@@ -1,0 +1,116 @@
+{
+    "winget": {
+        "$schema": "https://aka.ms/winget-packages.schema.2.0.json",
+        "CreationDate": "2022-08-16T20:55:44.415-00:00",
+        "Sources": [
+            {
+                "Packages": [
+                    {
+                        "PackageIdentifier": "Microsoft.VisualStudio.2022.Professional"
+                    },
+                    {
+                        "PackageIdentifier": "Bitwarden.Bitwarden"
+                    },
+                    {
+                        "PackageIdentifier": "7zip.7zip"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.VisualStudio.2019.Professional"
+                    },
+                    {
+                        "PackageIdentifier": "Docker.DockerDesktop"
+                    },
+                    {
+                        "PackageIdentifier": "Git.Git"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.PowerShell"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.WindowsTerminal"
+                    },
+                    {
+                        "PackageIdentifier": "Mozilla.Firefox"
+                    },
+                    {
+                        "PackageIdentifier": "Notepad++.Notepad++"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.Office"
+                    },
+                    {
+                        "PackageIdentifier": "JanDeDobbeleer.OhMyPosh"
+                    },
+                    {
+                        "PackageIdentifier": "Postman.Postman"
+                    },
+                    {
+                        "PackageIdentifier": "Postman.Postman.DesktopAgent"
+                    },
+                    {
+                        "PackageIdentifier": "Spotify.Spotify"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.Teams"
+                    },
+                    {
+                        "PackageIdentifier": "WinMerge.WinMerge"
+                    },
+                    {
+                        "PackageIdentifier": "Zoom.Zoom"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.VCRedist.2013.x64"
+                    },
+                    {
+                        "PackageIdentifier": "PuTTY.PuTTY"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.VCRedist.2015+.x86"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.VisualStudioCode"
+                    },
+                    {
+                        "PackageIdentifier": "SomePythonThings.WingetUIStore"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.VCRedist.2013.x86"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.AzureCLI"
+                    },
+                    {
+                        "PackageIdentifier": "Google.Chrome"
+                    },
+                    {
+                        "PackageIdentifier": "OpenJS.NodeJS.LTS"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.VCRedist.2015+.x64"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.PowerToys"
+                    }
+                ],
+                "SourceDetails": {
+                    "Argument": "https://cdn.winget.microsoft.com/cache",
+                    "Identifier": "Microsoft.Winget.Source_8wekyb3d8bbwe",
+                    "Name": "winget",
+                    "Type": "Microsoft.PreIndexed.Package"
+                }
+            }
+        ],
+        "WinGetVersion": "1.4.2161-preview"
+    },
+    "scoop": {
+        "apps": []
+    },
+    "chocolatey": {
+        "apps": [
+            {
+                "Name": "studio3t"
+            }
+        ]
+    }
+}
