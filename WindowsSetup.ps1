@@ -155,8 +155,8 @@ RestartDeviceAfterUpdate -Enable
 DefaultTerminalApp -WindowsTerminal
 RKNBypass -Disable
 SATADrivesRemovableMedia -Disable
-InstallVCRedist
-InstallDotNetRuntimes
+#InstallVCRedist
+#InstallDotNetRuntimes
 PreventEdgeShortcutCreation -Channels Stable, Beta, Dev, Canary
 
 #endregion System
