@@ -15,9 +15,6 @@
                         "PackageIdentifier": "7zip.7zip"
                     },
                     {
-                        "PackageIdentifier": "Microsoft.VisualStudio.2019.Professional"
-                    },
-                    {
                         "PackageIdentifier": "Docker.DockerDesktop"
                     },
                     {
@@ -42,6 +39,9 @@
                         "PackageIdentifier": "JanDeDobbeleer.OhMyPosh"
                     },
                     {
+                        "PackageIdentifier": "Microsoft.OneDrive"
+                    },
+                    {
                         "PackageIdentifier": "Postman.Postman"
                     },
                     {
@@ -63,10 +63,16 @@
                         "PackageIdentifier": "Microsoft.VCRedist.2013.x64"
                     },
                     {
-                        "PackageIdentifier": "PuTTY.PuTTY"
+                        "PackageIdentifier": "Microsoft.VCRedist.2013.x86"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.VCRedist.2015+.x64"
                     },
                     {
                         "PackageIdentifier": "Microsoft.VCRedist.2015+.x86"
+                    },
+                    {
+                        "PackageIdentifier": "PuTTY.PuTTY"
                     },
                     {
                         "PackageIdentifier": "Microsoft.VisualStudioCode"
@@ -75,7 +81,10 @@
                         "PackageIdentifier": "SomePythonThings.WingetUIStore"
                     },
                     {
-                        "PackageIdentifier": "Microsoft.VCRedist.2013.x86"
+                        "PackageIdentifier": "Microsoft.DotNet.DesktopRuntime.6"
+                    },
+                    {
+                        "PackageIdentifier": "Microsoft.DotNet.DesktopRuntime.7"
                     },
                     {
                         "PackageIdentifier": "Microsoft.AzureCLI"
@@ -85,9 +94,6 @@
                     },
                     {
                         "PackageIdentifier": "OpenJS.NodeJS.LTS"
-                    },
-                    {
-                        "PackageIdentifier": "Microsoft.VCRedist.2015+.x64"
                     },
                     {
                         "PackageIdentifier": "Microsoft.PowerToys"
