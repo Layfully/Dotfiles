@@ -1,7 +1,6 @@
 #Prompt
 Import-Module posh-git
-Import-Module oh-my-posh
-Set-PoshPrompt Paradox
+oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/velvet.omp.json" | Invoke-Expression
 
 #Icons
 Import-Module -Name Terminal-Icons
@@ -16,9 +15,6 @@ Set-PSReadlineOption -PredictionViewStyle ListView
 #Fzf
 Import-Module PSFzf
 Set-PsFzfOption -PSreadLineChordProvider 'Ctrl+f' -PSReadLineChordReverseHistory 'Ctrl+r'  
-
-#OMP
-Set-PoshPrompt velvet
 
 #Utilities
 function which ($command) {
