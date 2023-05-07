@@ -18,7 +18,7 @@ winget install -e --id Microsoft.PowerToys
 winget install -h PowerShell -s msstore --accept-package-agreements
 
 $PowerShellProfilePath = "$env:USERPROFILE\Documents\PowerShell\" 
-$PowerShellProfileFullPath = ($PowerShellProfilePath + $PowerShellProfileFileName)
+$PowerShellProfileFullPath = ($PowerShellProfilePath + "Microsoft.PowerShell_profile.ps1")
 
 if (Test-Path $PowerShellProfilePath) {
     if (Test-Path $PowerShellProfileFullPath) {
