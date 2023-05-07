@@ -15,17 +15,7 @@
 	Version: 22H2/23H2+
 	Builds: 22621.1413+
 	Editions: Home/Pro/Enterprise
-
-	.LINK GitHub
-	https://github.com/farag2/Sophia-Script-for-Windows
-
-	.LINK Telegram
-	https://t.me/sophianews
-	https://t.me/sophia_chat
-
-	.LINK Discord
-	https://discord.gg/sSryhaEv79
-
+	
 	.NOTES
 	https://forum.ru-board.com/topic.cgi?forum=62&topic=30617#15
 	https://habr.com/company/skillfactory/blog/553800/
@@ -132,10 +122,6 @@ function Checks
 			$UBR = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows nt\CurrentVersion" -Name UBR
 			Write-Warning -Message ($Localization.UpdateWarning -f $CurrentBuild.CurrentBuild, $UBR.UBR)
 
-			Start-Process -FilePath "https://t.me/sophia_chat"
-			Start-Process -FilePath "https://discord.gg/sSryhaEv79"
-			Start-Process -FilePath "https://github.com/farag2/Sophia-Script-for-Windows#system-requirements"
-
 			# Enable receiving updates for other Microsoft products when you update Windows
 			(New-Object -ComObject Microsoft.Update.ServiceManager).AddService2("7971f918-a847-4430-9279-4a52d1efe18d", 7, "")
 
@@ -167,10 +153,6 @@ function Checks
 				$UBR = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows nt\CurrentVersion" -Name UBR
 				Write-Warning -Message ($Localization.UpdateWarning -f $CurrentBuild.CurrentBuild, $UBR.UBR)
 
-				Start-Process -FilePath "https://t.me/sophia_chat"
-				Start-Process -FilePath "https://discord.gg/sSryhaEv79"
-				Start-Process -FilePath "https://github.com/farag2/Sophia-Script-for-Windows#system-requirements"
-
 				# Enable receiving updates for other Microsoft products when you update Windows
 				(New-Object -ComObject Microsoft.Update.ServiceManager).AddService2("7971f918-a847-4430-9279-4a52d1efe18d", 7, "")
 
@@ -196,9 +178,6 @@ function Checks
 		{$_ -lt 22000}
 		{
 			Write-Warning -Message $Localization.UnsupportedOSBuild
-			Start-Process -FilePath "https://t.me/sophia_chat"
-			Start-Process -FilePath "https://discord.gg/sSryhaEv79"
-			Start-Process -FilePath "https://github.com/farag2/Sophia-Script-for-Windows#system-requirements"
 			exit
 		}
 	}
@@ -207,9 +186,6 @@ function Checks
 	if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage")
 	{
 		Write-Warning -Message $Localization.UnsupportedLanguageMode
-		Start-Process -FilePath "https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_language_modes"
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 
@@ -221,8 +197,6 @@ function Checks
 	if ($CurrentUserName -ne $LoginUserName)
 	{
 		Write-Warning -Message $Localization.LoggedInUserNotAdmin
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 
@@ -230,8 +204,6 @@ function Checks
 	if ($PSVersionTable.PSVersion.Major -ne 5)
 	{
 		Write-Warning -Message ($Localization.UnsupportedPowerShell -f $PSVersionTable.PSVersion.Major, $PSVersionTable.PSVersion.Minor)
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 
@@ -239,8 +211,6 @@ function Checks
 	if (($Host.Name -match "ISE") -or ($env:TERM_PROGRAM -eq "vscode"))
 	{
 		Write-Warning -Message ($Localization.UnsupportedHost -f $Host.Name.replace("Host", ""))
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 
@@ -276,16 +246,10 @@ function Checks
 			if ($Tweakers[$Tweaker] -eq "HKCU:\Software\Win 10 Tweaker")
 			{
 				Write-Warning -Message $Localization.Win10TweakerWarning
-				Start-Process -FilePath "https://youtu.be/na93MS-1EkM"
-				Start-Process -FilePath "https://pikabu.ru/story/byekdor_v_win_10_tweaker_ili_sovremennyie_metodyi_borbyi_s_piratstvom_8227558"
-				Start-Process -FilePath "https://t.me/sophia_chat"
-				Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 				exit
 			}
 
 			Write-Warning -Message ($Localization.TweakerWarning -f $Tweaker)
-			Start-Process -FilePath "https://t.me/sophia_chat"
-			Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 			exit
 		}
 	}
@@ -294,8 +258,6 @@ function Checks
 	if (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\.NETFramework\Performance -Name *flibustier)
 	{
 		Write-Warning -Message ($Localization.TweakerWarning -f "flblauncher")
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 
@@ -304,9 +266,6 @@ function Checks
 	{
 		Write-Warning -Message $Localization.Bin
 		Start-Sleep -Seconds 5
-		Start-Process -FilePath "https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 
@@ -323,8 +282,6 @@ function Checks
 	if (($PendingActions | Test-Path) -contains $true)
 	{
 		Write-Warning -Message $Localization.RebootPending
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 
@@ -358,10 +315,6 @@ function Checks
 				Write-Warning -Message $Localization.UnsupportedRelease
 
 				Start-Sleep -Seconds 5
-
-				Start-Process -FilePath "https://github.com/farag2/Sophia-Script-for-Windows/releases/latest"
-				Start-Process -FilePath "https://t.me/sophia_chat"
-				Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 				exit
 			}
 		}
@@ -388,10 +341,6 @@ function Checks
 		# Provider Load Failure exception
 		Write-Warning -Message $Global:Error.Exception.Message | Select-Object -First 1
 		Write-Warning -Message $Localization.DefenderBroken
-
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
-
 		exit
 	}
 
@@ -399,8 +348,6 @@ function Checks
 	if ($null -eq (Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntiVirusProduct -ErrorAction Ignore))
 	{
 		Write-Warning -Message $Localization.DefenderBroken
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 
@@ -412,8 +359,6 @@ function Checks
 	catch [Microsoft.PowerShell.Commands.ServiceCommandException]
 	{
 		Write-Warning -Message $Localization.DefenderBroken
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 		exit
 	}
 	$Script:DefenderServices = ($Services | Where-Object -FilterScript {$_.Status -ne "running"} | Measure-Object).Count -lt $Services.Count
@@ -462,9 +407,6 @@ function Checks
 	catch [System.Management.Automation.PropertyNotFoundException]
 	{
 		Write-Warning -Message $Localization.UpdateDefender
-
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 
 		# Enable receiving updates for other Microsoft products when you update Windows
 		(New-Object -ComObject Microsoft.Update.ServiceManager).AddService2("7971f918-a847-4430-9279-4a52d1efe18d", 7, "")
@@ -651,9 +593,6 @@ public static string GetString(uint strId)
 				& "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe" --no-first-run --noerrdialogs --no-default-browser-check --start-maximized
 
 				Remove-Item -Path "$DownloadsFolder\MicrosoftEdgeSetup.exe" -Force
-
-				Start-Process -FilePath "https://t.me/sophia_chat"
-				Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 			}
 			catch [System.Net.WebException]
 			{
@@ -697,10 +636,6 @@ public static string GetString(uint strId)
 				Invoke-Item -Path $PSScriptRoot\..\$PresetName
 
 				Start-Sleep -Seconds 5
-
-				Start-Process -FilePath "https://github.com/farag2/Sophia-Script-for-Windows#how-to-use"
-				Start-Process -FilePath "https://t.me/sophia_chat"
-				Start-Process -FilePath "https://discord.gg/sSryhaEv79"
 
 				exit
 			}
@@ -906,10 +841,6 @@ function DiagTrackService
 			# Get date from the required line to replace it with "Checks -Warning"
 			$RequiredLine = (Get-Content -Path $PresetName -Encoding UTF8) | Where-Object -FilterScript {$_.ReadCount -eq $LineNumber}
 			(Get-Content -Path $PresetName -Encoding UTF8).Replace($RequiredLine, "Checks -Warning") | Set-Content -Path $PresetName -Encoding UTF8 -Force
-
-			Start-Process -FilePath "https://t.me/sophia_chat"
-			Start-Process -FilePath "https://discord.gg/sSryhaEv79"
-
 			exit
 		}
 	}
@@ -923,10 +854,6 @@ function DiagTrackService
 		# Array of a new file: content before $LineNumber (including $LineNumber), new added string, the rest data of file
 		$UpdatedFile = @($ReadFile[0..($LineNumber - 1)], "`nChecks -Warning", $ReadFile[$LineNumber..($ReadFile.Length + 1)])
 		Set-Content -Path $PresetName -Value $UpdatedFile -Encoding UTF8 -Force
-
-		Start-Process -FilePath "https://t.me/sophia_chat"
-		Start-Process -FilePath "https://discord.gg/sSryhaEv79"
-
 		exit
 	}
 
