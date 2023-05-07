@@ -41,5 +41,5 @@ RefreshEnv
 
 #--- reenabling critial items ---
 # Enable-UAC
-# Enable-MicrosoftUpdate
-# Install-WindowsUpdate -acceptEula
+Enable-MicrosoftUpdate
+Install-WindowsUpdate -acceptEula
