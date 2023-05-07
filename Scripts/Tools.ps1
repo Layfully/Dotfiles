@@ -14,11 +14,15 @@
 # Install powertoys
 winget install -e --id Microsoft.PowerToys
 
+# Install chocolatey
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
 # ---------------------------------------------- #
 # Prompt  -------------------------------------- #
 # ---------------------------------------------- #
 pwsh -Command { Install-Module posh-git -Scope CurrentUser -Force}
 winget install JanDeDobbeleer.OhMyPosh -s winget
+oh-my-posh font install JetBrainsMono
 
 # Install powershell and use symlink to corresponding dotfile
 winget install -h PowerShell -s msstore --accept-package-agreements
