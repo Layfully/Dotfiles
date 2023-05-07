@@ -16,5 +16,17 @@ winget install -e --id Microsoft.PowerToys
 
 # Install powershell and use symlink to corresponding dotfile
 winget install -h PowerShell -s msstore --accept-package-agreements
-Remove-Item -Path "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Force
-New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Target "$env:USERPROFILE\Dotfiles\Config\user_profile.ps1"
+
+$PowerShellProfilePath = "$env:USERPROFILE\Documents\PowerShell\" 
+$PowerShellProfileFullPath = ($PowerShellProfilePath + $PowerShellProfileFileName)
+
+if (Test-Path $PowerShellProfilePath) {
+    if (Test-Path $PowerShellProfileFullPath) {
+        Remove-Item -Path $PowerShellProfileFullPath -Force
+    }
+}
+else {
+    New-Item -Path "$env:USERPROFILE\Documents" -Name "PowerShell" -ItemType "directory"   
+}
+
+New-Item -ItemType SymbolicLink -Path $PowerShellProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\user_profile.ps1"
