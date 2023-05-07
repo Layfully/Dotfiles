@@ -14,6 +14,12 @@
 # Install powertoys
 winget install -e --id Microsoft.PowerToys
 
+# ---------------------------------------------- #
+# Prompt  -------------------------------------- #
+# ---------------------------------------------- #
+pwsh -Command { Install-Module posh-git -Scope CurrentUser -Force}
+winget install JanDeDobbeleer.OhMyPosh -s winget
+
 # Install powershell and use symlink to corresponding dotfile
 winget install -h PowerShell -s msstore --accept-package-agreements
 
