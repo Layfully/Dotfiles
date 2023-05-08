@@ -21,10 +21,10 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 choco install jetbrainsmononf -y
 
 # Install z for faster folder navigation
-Install-Module -Name z 
+Install-Module -Name z -Repository PSGallery -Force
 
 # Install PSFzf to use fzf in PowerShell
-Install-Module -Name PSFzf 
+Install-Module -Name PSFzf -Force
 
 # ---------------------------------------------- #
 # Prompt  -------------------------------------- #
@@ -48,3 +48,19 @@ else {
 }
 
 New-Item -ItemType SymbolicLink -Path $PowerShellProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\user_profile.ps1"
+
+# Install windows terminal and use symlink to corresponding dotfile
+$WindowsTerminalProfilePath = "$env:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\"
+$WindowsTerminalProfileFullPath = ($WindowsTerminalProfilePath + "settings.json")
+
+if (Test-Path $WindowsTerminalProfilePath) {
+    if (Test-Path $WindowsTerminalProfileFullPath) {
+        Remove-Item -Path $WindowsTerminalProfileFullPath -Force
+    }
+}
+else {
+    New-Item -Path "$env:USERPROFILE\Documents" -Name "PowerShell" -ItemType "directory"   
+}
+
+New-Item -ItemType SymbolicLink -Path $WindowsTerminalProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\WindowsTerminal\settings.json"
+
