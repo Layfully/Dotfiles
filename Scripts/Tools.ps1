@@ -26,6 +26,9 @@ Install-Module -Name z -Repository PSGallery -Force
 # Install PSFzf to use fzf in PowerShell
 Install-Module -Name PSFzf -Force
 
+# Install PSReadLine predictions
+Install-Module -Name CompletionPredictor -Repository PSGallery
+
 # ---------------------------------------------- #
 # Prompt  -------------------------------------- #
 # ---------------------------------------------- #
