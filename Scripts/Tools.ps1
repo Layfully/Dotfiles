@@ -11,14 +11,20 @@
 #choco install -y gitdiffmargin
 #choco install -y resharper-ultimate-all --package-parameters="'/NoCpp'"
 
-# Install powertoys
 winget install -e --id Microsoft.PowerToys
+winget install fzf
 
 # Install chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # Install font used by terminal
 choco install jetbrainsmononf -y
+
+# Install z for faster folder navigation
+Install-Module -Name z 
+
+# Install PSFzf to use fzf in PowerShell
+Install-Module -Name PSFzf 
 
 # ---------------------------------------------- #
 # Prompt  -------------------------------------- #
