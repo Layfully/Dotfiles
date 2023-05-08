@@ -14,17 +14,20 @@
 winget install -e --id Microsoft.PowerToys
 winget install fzf
 
+# Trust PSGallery
+Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+
 # Install chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # Install font used by terminal
-choco install jetbrainsmononf -y --force
+choco install jetbrainsmononf -y
 
 # Install z for faster folder navigation
-Install-Module -Name z -Repository PSGallery -Force
+Install-Module -Name z -Repository PSGallery
 
 # Install PSFzf to use fzf in PowerShell
-Install-Module -Name PSFzf -Force
+Install-Module -Name PSFzf
 
 # Install PSReadLine predictions
 Install-Module -Name CompletionPredictor -Repository PSGallery
@@ -32,7 +35,7 @@ Install-Module -Name CompletionPredictor -Repository PSGallery
 # ---------------------------------------------- #
 # Prompt  -------------------------------------- #
 # ---------------------------------------------- #
-pwsh -Command { Install-Module posh-git -Scope CurrentUser -Force}
+pwsh -Command { Install-Module posh-git -Scope CurrentUser}
 winget install JanDeDobbeleer.OhMyPosh -s winget
 
 # Install powershell and use symlink to corresponding dotfile
