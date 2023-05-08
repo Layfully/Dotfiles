@@ -30,7 +30,7 @@ if ($fzfInstalled) {
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 
 # Install chocolatey
-if(not(test-path "C:\ProgramData\chocolatey\bin\choco.exe")) {
+if(-not(test-path "C:\ProgramData\chocolatey\bin\choco.exe")) {
     Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 }
 
