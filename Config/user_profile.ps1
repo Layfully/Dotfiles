@@ -18,7 +18,7 @@ Set-PsFzfOption -PSreadLineChordProvider 'Ctrl+f' -PSReadLineChordReverseHistory
 
 #Utilities
 function which ($command) {
-    Get-Command -Name $commandd -ErrorAction -ErrorAction SilentlyContinue |
+    Get-Command -Name $command -ErrorAction -ErrorAction SilentlyContinue |
         Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
 }
 
