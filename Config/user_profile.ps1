@@ -11,7 +11,7 @@ Import-Module -Name Terminal-Icons
 #PSReadLine
 Import-Module -Name CompletionPredictor
 
-Set-PSReadLineOption -EditMode Emacs
+Set-PSReadLineOption -EditMode windows
 Set-PSReadLineOption -BellStyle None
 Set-PSReadLineKeyHandler -Chord 'Ctrl+d' -Function DeleteChar
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
