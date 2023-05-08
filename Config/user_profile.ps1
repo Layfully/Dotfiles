@@ -9,6 +9,8 @@ oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/velvet.omp.json" | Invoke-E
 Import-Module -Name Terminal-Icons
 
 #PSReadLine
+Import-Module -Name CompletionPredictor
+
 Set-PSReadLineOption -EditMode Emacs
 Set-PSReadLineOption -BellStyle None
 Set-PSReadLineKeyHandler -Chord 'Ctrl+d' -Function DeleteChar
