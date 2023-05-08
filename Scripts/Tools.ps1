@@ -11,8 +11,20 @@
 #choco install -y gitdiffmargin
 #choco install -y resharper-ultimate-all --package-parameters="'/NoCpp'"
 
-winget install -e --id Microsoft.PowerToys -h
-winget install fzf -h
+$powerToysInstalled = winget list -e | Select-String "Microsoft.PowerToys"
+$fzfInstalled = winget list -e | Select-String "fzf"
+
+if ($powerToysInstalled) {
+    winget upgrade --id Microsoft.PowerToys
+} else {
+    winget install -e --id Microsoft.PowerToys -h
+}
+
+if ($fzfInstalled) {
+    winget upgrade fzf -h
+} else {
+    winget install fzf -h
+}
 
 # Trust PSGallery
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
