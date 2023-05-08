@@ -30,7 +30,11 @@ if ($fzfInstalled) {
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 
 # Install chocolatey
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+$testchoco = powershell choco -v
+if(-not($testchoco)) {
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+}
 
 # Install font used by terminal
 choco install jetbrainsmononf -y
