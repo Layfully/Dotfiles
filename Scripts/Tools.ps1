@@ -11,9 +11,10 @@
 #choco install -y gitdiffmargin
 #choco install -y resharper-ultimate-all --package-parameters="'/NoCpp'"
 
-#Install powertoys and fuzzy finder
+#Install powertoys fzf and windows terminal
 winget upgrade --id Microsoft.PowerToys
 winget upgrade fzf -h
+winget upgrade --id Microsoft.WindowsTerminal
 
 # Trust PSGallery
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
