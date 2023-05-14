@@ -222,6 +222,16 @@ function which ($command) {
         Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
 }
 
+function git {
+    param([string]$command)
+
+    if ($command -eq "status") {
+        # Custom implementation for the "status" sub-command
+        # Replace this with your own command
+        Invoke-FuzzyGitStatus
+    }
+}
+
 #Alias
 Set-Alias vim nvim
 Set-Alias ll ls
@@ -230,4 +240,3 @@ Set-Alias grep findstr
 Set-Alias tig 'C:\Program Files\Git\usr\bin\tig.exe'
 Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
 Set-Alias zz Invoke-FuzzyZLocation
-Set-Alias git status Invoke-FuzzyGitStatus
