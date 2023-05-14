@@ -19,6 +19,7 @@ Set-PSReadLineOption -PredictionViewStyle InlineView
 
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+Set-PSReadLineKeyHandler -Key Tab -ScriptBlock { Invoke-FzfTabCompletion }
 
 # The next four key handlers are designed to make entering matched quotes
 # parens, and braces a nicer experience.  I'd like to include functions
