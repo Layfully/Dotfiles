@@ -229,5 +229,9 @@ Set-Alias g git
 Set-Alias grep findstr
 Set-Alias tig 'C:\Program Files\Git\usr\bin\tig.exe'
 Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
-Set-Alias zz Invoke-FuzzyZLocation
-Set-Alias gs Invoke-FuzzyGitStatus
+Set-Alias fz Invoke-FuzzyZLocation
+Set-Alias fgs Invoke-FuzzyGitStatus
+Set-Alias fe Invoke-FuzzyEdit
+Set-Alias fh Invoke-FuzzyHistory
+Set-Alias fkill Invoke-FuzzyKillProcess
+Set-Alias fd Invoke-FuzzySetLocation
