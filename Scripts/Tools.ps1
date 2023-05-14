@@ -16,7 +16,7 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
         $CommandLine = $MyInvocation.MyCommand.Path + $MyInvocation.UnboundArguments
         Write-Output $CommandLine
-        Start-Process -Verb RunAs wt -ArgumentList "C:\Users\admin\Dotfiles\Scripts\Tools.ps1"
+        Start-Process -Verb RunAs wt -ArgumentList $CommandLine
         Exit
     }
 }
