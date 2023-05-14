@@ -3,7 +3,7 @@ using namespace System.Management.Automation.Language
 
 #Prompt
 Import-Module posh-git
-oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/velvet.omp.json" | Invoke-Expression
+oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/cloud-context.omp.json" | Invoke-Expression
 
 #Icons
 Import-Module -Name Terminal-Icons
