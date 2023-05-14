@@ -22,6 +22,7 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 }
 
 #Install powertoys fzf and windows terminal
+#TODO: once its possible to load settings for power toys from file - do it.
 winget upgrade --id Microsoft.PowerToys
 winget upgrade fzf -h
 winget upgrade --id Microsoft.WindowsTerminal
@@ -89,6 +90,8 @@ else {
 }
 
 New-Item -ItemType SymbolicLink -Path $WindowsTerminalProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\WindowsTerminal\settings.json"
+
+# TODO: add ripgrep
 
 # Reload profile so that changes are applied
 . $profile
