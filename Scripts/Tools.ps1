@@ -90,3 +90,5 @@ else {
 
 New-Item -ItemType SymbolicLink -Path $WindowsTerminalProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\WindowsTerminal\settings.json"
 
+# Reload profile so that changes are applied
+. $profile
