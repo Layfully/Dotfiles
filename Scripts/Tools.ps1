@@ -1,14 +1,11 @@
 #--- Visual Studio ---
-#choco install visualstudio2019professional -y --package-parameters "--add Microsoft.VisualStudio.Component.Git" 
-#Update-SessionEnvironment #refreshing env due to Git install
-
-#choco install -y visualstudio2019-workload-manageddesktop
-#choco install -y visualstudio2019-workload-netcoretools
-#choco install -y visualstudio2019-workload-azure 
-#choco install -y visualstudio2019-workload-visualstudioextension 
+winget install -e -h --id Microsoft.VisualStudio.2022.Enterprise --silent --override "--wait --quiet --addProductLang En-us --config .vsconfig"
 
 #--- Visual Studio extensions ---
+#this one could be nice test if this is good
 #choco install -y gitdiffmargin
+
+#resharper is legendary will need to learn it in the future
 #choco install -y resharper-ultimate-all --package-parameters="'/NoCpp'"
 
     # Self-elevate the script if required
@@ -20,6 +17,9 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
         Exit
     }
 }
+
+# Add winget cdn as a source
+winget source add --name winget https://winget.azureedge.net/cache
 
 #Install powertoys fzf and windows terminal
 #TODO: once its possible to load settings for power toys from file - do it.
