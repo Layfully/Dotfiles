@@ -222,6 +222,8 @@ function which ($command) {
         Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
 }
 
+function Get-GitStatus { & git status $args }
+
 #Alias
 Set-Alias vim nvim
 Set-Alias ll ls
@@ -235,3 +237,4 @@ Set-Alias fe Invoke-FuzzyEdit
 Set-Alias fh Invoke-FuzzyHistory
 Set-Alias fkill Invoke-FuzzyKillProcess
 Set-Alias fd Invoke-FuzzySetLocation
+Set-Alias gs Get-GitStatus
