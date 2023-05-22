@@ -19,7 +19,16 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 }
 
 # Add winget cdn as a source
-winget source add --name winget https://cdn.winget.microsoft.com/cache
+$sourcesList = winget source list | Out-String
+$sourceName = "winget"
+$sourceURL = "https://cdn.winget.microsoft.com/cache"
+
+if ($sourcesList -like "*$sourceName*") {
+    Write-Output "The winget source '$sourceName' is already added."
+} else {
+    Write-Output "The winget source '$sourceName' is not added. Adding now..."
+    winget source add --name $sourceName --url $sourceURL
+}
 
 #Install powertoys fzf and windows terminal
 #TODO: once its possible to load settings for power toys from file - do it.
