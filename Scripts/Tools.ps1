@@ -51,6 +51,7 @@ else {
 choco upgrade jetbrainsmononf -y
 
 # Install z for faster folder navigation
+Uninstall-Package -Name z -ErrorAction SilentlyContinue
 Install-Module ZLocation -Scope CurrentUser
 
 # Install PSFzf to use fzf in PowerShell
