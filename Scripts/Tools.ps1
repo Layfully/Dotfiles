@@ -1,5 +1,5 @@
 #--- Visual Studio ---
-winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us"
+winget install -id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config ..\Config\.vsconfig"
 
 #--- Visual Studio extensions ---
 #this one could be nice test if this is good
