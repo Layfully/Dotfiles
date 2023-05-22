@@ -1,5 +1,5 @@
 #--- Visual Studio ---
-$visualStudioPath = "~\Dotfiles\Config\.vsconfig"
+$configPath = "$env:USERPROFILE\Dotfiles\Config\.vsconfig"
 winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config $visualStudioPath"
 
 #--- Visual Studio extensions ---
