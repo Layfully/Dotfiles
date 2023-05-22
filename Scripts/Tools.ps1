@@ -1,5 +1,6 @@
 #--- Visual Studio ---
-winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config ..\Config\.vsconfig"
+$visualStudioPath = "..\Config\.vsconfig"
+winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config `"$visualStudioPath`""
 
 #--- Visual Studio extensions ---
 #this one could be nice test if this is good
