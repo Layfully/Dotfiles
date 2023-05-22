@@ -19,7 +19,7 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 }
 
 # Add winget cdn as a source
-winget source add --name winget https://winget.azureedge.net/cache
+winget source add --name winget https://cdn.winget.microsoft.com/cache
 
 #Install powertoys fzf and windows terminal
 #TODO: once its possible to load settings for power toys from file - do it.
