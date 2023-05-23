@@ -1,6 +1,27 @@
 #--- Visual Studio ---
-$configPath = "$env:USERPROFILE\Dotfiles\Config\.vsconfig"
-winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config $configPath"
+param (
+    [switch]$SkipVisualStudio = $false
+)
+
+if ($SkipVisualStudio -eq $false) {
+    $UserConfirmation = ""
+    $configPath = "$env:USERPROFILE\Dotfiles\Config\.vsconfig"
+
+    while ($UserConfirmation -ne "Y" -and $UserConfirmation -ne "no") {
+        $UserConfirmation = Read-Host -Prompt "Do you want to install visual studio? (Y/N)"
+    }
+
+    if ($UserConfirmation -eq "Y") {
+        # Put the installation commands here.
+        Write-Host "Continuing with Visual Studio installation..."
+        winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config $configPath"
+    } else {
+        Write-Host "Visual Studio installation cancelled by the user."
+    }
+} else {
+    winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config $configPath"    
+}
+
 
 #--- Visual Studio extensions ---
 #this one could be nice test if this is good
