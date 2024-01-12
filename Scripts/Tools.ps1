@@ -27,7 +27,7 @@ if ($SkipVisualStudio -eq $false) {
 #this one could be nice test if this is good
 #choco install -y gitdiffmargin
 
-#resharper is legendary will need to learn it in the future
+#resharper is alternative
 #choco install -y resharper-ultimate-all --package-parameters="'/NoCpp'"
 
     # Self-elevate the script if required
@@ -70,7 +70,7 @@ else {
 }
 
 # Install font used by terminal
-choco upgrade jetbrainsmononf -y
+choco upgrade nerd-fonts-jetbrainsmono -y
 
 # Install z for faster folder navigation
 Uninstall-Package -Name z -ErrorAction SilentlyContinue
