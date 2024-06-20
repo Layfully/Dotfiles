@@ -224,6 +224,12 @@ function which ($command) {
 
 function Get-GitStatus { & git status $args }
 
+function Get-GitPull { & git pull $args }
+
+function Get-GitPush { & git push $args }
+
+function Get-GitFetch { & git fetch origin $args}
+
 #Alias
 Set-Alias vim nvim
 Set-Alias ll ls
@@ -238,3 +244,6 @@ Set-Alias fh Invoke-FuzzyHistory
 Set-Alias fkill Invoke-FuzzyKillProcess
 Set-Alias fd Invoke-FuzzySetLocation
 Set-Alias gs Get-GitStatus
+Set-Alias gl Get-GitPull
+Set-Alias gp Get-GitPush
+Set-Alias gf Get-GitFetch
