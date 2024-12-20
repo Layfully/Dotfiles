@@ -19,7 +19,7 @@ if ($SkipVisualStudio -eq $false) {
         Write-Host "Visual Studio installation cancelled by the user."
     }
 } else {
-    winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config $configPath"    
+    winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config $configPath"
 }
 
 
@@ -52,11 +52,14 @@ if ($sourcesList -like "*$sourceName*") {
     winget source add --name $sourceName --url $sourceURL
 }
 
-#Install powertoys fzf and windows terminal
+#Install powertoys, fzf, windows terminal and github copilot for cli
 #TODO: once its possible to load settings for power toys from file - do it.
 winget upgrade --id Microsoft.PowerToys
 winget upgrade fzf -h
 winget upgrade --id Microsoft.WindowsTerminal
+
+(Get-Package -Name GitHub.cli -ErrorAction SilentlyContinue) ? (winget upgrade --id GitHub.cli) : (winget install --id GitHub.cli)
+(gh extension list | Select-String gh-copilot) ? (gh extension upgrade gh-copilot) : (gh extension install github/gh-copilot)
 
 # Trust PSGallery
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
@@ -94,7 +97,7 @@ winget upgrade JanDeDobbeleer.OhMyPosh -s winget
 # Install powershell and use symlink to corresponding dotfile
 winget upgrade -h PowerShell -s msstore --accept-package-agreements
 
-$PowerShellProfilePath = "$env:USERPROFILE\Documents\PowerShell\" 
+$PowerShellProfilePath = "$env:USERPROFILE\Documents\PowerShell\"
 $PowerShellProfileFullPath = ($PowerShellProfilePath + "Microsoft.PowerShell_profile.ps1")
 
 if (Test-Path $PowerShellProfilePath) {
@@ -103,7 +106,7 @@ if (Test-Path $PowerShellProfilePath) {
     }
 }
 else {
-    New-Item -Path "$env:USERPROFILE\Documents" -Name "PowerShell" -ItemType "directory"   
+    New-Item -Path "$env:USERPROFILE\Documents" -Name "PowerShell" -ItemType "directory"
 }
 
 New-Item -ItemType SymbolicLink -Path $PowerShellProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\user_profile.ps1"
@@ -118,7 +121,7 @@ if (Test-Path $WindowsTerminalProfilePath) {
     }
 }
 else {
-    New-Item -Path "$env:USERPROFILE\Documents" -Name "PowerShell" -ItemType "directory"   
+    New-Item -Path "$env:USERPROFILE\Documents" -Name "PowerShell" -ItemType "directory"
 }
 
 New-Item -ItemType SymbolicLink -Path $WindowsTerminalProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\WindowsTerminal\settings.json"
