@@ -91,6 +91,9 @@ Install-Module -Name posh-git
 # Install terminal icons
 Install-Module -Name Terminal-Icons
 
+# Install Az
+Install-Module -Name Az
+
 # Install oh my posh
 winget upgrade JanDeDobbeleer.OhMyPosh -s winget
 
