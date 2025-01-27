@@ -1,0 +1,73 @@
+{
+    "workbench.editorAssociations": {
+        "*.{sqlplan}": "workbench.editor.executionplan"
+    },
+    "workbench.enablePreviewFeatures": true,
+    "datasource.connectionGroups": [
+        {
+            "name": "ROOT",
+            "id": "C777F06B-202E-4480-B475-FA416154D458"
+        }
+    ],
+    "datasource.connections": [
+        {
+            "options": {
+                "connectionName": "Prod",
+                "server": "ASXVPWARK013022",
+                "database": "",
+                "authenticationType": "SqlLogin",
+                "user": "sa",
+                "password": "",
+                "applicationName": "azdata",
+                "encrypt": "true",
+                "trustServerCertificate": true,
+                "groupId": "C777F06B-202E-4480-B475-FA416154D458",
+                "databaseDisplayName": ""
+            },
+            "groupId": "C777F06B-202E-4480-B475-FA416154D458",
+            "providerName": "MSSQL",
+            "savePassword": true,
+            "id": "b362d141-3ca0-4724-97b5-6667df7bb204"
+        }
+    ],
+    "workbench.colorTheme": "Default Dark Modern",
+    "telemetry.telemetryLevel": "off",
+    "workbench.experimental.cloudChanges.autoStore": "onShutdown",
+    "workbench.experimental.cloudChanges.partialMatches.enabled": true,
+    "update.mode": "start",
+    "git.autofetch": true,
+    "files.autoSave": "afterDelay",
+    "editor.fontSize": 14,
+    "editor.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
+    "editor.tabSize": 2,
+    "editor.accessibilitySupport": "off",
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "editor.defaultColorDecorators": true,
+    "editor.experimental.asyncTokenization": true,
+    "editor.foldingImportsByDefault": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.smoothScrolling": true,
+    "editor.stickyScroll.enabled": true,
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "editor.cursorBlinking": "phase",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.fontLigatures": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modificationsIfAvailable",
+    "diffEditor.experimental.useVersion2": true,
+    "editor.minimap.enabled": true,
+    "editor.minimap.autohide": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "queryEditor.githubCopilotContextualizationEnabled": true,
+    "queryEditor.results.saveAsExcel.autoSizeColumns": true,
+    "queryEditor.results.saveAsExcel.autoFilterHeaderRow": true,
+    "queryEditor.results.saveAsExcel.boldHeaderRow": true,
+    "queryEditor.results.saveAsExcel.freezeHeaderRow": true,
+    "executionPlan.tooltips.enableOnHoverTooltips": true,
+    "window.menuBarVisibility": "compact",
+    "explorer.fileNesting.enabled": true,
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.editor.wrapTabs": true
+}
