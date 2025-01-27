@@ -7,7 +7,7 @@ if ($SkipVisualStudio -eq $false) {
     $UserConfirmation = ""
     $configPath = "$env:USERPROFILE\Dotfiles\Config\.vsconfig"
 
-    while ($UserConfirmation -ne "Y" -and $UserConfirmation -ne "no") {
+    while ($UserConfirmation -ne "Y" -and $UserConfirmation -ne "N") {
         $UserConfirmation = Read-Host -Prompt "Do you want to install visual studio? (Y/N)"
     }
 
