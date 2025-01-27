@@ -100,6 +100,7 @@ winget upgrade JanDeDobbeleer.OhMyPosh -s winget
 # Install powershell and use symlink to corresponding dotfile
 winget upgrade -h PowerShell -s msstore --accept-package-agreements
 
+# Symbolic links setup
 $PowerShellProfilePath = "$env:USERPROFILE\Documents\PowerShell\"
 $PowerShellProfileFullPath = ($PowerShellProfilePath + "Microsoft.PowerShell_profile.ps1")
 
@@ -113,6 +114,34 @@ else {
 }
 
 New-Item -ItemType SymbolicLink -Path $PowerShellProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\user_profile.ps1"
+
+$AzureDataStudioConfigPath = "$env:APPDATA\azuredatastudio\User\"
+$AzureDataStudioSettingsFile = ($AzureDataStudioConfigPath + "settings.json")
+
+if (Test-Path $AzureDataStudioConfigPath) {
+    if (Test-Path $AzureDataStudioSettingsFile) {
+        Remove-Item -Path $AzureDataStudioSettingsFile -Force
+    }
+}
+else {
+    New-Item -Path "$env:APPDATA\azuredatastudio" -Name "User" -ItemType "directory"
+}
+
+New-Item -ItemType SymbolicLink -Path $AzureDataStudioSettingsFile -Target "$env:USERPROFILE\Dotfiles\Config\AzureDataStudio\settings.json"
+
+$VSCodeConfigPath = "$env:APPDATA\Code\User\"
+$VSCodeSettingsFile = ($VSCodeConfigPath + "settings.json")
+
+if (Test-Path $VSCodeConfigPath) {
+    if (Test-Path $VSCodeSettingsFile) {
+        Remove-Item -Path $VSCodeSettingsFile -Force
+    }
+}
+else {
+    New-Item -Path "$env:APPDATA\Code" -Name "User" -ItemType "directory"
+}
+
+New-Item -ItemType SymbolicLink -Path $VSCodeSettingsFile -Target "$env:USERPROFILE\Dotfiles\Config\VisualStudioCode\settings.json"
 
 # Install windows terminal and use symlink to corresponding dotfile
 $WindowsTerminalProfilePath = "$env:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\"
