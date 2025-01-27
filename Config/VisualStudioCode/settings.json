@@ -56,5 +56,7 @@
   "update.mode": "start",
   "git.autofetch": true,
   "git.blame.editorDecoration.enabled": true,
-  "git.blame.statusBarItem.enabled": true
+  "git.blame.statusBarItem.enabled": true,
+  "sqldeveloper.sqlHistory.historyLimit": 500,
+  "sqldeveloper.telemetry.enabled": false
 }
