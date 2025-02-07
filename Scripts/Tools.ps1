@@ -115,20 +115,6 @@ else {
 
 New-Item -ItemType SymbolicLink -Path $PowerShellProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\user_profile.ps1"
 
-$AzureDataStudioConfigPath = "$env:APPDATA\azuredatastudio\User\"
-$AzureDataStudioSettingsFile = ($AzureDataStudioConfigPath + "settings.json")
-
-if (Test-Path $AzureDataStudioConfigPath) {
-    if (Test-Path $AzureDataStudioSettingsFile) {
-        Remove-Item -Path $AzureDataStudioSettingsFile -Force
-    }
-}
-else {
-    New-Item -Path "$env:APPDATA\azuredatastudio" -Name "User" -ItemType "directory"
-}
-
-New-Item -ItemType SymbolicLink -Path $AzureDataStudioSettingsFile -Target "$env:USERPROFILE\Dotfiles\Config\AzureDataStudio\settings.json"
-
 $VSCodeConfigPath = "$env:APPDATA\Code\User\"
 $VSCodeSettingsFile = ($VSCodeConfigPath + "settings.json")
 
