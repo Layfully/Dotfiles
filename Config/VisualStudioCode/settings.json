@@ -58,5 +58,42 @@
   "git.blame.editorDecoration.enabled": true,
   "git.blame.statusBarItem.enabled": true,
   "sqldeveloper.sqlHistory.historyLimit": 500,
-  "sqldeveloper.telemetry.enabled": false
+  "sqldeveloper.telemetry.enabled": false,
+  "mssql.connections": [
+    {
+      "server": "ASXVPWARK013022",
+      "database": "",
+      "authenticationType": "SqlLogin",
+      "user": "sa",
+      "password": "",
+      "emptyPasswordInput": false,
+      "savePassword": true,
+      "profileName": "Production",
+      "encrypt": "Mandatory",
+      "trustServerCertificate": true,
+      "connectTimeout": 15,
+      "commandTimeout": 30,
+      "applicationName": "vscode-mssql"
+    }
+  ],
+  "mssql.applyLocalization": true,
+  "mssql.copyIncludeHeaders": true,
+  "mssql.enableExperimentalFeatures": true,
+  "mssql.enableRichExperiences": true,
+  "mssql.format.alignColumnDefinitionsInColumns": true,
+  "mssql.format.keywordCasing": "uppercase",
+  "mssql.ignorePlatformWarning": true,
+  "mssql.objectExplorer.groupBySchema": true,
+  "mssql.openQueryResultsInTabByDefault": true,
+  "mssql.query.alwaysEncryptedParameterization": true,
+  "debug.openDebug": "openOnDebugBreak",
+  "editor.tabCompletion": "off",
+  "powershell.integratedConsole.focusConsoleOnExecute": true,
+  "files.defaultLanguage": "",
+  "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+  "powershell.codeFolding.showLastLine": true,
+  "powershell.sideBar.CommandExplorerVisibility": true,
+  "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
+  "powershell.codeFormatting.whitespaceBetweenParameters": true,
+  "powershell.integratedConsole.showOnStartup": false
 }
