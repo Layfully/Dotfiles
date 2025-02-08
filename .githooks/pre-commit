@@ -2,3 +2,4 @@
 
 # Run the PowerShell script to update the PowerToys backup
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/UpdatePowerToysBackup.ps1"
+git add "$USERPROFILE/Dotfiles/Config/PowerToys/latest_powertoys_backup.ptb"
