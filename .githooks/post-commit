@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Run the PowerShell script to update the PowerToys backup
+powershell.exe -ExecutionPolicy Bypass -File "$env:USERPROFILE/Dotfiles/Scripts/GitHooks/UpdatePowerToysBackup.ps1"
