@@ -95,5 +95,9 @@
   "powershell.sideBar.CommandExplorerVisibility": true,
   "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
   "powershell.codeFormatting.whitespaceBetweenParameters": true,
-  "powershell.integratedConsole.showOnStartup": false
+  "powershell.integratedConsole.showOnStartup": false,
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.chat.generateTests.codeLens": true,
+  "github.copilot.chat.search.semanticTextResults": true,
+  "github.copilot.chat.temporalContext.enabled": true
 }
