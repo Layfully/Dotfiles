@@ -1,36 +1,8 @@
-#--- Visual Studio ---
 param (
     [switch]$SkipVisualStudio = $false
 )
 
-if ($SkipVisualStudio -eq $false) {
-    $UserConfirmation = ""
-    $configPath = "$env:USERPROFILE\Dotfiles\Config\.vsconfig"
-
-    while ($UserConfirmation -ne "Y" -and $UserConfirmation -ne "N") {
-        $UserConfirmation = Read-Host -Prompt "Do you want to install visual studio? (Y/N)"
-    }
-
-    if ($UserConfirmation -eq "Y") {
-        # Put the installation commands here.
-        Write-Host "Continuing with Visual Studio installation..."
-        winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config $configPath"
-    } else {
-        Write-Host "Visual Studio installation cancelled by the user."
-    }
-} else {
-    winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config $configPath"
-}
-
-
-#--- Visual Studio extensions ---
-#this one could be nice test if this is good
-#choco install -y gitdiffmargin
-
-#resharper is alternative
-#choco install -y resharper-ultimate-all --package-parameters="'/NoCpp'"
-
-    # Self-elevate the script if required
+#--- Self-Elevation ---
 if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
     if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
         $CommandLine = $MyInvocation.MyCommand.Path + $MyInvocation.UnboundArguments
@@ -40,111 +12,205 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     }
 }
 
-# Add winget cdn as a source
+#--- Visual Studio ---
+if (-not $SkipVisualStudio) {
+    $UserConfirmation = Read-Host -Prompt "Do you want to install Visual Studio? (Y/N)"
+
+    if ($UserConfirmation -cmatch "^y(es)?") {
+        # Use -cmatch for case-insensitive and more flexible matching
+        Write-Host "Continuing with Visual Studio installation..."
+        $vsConfigPath = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\.vsconfig"
+        winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config `"$vsConfigPath`"" # Quote config path in case it contains spaces
+    }
+    else {
+        Write-Host "Visual Studio installation cancelled by the user."
+    }
+}
+else {
+    Write-Host "Skipping Visual Studio installation as requested."
+}
+#--- Visual Studio extensions ---
+#this one could be nice test if this is good
+#choco install -y gitdiffmargin
+
+#resharper is alternative
+#choco install -y resharper-ultimate-all --package-parameters="'/NoCpp'"
+
+
+#--- Winget Setup ---
+# Add winget cdn source if not already present.
 $sourcesList = winget source list | Out-String
 $sourceName = "winget"
 $sourceURL = "https://cdn.winget.microsoft.com/cache"
 
 if ($sourcesList -like "*$sourceName*") {
     Write-Output "The winget source '$sourceName' is already added."
-} else {
+}
+else {
     Write-Output "The winget source '$sourceName' is not added. Adding now..."
     winget source add --name $sourceName --url $sourceURL
 }
 
-#Install powertoys, fzf, windows terminal and github copilot for cli
-#TODO: once its possible to load settings for power toys from file - do it.
-winget upgrade --id Microsoft.PowerToys
-winget upgrade fzf -h
-winget upgrade --id Microsoft.WindowsTerminal
+#--- Tool Installation and Upgrade ---
+Write-Host "Ensuring essential tools are installed and up-to-date..."
 
-(Get-Package -Name GitHub.cli -ErrorAction SilentlyContinue) ? (winget upgrade --id GitHub.cli) : (winget install --id GitHub.cli)
+# Use a list for easier management and iteration
+$wingetPackages = @(
+    "Microsoft.PowerToys"
+    "fzf"
+    "Microsoft.WindowsTerminal"
+    "GitHub.cli"
+    "JanDeDobbeleer.OhMyPosh"
+    "Microsoft.PowerShell"
+)
+
+foreach ($packageId in $wingetPackages) {
+    Write-Host "Installing/Upgrading '$packageId' using winget..."
+    winget install --id $packageId --silent --accept-package-agreements
+}
+
+# GitHub CLI Extension - gh-copilot
+Write-Host "Ensuring GitHub CLI extension 'gh-copilot' is installed and up-to-date..."
 (gh extension list | Select-String gh-copilot) ? (gh extension upgrade gh-copilot) : (gh extension install github/gh-copilot)
 
+#--- PowerShell Module Installation ---
+Write-Host "Setting up PowerShell modules..."
+
 # Trust PSGallery
-Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted -ErrorAction SilentlyContinue
 
 # Install chocolatey
-if(-not(test-path "C:\ProgramData\chocolatey\bin\choco.exe")) {
-    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+if (-not (Test-Path "C:\ProgramData\chocolatey\bin\choco.exe")) {
+    Write-Host "Installing Chocolatey..."
+    Set-ExecutionPolicy Bypass -Scope Process -Force
+    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072
+    iex ((New-Object Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 }
 else {
-    choco upgrade chocolatey
+    Write-Host "Upgrading Chocolatey..."
+    choco upgrade chocolatey -y --no-progress # Add -y and --no-progress for unattended install
 }
 
-# Install font used by terminal
-choco upgrade nerd-fonts-jetbrainsmono -y
+# Chocolatey Packages
+$chocoPackages = @(
+    "nerd-fonts-jetbrainsmono"
+    #"ripgrep"
+)
 
-# Install z for faster folder navigation
-Uninstall-Package -Name z -ErrorAction SilentlyContinue
-Install-Module ZLocation -Scope CurrentUser
+foreach ($package in $chocoPackages) {
+    Write-Host "Upgrading/Installing '$package' using Chocolatey..."
+    choco upgrade $package -y --no-progress
+}
 
-# Install PSFzf to use fzf in PowerShell
-Install-Module -Name PSFzf
+# PowerShell Modules
+$psModules = @(
+    "ZLocation"          # z for faster folder navigation
+    "PSFzf"              # PSFzf to use fzf in PowerShell
+    "CompletionPredictor" # PSReadLine predictions
+    "posh-git"           # prompt posh-git
+    "Terminal-Icons"     # terminal icons
+    "Az"                 # Azure PowerShell modules
+)
 
-# Install PSReadLine predictions
-Install-Module -Name CompletionPredictor -Repository PSGallery
+foreach ($moduleName in $psModules) {
+    Write-Host "Installing PowerShell module '$moduleName'..."
+    Install-Module -Name $moduleName -Scope CurrentUser -Force
+}
 
-# Install prompt posh-git
-Install-Module -Name posh-git
+#--- Symbolic Links Setup ---
+Write-Host "Setting up symbolic links for configuration files..."
+# Define configuration paths and target files
+$configItems = @(
+    @{
+        ProfileFullPath = Join-Path -Path $env:USERPROFILE -ChildPath "Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\user_profile.ps1"
+    },
+    @{
+        ProfileFullPath = Join-Path -Path $env:APPDATA -ChildPath "Code\User\settings.json"
+        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\VisualStudioCode\settings.json"
+    },
+    @{
+        ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\WindowsTerminal\settings.json"
+    }
+)
 
-# Install terminal icons
-Install-Module -Name Terminal-Icons
+foreach ($item in $configItems) {
+    $ProfileFullPath = $item.ProfileFullPath
+    $TargetPath = $item.TargetPath
+    $ProfilePath = Split-Path -Path $ProfileFullPath # Get the directory path
 
-# Install Az
-Install-Module -Name Az
+    Write-Host "Creating symbolic link for '$ProfileFullPath' pointing to '$TargetPath'..."
 
-# Install oh my posh
-winget upgrade JanDeDobbeleer.OhMyPosh -s winget
+    # Create profile directory if it doesn't exist
+    if (!(Test-Path -Path $ProfilePath)) {
+        New-Item -ItemType Directory -Path $ProfilePath -Force | Out-Null
+    }
 
-# Install powershell and use symlink to corresponding dotfile
-winget upgrade -h PowerShell -s msstore --accept-package-agreements
+    # Remove existing profile file and create symbolic link in one line, suppressing errors if file doesn't exist to remove
+    Remove-Item -Path $ProfileFullPath -Force -ErrorAction SilentlyContinue
+    New-Item -ItemType SymbolicLink -Path $ProfileFullPath -Target $TargetPath
+}
 
-# Symbolic links setup
-$PowerShellProfilePath = "$env:USERPROFILE\Documents\PowerShell\"
-$PowerShellProfileFullPath = ($PowerShellProfilePath + "Microsoft.PowerShell_profile.ps1")
+#--- Remove older modules ---
 
-if (Test-Path $PowerShellProfilePath) {
-    if (Test-Path $PowerShellProfileFullPath) {
-        Remove-Item -Path $PowerShellProfileFullPath -Force
+$modules = Get-Module -ListAvailable | Group-Object -Property Name
+
+foreach ($moduleGroup in $modules) {
+    $moduleName = $moduleGroup.Name
+    $moduleVersions = Get-Module -Name $moduleName -ListAvailable | Sort-Object Version -Descending
+
+    if ($moduleVersions -eq $null -or $moduleVersions.Count -le 1) {
+        continue  # Nothing to do if only one or zero versions
+    }
+
+    $latestVersion = $moduleVersions[0].Version
+    Write-Host "Latest version of '$moduleName' is: $latestVersion"
+
+    for ($i = 1; $i -lt $moduleVersions.Count; $i++) {
+        $currentVersion = $moduleVersions[$i].Version
+        $currentModule = $moduleVersions[$i]
+
+        $isLoaded = false
+        if (Get-Module -Name $moduleName -ErrorAction SilentlyContinue) {
+            # Check if *this specific version* is loaded.
+            $loadedModules = Get-Module -Name $moduleName
+            foreach ($loadedModule in $loadedModules) {
+                if ($loadedModule.Version -eq $currentVersion) {
+                    $isLoaded = $true
+                    break;
+                }
+            }
+        }
+
+        if ($isLoaded) {
+            Write-Host "Module '$moduleName' version '$currentVersion' is currently loaded." -ForegroundColor Yellow
+
+            try {
+                Write-Host "Attempting to remove module '$moduleName' version '$currentVersion' from session."
+                Remove-Module -Name $moduleName -RequiredVersion $currentVersion -Force -ErrorAction Stop  # Remove from current session
+            }
+            catch {
+                Write-Warning "Could not remove loaded module '$moduleName' version '$currentVersion' from session.  Skipping uninstallation. Error: $($_.Exception.Message)"
+                continue
+
+            }
+            Write-Host "Uninstalling older version: $currentVersion (from $($currentModule.ModuleBase))" -ForegroundColor DarkYellow
+
+            try {
+                Remove-Item -Path $currentModule.ModuleBase -Recurse -Force -ErrorAction Stop
+                Write-Host "Version $currentVersion uninstalled successfully." -ForegroundColor Green
+            }
+            catch {
+                Write-Error "Failed to uninstall version $($currentVersion): $($_.Exception.Message)"
+            }
+        }
     }
 }
-else {
-    New-Item -Path "$env:USERPROFILE\Documents" -Name "PowerShell" -ItemType "directory"
-}
-
-New-Item -ItemType SymbolicLink -Path $PowerShellProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\user_profile.ps1"
-
-$VSCodeConfigPath = "$env:APPDATA\Code\User\"
-$VSCodeSettingsFile = ($VSCodeConfigPath + "settings.json")
-
-if (Test-Path $VSCodeConfigPath) {
-    if (Test-Path $VSCodeSettingsFile) {
-        Remove-Item -Path $VSCodeSettingsFile -Force
-    }
-}
-else {
-    New-Item -Path "$env:APPDATA\Code" -Name "User" -ItemType "directory"
-}
-
-New-Item -ItemType SymbolicLink -Path $VSCodeSettingsFile -Target "$env:USERPROFILE\Dotfiles\Config\VisualStudioCode\settings.json"
-
-# Install windows terminal and use symlink to corresponding dotfile
-$WindowsTerminalProfilePath = "$env:USERPROFILE\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\"
-$WindowsTerminalProfileFullPath = ($WindowsTerminalProfilePath + "settings.json")
-
-if (Test-Path $WindowsTerminalProfilePath) {
-    if (Test-Path $WindowsTerminalProfileFullPath) {
-        Remove-Item -Path $WindowsTerminalProfileFullPath -Force
-    }
-}
-else {
-    New-Item -Path "$env:USERPROFILE\Documents" -Name "PowerShell" -ItemType "directory"
-}
-
-New-Item -ItemType SymbolicLink -Path $WindowsTerminalProfileFullPath -Target "$env:USERPROFILE\Dotfiles\Config\WindowsTerminal\settings.json"
-
-# TODO: add ripgrep
+#--- Final Steps ---
+Write-Host "Setup complete."
 
 # Reload profile so that changes are applied
+Write-Host "Reloading PowerShell profile..."
 . $profile
+Read-Host -Prompt "Press Enter to exit..."
