@@ -19,7 +19,7 @@ if (-not $SkipVisualStudio) {
     if ($UserConfirmation -cmatch "^y(es)?") {
         # Use -cmatch for case-insensitive and more flexible matching
         Write-Host "Continuing with Visual Studio installation..."
-        $vsConfigPath = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\.vsconfig"
+        $vsConfigPath = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\VisualStudio\installationConfig2022.vsconfig"
         winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config `"$vsConfigPath`"" # Quote config path in case it contains spaces
     }
     else {
