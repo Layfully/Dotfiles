@@ -99,5 +99,16 @@
   "github.copilot.chat.scopeSelection": true,
   "github.copilot.chat.generateTests.codeLens": true,
   "github.copilot.chat.search.semanticTextResults": true,
-  "github.copilot.chat.editor.temporalContext.enabled": true
+  "github.copilot.chat.editor.temporalContext.enabled": true,
+  "git.openRepositoryInParentFolders": "always",
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.cursorStyleInactive": "none",
+  "terminal.integrated.enableImages": true,
+  "terminal.integrated.enableVisualBell": true,
+  "terminal.integrated.experimental.windowsUseConptyDll": true,
+  "terminal.integrated.fontLigatures.enabled": true,
+  "terminal.integrated.mouseWheelZoom": true,
+  "terminal.integrated.fontSize": 15,
+  "terminal.integrated.smoothScrolling": true
 }
