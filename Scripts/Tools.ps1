@@ -132,6 +132,10 @@ $configItems = @(
     @{
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
         TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\WindowsTerminal\settings.json"
+    },
+    @{
+        ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "microsoft\visualstudio\17.0_12268c9f\settings\CurrentSettings.vssettings"
+        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\VisualStudio\settings.vssettings"
     }
 )
 
@@ -171,7 +175,7 @@ foreach ($moduleGroup in $modules) {
         $currentVersion = $moduleVersions[$i].Version
         $currentModule = $moduleVersions[$i]
 
-        $isLoaded = false
+        $isLoaded = $false
         if (Get-Module -Name $moduleName -ErrorAction SilentlyContinue) {
             # Check if *this specific version* is loaded.
             $loadedModules = Get-Module -Name $moduleName
