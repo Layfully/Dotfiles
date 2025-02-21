@@ -61,7 +61,8 @@ $wingetPackages = @(
     "Microsoft.WindowsTerminal"
     "GitHub.cli"
     "JanDeDobbeleer.OhMyPosh"
-    "Microsoft.PowerShell"
+    "Microsoft.PowerShell",
+    "MartiCliment.UniGetUI"
 )
 
 foreach ($packageId in $wingetPackages) {
