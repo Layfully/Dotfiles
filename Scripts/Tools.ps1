@@ -138,6 +138,10 @@ $configItems = @(
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "microsoft\visualstudio\17.0_12268c9f\settings\CurrentSettings.vssettings"
         TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\VisualStudio\settings.vssettings"
     }
+    @{
+        ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "UniGetUI\Configuration"
+        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\UniGetUI"
+    }
 )
 
 foreach ($item in $configItems) {
