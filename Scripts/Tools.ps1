@@ -65,6 +65,7 @@ $wingetPackages = @(
     "MartiCliment.UniGetUI"
     "Git.Git"
     "Bitwarden.Bitwarden"
+    "Microsoft.VisualStudioCode"
 )
 
 foreach ($packageId in $wingetPackages) {
