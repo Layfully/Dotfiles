@@ -57,12 +57,14 @@ Write-Host "Ensuring essential tools are installed and up-to-date..."
 # Use a list for easier management and iteration
 $wingetPackages = @(
     "Microsoft.PowerToys"
-    "fzf"
+    "junegunn.fzf"
     "Microsoft.WindowsTerminal"
     "GitHub.cli"
     "JanDeDobbeleer.OhMyPosh"
     "Microsoft.PowerShell",
     "MartiCliment.UniGetUI"
+    "Git.Git"
+    "Bitwarden.Bitwarden"
 )
 
 foreach ($packageId in $wingetPackages) {
@@ -110,7 +112,7 @@ $psModules = @(
     "CompletionPredictor" # PSReadLine predictions
     "posh-git"           # prompt posh-git
     "Terminal-Icons"     # terminal icons
-    "Az"                 # Azure PowerShell modules
+    #"Az"                 # Azure PowerShell modules
 )
 
 foreach ($moduleName in $psModules) {
@@ -134,10 +136,10 @@ $configItems = @(
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
         TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\WindowsTerminal\settings.json"
     },
-    @{
-        ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "microsoft\visualstudio\17.0_12268c9f\settings\CurrentSettings.vssettings"
-        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\VisualStudio\settings.vssettings"
-    }
+    #@{
+    #    ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "microsoft\visualstudio\17.0_12268c9f\settings\CurrentSettings.vssettings"
+    #    TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\VisualStudio\settings.vssettings"
+    #}
     @{
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "UniGetUI\Configuration"
         TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\UniGetUI"
@@ -216,6 +218,10 @@ foreach ($moduleGroup in $modules) {
         }
     }
 }
+
+git config --global user.email "git@adriangaborek.dev"
+git config --global user.name "Adrian Gaborek"
+
 #--- Final Steps ---
 Write-Host "Setup complete."
 
