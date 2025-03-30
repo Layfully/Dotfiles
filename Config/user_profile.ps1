@@ -109,7 +109,7 @@ Set-PSReadLineKeyHandler -Key '"',"'" `
 
     # If cursor is at the start of a token, enclose it in quotes.
     if ($token.Extent.StartOffset -eq $cursor) {
-        if ($token.Kind -eq [TokenKind]::Generic -or $token.Kind -eq [TokenKind]::Identifier -or 
+        if ($token.Kind -eq [TokenKind]::Generic -or $token.Kind -eq [TokenKind]::Identifier -or
             $token.Kind -eq [TokenKind]::Variable -or $token.TokenFlags.hasFlag([TokenFlags]::Keyword)) {
             $end = $token.Extent.EndOffset
             $len = $end - $cursor
@@ -143,7 +143,7 @@ Set-PSReadLineKeyHandler -Key '(','{','[' `
     $line = $null
     $cursor = $null
     [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
-    
+
     if ($selectionStart -ne -1)
     {
       # Text is selected, wrap it in brackets
@@ -214,7 +214,7 @@ Set-PSReadLineKeyHandler -Key Backspace `
 
 #Fzf
 Import-Module PSFzf
-Set-PsFzfOption -PSreadLineChordProvider 'Ctrl+f' -PSReadLineChordReverseHistory 'Ctrl+r'  
+Set-PsFzfOption -PSreadLineChordProvider 'Ctrl+f' -PSReadLineChordReverseHistory 'Ctrl+r'
 
 #Utilities
 function which ($command) {
@@ -244,6 +244,6 @@ Set-Alias fh Invoke-FuzzyHistory
 Set-Alias fkill Invoke-FuzzyKillProcess
 Set-Alias fd Invoke-FuzzySetLocation
 Set-Alias gs Get-GitStatus
-Set-Alias gl Get-GitPull
-Set-Alias gp Get-GitPush
+Set-Alias -Name gl -Value Get-GitPull -Force
+Set-Alias -Name gp -Value Get-GitPush -Force
 Set-Alias gf Get-GitFetch
