@@ -212,6 +212,9 @@ Set-PSReadLineKeyHandler -Key Backspace `
     }
 }
 
+#AiShell
+Start-AIShell
+
 #Fzf
 Import-Module PSFzf
 Set-PsFzfOption -PSreadLineChordProvider 'Ctrl+f' -PSReadLineChordReverseHistory 'Ctrl+r'  
@@ -244,6 +247,6 @@ Set-Alias fh Invoke-FuzzyHistory
 Set-Alias fkill Invoke-FuzzyKillProcess
 Set-Alias fd Invoke-FuzzySetLocation
 Set-Alias gs Get-GitStatus
-Set-Alias gl Get-GitPull
-Set-Alias gp Get-GitPush
-Set-Alias gf Get-GitFetch
+Set-Alias gpl Get-GitPull
+Set-Alias gps Get-GitPush
+Set-Alias gft Get-GitFetch
