@@ -247,12 +247,6 @@ Set-Alias fh Invoke-FuzzyHistory
 Set-Alias fkill Invoke-FuzzyKillProcess
 Set-Alias fd Invoke-FuzzySetLocation
 Set-Alias gs Get-GitStatus
-<<<<<<< HEAD
-Set-Alias gpl Get-GitPull
-Set-Alias gps Get-GitPush
-Set-Alias gft Get-GitFetch
-=======
 Set-Alias -Name gl -Value Get-GitPull -Force
 Set-Alias -Name gp -Value Get-GitPush -Force
 Set-Alias gf Get-GitFetch
->>>>>>> 70d7fa234d161e82deacdb0b46cce0f9a44aaf0a
