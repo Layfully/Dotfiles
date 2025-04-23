@@ -1,6 +1,8 @@
 {
   "editor.unicodeHighlight.nonBasicASCII": false,
-  "terminal.integrated.commandsToSkipShell": ["matlab.interrupt"],
+  "terminal.integrated.commandsToSkipShell": [
+    "matlab.interrupt"
+  ],
   "omnisharp.useModernNet": false,
   "editor.tabSize": 2,
   "workbench.iconTheme": "material-icon-theme",
@@ -19,7 +21,9 @@
   "workbench.colorCustomizations": {
     "terminal.background": "#00000000"
   },
-  "workbench.settings.applyToAllProfiles": ["workbench.colorCustomizations"],
+  "workbench.settings.applyToAllProfiles": [
+    "workbench.colorCustomizations"
+  ],
   "window.titleBarStyle": "custom",
   "vscode_vibrancy.opacity": 0.5,
   "synthwave84.brightness": 0.15,
