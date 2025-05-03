@@ -1,0 +1,8 @@
+wsl --install
+sudo apt update
+sudo apt upgrade -y
+git config --global user.name "Adrian Gaborek"
+git config --global user.email "git@adriangaborek.dev"
+git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe"
+git config --global credential.https://dev.azure.com.useHttpPath true
+sudo snap install rider --classic
