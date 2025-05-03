@@ -20,8 +20,8 @@
         "SkipMinorUpdates": false
       },
       "Updates": {
-        "UpdatesIgnored": false,
-        "IgnoredVersion": ""
+        "UpdatesIgnored": true,
+        "IgnoredVersion": "*"
       }
     },
     {
@@ -48,9 +48,101 @@
       }
     },
     {
+      "Id": "AIShell",
+      "Name": "AIShell",
+      "Version": "1.0.2",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az",
+      "Name": "Az",
+      "Version": "13.4.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az",
+      "Name": "Az",
+      "Version": "13.3.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
       "Id": "Az",
       "Name": "Az",
       "Version": "13.2.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Accounts",
+      "Name": "Az.Accounts",
+      "Version": "4.1.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -97,6 +189,29 @@
       "Id": "Az.Advisor",
       "Name": "Az.Advisor",
       "Version": "2.1.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Aks",
+      "Name": "Az.Aks",
+      "Version": "6.1.1",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -189,6 +304,29 @@
       "Id": "Az.App",
       "Name": "Az.App",
       "Version": "2.0.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.AppConfiguration",
+      "Name": "Az.AppConfiguration",
+      "Version": "1.4.1",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -395,6 +533,29 @@
     {
       "Id": "Az.Cdn",
       "Name": "Az.Cdn",
+      "Version": "3.3.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Cdn",
+      "Name": "Az.Cdn",
       "Version": "3.3.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -441,7 +602,53 @@
     {
       "Id": "Az.CognitiveServices",
       "Name": "Az.CognitiveServices",
+      "Version": "1.16.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.CognitiveServices",
+      "Name": "Az.CognitiveServices",
       "Version": "1.15.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Compute",
+      "Name": "Az.Compute",
+      "Version": "9.2.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -579,6 +786,52 @@
     {
       "Id": "Az.CosmosDB",
       "Name": "Az.CosmosDB",
+      "Version": "1.18.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.CosmosDB",
+      "Name": "Az.CosmosDB",
+      "Version": "1.17.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.CosmosDB",
+      "Name": "Az.CosmosDB",
       "Version": "1.16.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -602,7 +855,53 @@
     {
       "Id": "Az.DataBoxEdge",
       "Name": "Az.DataBoxEdge",
+      "Version": "1.2.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.DataBoxEdge",
+      "Name": "Az.DataBoxEdge",
       "Version": "1.2.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.DataFactory",
+      "Name": "Az.DataFactory",
+      "Version": "1.19.1",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -717,6 +1016,29 @@
     {
       "Id": "Az.DataShare",
       "Name": "Az.DataShare",
+      "Version": "1.1.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.DataShare",
+      "Name": "Az.DataShare",
       "Version": "1.1.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -761,8 +1083,8 @@
       }
     },
     {
-      "Id": "Az.DesktopVirtualization",
-      "Name": "Az.DesktopVirtualization",
+      "Id": "Az.DesktopVirtualizat\u0007",
+      "Name": "Az.DesktopVirtualizat\u0007",
       "Version": "5.4.1",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -1014,8 +1336,8 @@
       }
     },
     {
-      "Id": "Az.HealthDataAIServices",
-      "Name": "Az.HealthDataAIServices",
+      "Id": "Az.HealthDataAIServic\u0007",
+      "Name": "Az.HealthDataAIServic\u0007",
       "Version": "1.0.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -1198,9 +1520,32 @@
       }
     },
     {
-      "Id": "Az.MachineLearningServi\u0007",
-      "Name": "Az.MachineLearningServi\u0007",
+      "Id": "Az.MachineLearningSer\u0007",
+      "Name": "Az.MachineLearningSer\u0007",
       "Version": "1.2.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Maintenance",
+      "Name": "Az.Maintenance",
+      "Version": "1.5.1",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -1244,8 +1589,31 @@
       }
     },
     {
-      "Id": "Az.ManagedServiceIdenti\u0007",
-      "Name": "Az.ManagedServiceIdenti\u0007",
+      "Id": "Az.ManagedServiceIden\u0007",
+      "Name": "Az.ManagedServiceIden\u0007",
+      "Version": "1.3.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.ManagedServiceIden\u0007",
+      "Name": "Az.ManagedServiceIden\u0007",
       "Version": "1.3.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -1338,7 +1706,53 @@
     {
       "Id": "Az.Migrate",
       "Name": "Az.Migrate",
+      "Version": "2.7.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Migrate",
+      "Name": "Az.Migrate",
       "Version": "2.6.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Monitor",
+      "Name": "Az.Monitor",
+      "Version": "6.0.2",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -1385,6 +1799,75 @@
       "Id": "Az.MySql",
       "Name": "Az.MySql",
       "Version": "1.3.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Network",
+      "Name": "Az.Network",
+      "Version": "7.16.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Network",
+      "Name": "Az.Network",
+      "Version": "7.15.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Network",
+      "Name": "Az.Network",
+      "Version": "7.15.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -1545,6 +2028,29 @@
     {
       "Id": "Az.PolicyInsights",
       "Name": "Az.PolicyInsights",
+      "Version": "1.7.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.PolicyInsights",
+      "Name": "Az.PolicyInsights",
       "Version": "1.7.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -1637,6 +2143,75 @@
     {
       "Id": "Az.RecoveryServices",
       "Name": "Az.RecoveryServices",
+      "Version": "7.7.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.RecoveryServices",
+      "Name": "Az.RecoveryServices",
+      "Version": "7.6.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.RecoveryServices",
+      "Name": "Az.RecoveryServices",
+      "Version": "7.5.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.RecoveryServices",
+      "Name": "Az.RecoveryServices",
       "Version": "7.5.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -1681,8 +2256,8 @@
       }
     },
     {
-      "Id": "Az.RedisEnterpriseCache",
-      "Name": "Az.RedisEnterpriseCache",
+      "Id": "Az.RedisEnterpriseCac\u0007",
+      "Name": "Az.RedisEnterpriseCac\u0007",
       "Version": "1.4.1",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -1729,6 +2304,29 @@
     {
       "Id": "Az.ResourceGraph",
       "Name": "Az.ResourceGraph",
+      "Version": "1.2.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.ResourceGraph",
+      "Name": "Az.ResourceGraph",
       "Version": "1.1.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -1753,6 +2351,52 @@
       "Id": "Az.ResourceMover",
       "Name": "Az.ResourceMover",
       "Version": "1.3.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Resources",
+      "Name": "Az.Resources",
+      "Version": "7.10.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Resources",
+      "Name": "Az.Resources",
+      "Version": "7.9.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -1844,6 +2488,29 @@
     {
       "Id": "Az.ServiceBus",
       "Name": "Az.ServiceBus",
+      "Version": "4.1.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.ServiceBus",
+      "Name": "Az.ServiceBus",
       "Version": "4.1.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -1891,6 +2558,29 @@
       "Id": "Az.SignalR",
       "Name": "Az.SignalR",
       "Version": "2.1.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Sql",
+      "Name": "Az.Sql",
+      "Version": "6.0.2",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -2005,6 +2695,52 @@
     {
       "Id": "Az.Storage",
       "Name": "Az.Storage",
+      "Version": "8.3.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Storage",
+      "Name": "Az.Storage",
+      "Version": "8.2.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Storage",
+      "Name": "Az.Storage",
       "Version": "8.1.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -2029,6 +2765,29 @@
       "Id": "Az.StorageMover",
       "Name": "Az.StorageMover",
       "Version": "1.5.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.StorageSync",
+      "Name": "Az.StorageSync",
+      "Version": "2.5.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -2120,6 +2879,52 @@
     {
       "Id": "Az.Synapse",
       "Name": "Az.Synapse",
+      "Version": "3.2.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Synapse",
+      "Name": "Az.Synapse",
+      "Version": "3.1.2",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Synapse",
+      "Name": "Az.Synapse",
       "Version": "3.1.1",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -2166,7 +2971,76 @@
     {
       "Id": "Az.Websites",
       "Name": "Az.Websites",
+      "Version": "3.4.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Websites",
+      "Name": "Az.Websites",
+      "Version": "3.3.1",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Websites",
+      "Name": "Az.Websites",
       "Version": "3.3.0",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Az.Workloads",
+      "Name": "Az.Workloads",
+      "Version": "1.0.0",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
       "InstallationOptions": {
@@ -2189,7 +3063,7 @@
     {
       "Id": "Bitwarden.Bitwarden",
       "Name": "Bitwarden",
-      "Version": "2025.2.0",
+      "Version": "2025.3.1",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2235,7 +3109,7 @@
     {
       "Id": "Docker.DockerDesktop",
       "Name": "Docker Desktop",
-      "Version": "4.38.0",
+      "Version": "4.40.0",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2275,13 +3149,13 @@
       },
       "Updates": {
         "UpdatesIgnored": false,
-        "IgnoredVersion": ""
+        "IgnoredVersion": "7.0.1.0083"
       }
     },
     {
-      "Id": "GIMP.GIMP",
+      "Id": "GIMP.GIMP.3",
       "Name": "GIMP",
-      "Version": "2.10.38",
+      "Version": "3.0.2",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2327,7 +3201,7 @@
     {
       "Id": "Git.Git",
       "Name": "Git",
-      "Version": "2.48.1",
+      "Version": "2.49.0",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2350,7 +3224,7 @@
     {
       "Id": "GitHub.cli",
       "Name": "GitHub CLI",
-      "Version": "2.67.0",
+      "Version": "2.70.0",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2373,7 +3247,7 @@
     {
       "Id": "Google.Chrome",
       "Name": "Google Chrome",
-      "Version": "133.0.6943.142",
+      "Version": "135.0.7049.96",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2396,9 +3270,147 @@
     {
       "Id": "JanDeDobbeleer.OhMyPosh",
       "Name": "Oh My Posh",
-      "Version": "25.0.0",
+      "Version": "25.16.1",
       "Source": "winget",
       "ManagerName": "Winget",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "JetBrainsMonoNF",
+      "Name": "JetBrainsMonoNF",
+      "Version": "3.0.1",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "KB2919355",
+      "Name": "KB2919355",
+      "Version": "1.0.20160915",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "KB2919442",
+      "Name": "KB2919442",
+      "Version": "1.0.20160915",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "KB2999226",
+      "Name": "KB2999226",
+      "Version": "1.0.20181019",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "KB3033929",
+      "Name": "KB3033929",
+      "Version": "1.0.5",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "KB3035131",
+      "Name": "KB3035131",
+      "Version": "1.0.3",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
       "InstallationOptions": {
         "SkipHashCheck": false,
         "InteractiveInstallation": false,
@@ -2442,7 +3454,7 @@
     {
       "Id": "MartiCliment.UniGetUI",
       "Name": "UniGetUI (formerly WingetUI)",
-      "Version": "3.1.7",
+      "Version": "3.1.8",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2465,7 +3477,7 @@
     {
       "Id": "Microsoft.AppInstaller",
       "Name": "App Installer",
-      "Version": "1.25.320.0",
+      "Version": "1.25.340.0",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2488,7 +3500,7 @@
     {
       "Id": "Microsoft.Azure.FunctionsCoreTools",
       "Name": "Azure Functions Core Tools",
-      "Version": "4.0.6821",
+      "Version": "4.0.7030",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2511,7 +3523,7 @@
     {
       "Id": "Microsoft.AzureCLI",
       "Name": "Microsoft Azure CLI",
-      "Version": "2.69.0",
+      "Version": "2.71.0",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2626,7 +3638,7 @@
     {
       "Id": "Microsoft.DotNet.SDK.Preview",
       "Name": "Microsoft .NET SDK 10.0 Preview",
-      "Version": "9.0.100-rc.2.24474.11",
+      "Version": "10.0.100-preview.3.25201.16",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2649,7 +3661,7 @@
     {
       "Id": "Microsoft.Edge",
       "Name": "Microsoft Edge",
-      "Version": "133.0.3065.92",
+      "Version": "135.0.3179.85",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2672,7 +3684,7 @@
     {
       "Id": "Microsoft.Office",
       "Name": "Microsoft 365 Apps for enterprise",
-      "Version": "16.0.18429.20158",
+      "Version": "16.0.18623.20178",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2695,7 +3707,7 @@
     {
       "Id": "Microsoft.OneDrive",
       "Name": "Microsoft OneDrive",
-      "Version": "25.015.0126.0002",
+      "Version": "25.056.0324.0003",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2741,7 +3753,7 @@
     {
       "Id": "Microsoft.PowerToys",
       "Name": "PowerToys",
-      "Version": "0.88.0",
+      "Version": "0.90.1",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2764,7 +3776,7 @@
     {
       "Id": "Microsoft.SQLServer.2012.NativeClient",
       "Name": "Microsoft SQL Server 2012 Native Client",
-      "Version": "11.3.6540.0",
+      "Version": "11.4.7001.0",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2787,7 +3799,7 @@
     {
       "Id": "Microsoft.Teams",
       "Name": "Microsoft Teams",
-      "Version": "25044.2205.3455.2339",
+      "Version": "25094.303.3554.9058",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -2833,7 +3845,7 @@
     {
       "Id": "Microsoft.Teams.Free",
       "Name": "Microsoft Teams",
-      "Version": "25031.702.3408.1909",
+      "Version": "25093.1903.3570.2537",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3015,9 +4027,32 @@
       }
     },
     {
+      "Id": "Microsoft.VisualStudio.2019.BuildTools",
+      "Name": "Visual Studio BuildTools 2019",
+      "Version": "16.11.46",
+      "Source": "winget",
+      "ManagerName": "Winget",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
       "Id": "Microsoft.VisualStudio.2019.Professional",
       "Name": "Visual Studio Professional 2019",
-      "Version": "16.11.44",
+      "Version": "16.11.46",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3040,7 +4075,7 @@
     {
       "Id": "Microsoft.VisualStudio.2022.Professional",
       "Name": "Visual Studio Professional 2022",
-      "Version": "17.13.2",
+      "Version": "17.13.6",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3063,7 +4098,7 @@
     {
       "Id": "Microsoft.VisualStudioCode",
       "Name": "Microsoft Visual Studio Code",
-      "Version": "1.97.2",
+      "Version": "1.99.3",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3086,7 +4121,7 @@
     {
       "Id": "Microsoft.WSL",
       "Name": "Windows Subsystem for Linux",
-      "Version": "2.4.11.0",
+      "Version": "5.10.102.1",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3130,8 +4165,8 @@
       }
     },
     {
-      "Id": "Microsoft.WinGet.Client",
-      "Name": "Microsoft.WinGet.Client",
+      "Id": "Microsoft.WinGet.Clie\u0007",
+      "Name": "Microsoft.WinGet.Clie\u0007",
       "Version": "1.9.24\u0007",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -3153,8 +4188,8 @@
       }
     },
     {
-      "Id": "Microsoft.WinGet.Comman\u0007",
-      "Name": "Microsoft.WinGet.Comman\u0007",
+      "Id": "Microsoft.WinGet.Comm\u0007",
+      "Name": "Microsoft.WinGet.Comm\u0007",
       "Version": "1.0.4",
       "Source": "PSGallery",
       "ManagerName": "PowerShell7",
@@ -3224,7 +4259,7 @@
     {
       "Id": "Microsoft.WindowsTerminal",
       "Name": "Windows Terminal",
-      "Version": "1.22.10352.0",
+      "Version": "1.22.10731.0",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3270,7 +4305,7 @@
     {
       "Id": "Mozilla.Firefox.DeveloperEdition",
       "Name": "Firefox Developer Edition (en-US)",
-      "Version": "136.0",
+      "Version": "138.0",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3293,7 +4328,7 @@
     {
       "Id": "Notepad\u002B\u002B.Notepad\u002B\u002B",
       "Name": "Notepad\u002B\u002B",
-      "Version": "8.7.7",
+      "Version": "8.7.9",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3339,7 +4374,7 @@
     {
       "Id": "Oracle.VirtualBox",
       "Name": "Oracle VM VirtualBox",
-      "Version": "7.1.6",
+      "Version": "7.1.8",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3408,7 +4443,7 @@
     {
       "Id": "Postman.Postman",
       "Name": "Postman",
-      "Version": "11.34.4",
+      "Version": "11.41.4",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3500,7 +4535,30 @@
     {
       "Id": "Python.Python.3.12",
       "Name": "Python 3.12",
-      "Version": "3.12.9",
+      "Version": "3.12.10",
+      "Source": "winget",
+      "ManagerName": "Winget",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "Python.Python.3.13",
+      "Name": "Python 3.13",
+      "Version": "3.13.3",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3523,7 +4581,7 @@
     {
       "Id": "TeamViewer.TeamViewer",
       "Name": "TeamViewer",
-      "Version": "15.63.4",
+      "Version": "15.64.3",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3661,7 +4719,7 @@
     {
       "Id": "Zoom.Zoom.EXE",
       "Name": "Zoom Workplace (EXE)",
-      "Version": "6.3.10 (59437)",
+      "Version": "6.4.5 (64357)",
       "Source": "winget",
       "ManagerName": "Winget",
       "InstallationOptions": {
@@ -3682,9 +4740,170 @@
       }
     },
     {
+      "Id": "chocolatey",
+      "Name": "Chocolatey",
+      "Version": "2.4.3",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "chocolatey-compatibility.extension",
+      "Name": "Chocolatey Compatibility.extension",
+      "Version": "1.0.0",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "chocolatey-core.extension",
+      "Name": "Chocolatey Core.extension",
+      "Version": "1.4.0",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "chocolatey-dotnetfx.extension",
+      "Name": "Chocolatey Dotnetfx.extension",
+      "Version": "1.0.1",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "chocolatey-font-helpers.extension",
+      "Name": "Chocolatey Font Helpers.extension",
+      "Version": "0.0.4",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "chocolatey-visualstudio.extension",
+      "Name": "Chocolatey Visualstudio.extension",
+      "Version": "1.11.1",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "chocolatey-windowsupdate.extension",
+      "Name": "Chocolatey Windowsupdate.extension",
+      "Version": "1.0.5",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
       "Id": "dotnet-aspnet-codegenerator",
       "Name": "Dotnet Aspnet Codegenerator",
-      "Version": "7.0.7",
+      "Version": "9.0.0",
       "Source": "nuget.org",
       "ManagerName": ".NET Tool",
       "InstallationOptions": {
@@ -3728,11 +4947,57 @@
       }
     },
     {
+      "Id": "dotnetfx",
+      "Name": "Dotnetfx",
+      "Version": "4.8.0.20220524",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
       "Id": "junegunn.fzf",
       "Name": "fzf",
-      "Version": "0.60.2",
+      "Version": "0.61.2",
       "Source": "winget",
       "ManagerName": "Winget",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "nerd-fonts-JetBrainsMono",
+      "Name": "Nerd Fonts JetBrainsMono",
+      "Version": "3.3.0",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
       "InstallationOptions": {
         "SkipHashCheck": false,
         "InteractiveInstallation": false,
@@ -3774,11 +5039,241 @@
       }
     },
     {
-      "Id": "studio3t",
-      "Name": "Studio3t",
-      "Version": "2023.4.0",
+      "Id": "python",
+      "Name": "Python",
+      "Version": "3.13.3",
       "Source": "community",
       "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "python3",
+      "Name": "Python3",
+      "Version": "3.13.3",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "python312",
+      "Name": "Python312",
+      "Version": "3.12.10",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "python313",
+      "Name": "Python313",
+      "Version": "3.13.3",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "syspin",
+      "Name": "Syspin",
+      "Version": "0.99.9.20210303",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "vcredist140",
+      "Name": "Vcredist140",
+      "Version": "14.42.34438.20250221",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "vcredist2015",
+      "Name": "Vcredist2015",
+      "Version": "14.0.24215.20170201",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "visualstudio-installer",
+      "Name": "Visualstudio Installer",
+      "Version": "2.0.3",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "visualstudio2019-workload-vctools",
+      "Name": "Visualstudio2019 Workload Vctools",
+      "Version": "1.0.1",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "visualstudio2019buildtools",
+      "Name": "Visualstudio2019buildtools",
+      "Version": "16.11.46",
+      "Source": "community",
+      "ManagerName": "Chocolatey",
+      "InstallationOptions": {
+        "SkipHashCheck": false,
+        "InteractiveInstallation": false,
+        "RunAsAdministrator": false,
+        "Architecture": "",
+        "InstallationScope": "",
+        "CustomParameters": [],
+        "PreRelease": false,
+        "CustomInstallLocation": "",
+        "Version": "",
+        "SkipMinorUpdates": false
+      },
+      "Updates": {
+        "UpdatesIgnored": false,
+        "IgnoredVersion": ""
+      }
+    },
+    {
+      "Id": "z",
+      "Name": "Z",
+      "Version": "1.1.14",
+      "Source": "PSGallery",
+      "ManagerName": "PowerShell7",
       "InstallationOptions": {
         "SkipHashCheck": false,
         "InteractiveInstallation": false,
@@ -3879,13 +5374,13 @@
     {
       "Id": "ARP\\Machine\\X64\\MozillaMaintenanceService",
       "Name": "Mozilla Maintenance Service",
-      "Version": "135.0.1",
+      "Version": "137.0",
       "Source": "Local PC"
     },
     {
       "Id": "ARP\\Machine\\X64\\O365ProPlusRetail - pl-pl",
       "Name": "Aplikacje Microsoft 365 dla przedsi\u0119biorstw - pl-pl",
-      "Version": "16.0.18429.20158",
+      "Version": "16.0.18623.20178",
       "Source": "Local PC"
     },
     {
@@ -3904,6 +5399,12 @@
       "Id": "ARP\\Machine\\X64\\TAP-Windows",
       "Name": "TAP-Windows 9.24.2",
       "Version": "9.24.2",
+      "Source": "Local PC"
+    },
+    {
+      "Id": "ARP\\Machine\\X64\\{2A7082A8-99DB-4177-A9B5-DB3944A581FD}",
+      "Name": "Microsoft .NET SDK 9.0.203 (x64) from Visual Studio",
+      "Version": "9.2.325.16509",
       "Source": "Local PC"
     },
     {
@@ -3939,19 +5440,13 @@
     {
       "Id": "ARP\\Machine\\X64\\{A7AB73A3-CB10-4AA5-9D38-6AEFFBDE4C91}",
       "Name": "Microsoft Teams Meeting Add-in for Microsoft Office",
-      "Version": "1.24.31301",
+      "Version": "1.25.08601",
       "Source": "Local PC"
     },
     {
       "Id": "ARP\\Machine\\X64\\{AB5D8778-81F3-47E2-87A4-35E776CD664B}",
       "Name": "Microsoft VSS Writer for SQL Server 2022",
       "Version": "16.0.1000.6",
-      "Source": "Local PC"
-    },
-    {
-      "Id": "ARP\\Machine\\X64\\{B381EF1A-6981-4B8C-84E6-A142DAF6C055}",
-      "Name": "Microsoft .NET SDK 9.0.200 (x64) from Visual Studio",
-      "Version": "9.2.25.7312",
       "Source": "Local PC"
     },
     {
@@ -3973,12 +5468,6 @@
       "Source": "Local PC"
     },
     {
-      "Id": "ARP\\Machine\\X64\\{F8474A47-8B5D-4466-ACE3-78EAB3BF21A8}",
-      "Name": "Windows Subsystem for Linux Update",
-      "Version": "5.10.102.1",
-      "Source": "Local PC"
-    },
-    {
       "Id": "ARP\\Machine\\X86\\DevExpress Components 18.1",
       "Name": "DevExpress Components 18.1",
       "Version": "18.1.3",
@@ -3987,7 +5476,7 @@
     {
       "Id": "ARP\\Machine\\X86\\HostedAgent",
       "Name": "Trend Micro Security Agent",
-      "Version": "6.7.3897",
+      "Version": "6.7.3929",
       "Source": "Local PC"
     },
     {
@@ -4011,7 +5500,7 @@
     {
       "Id": "ARP\\Machine\\X86\\VantageSRV_is1",
       "Name": "Lenovo Vantage Service",
-      "Version": "4.2.24.0",
+      "Version": "4.2.85.0",
       "Source": "Local PC"
     },
     {
@@ -4153,9 +5642,9 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Clipchamp.Clipchamp_4.0.10720.0_x64__yxz26nhyzhsrt",
+      "Id": "MSIX\\Clipchamp.Clipchamp_4.2.10020.0_x64__yxz26nhyzhsrt",
       "Name": "Microsoft Clipchamp",
-      "Version": "4.0.10720.0",
+      "Version": "4.2.10020.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4183,6 +5672,12 @@
       "Source": "Microsoft Store"
     },
     {
+      "Id": "MSIX\\Microsoft.CommandPalette_0.1.1.0_x64__8wekyb3d8bbwe",
+      "Name": "Command Palette",
+      "Version": "0.1.1.0",
+      "Source": "Microsoft Store"
+    },
+    {
       "Id": "MSIX\\Microsoft.GetHelp_10.2409.22951.0_x64__8wekyb3d8bbwe",
       "Name": "Get Help",
       "Version": "10.2409.22951.0",
@@ -4201,9 +5696,9 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.HEVCVideoExtension_2.2.9.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.HEVCVideoExtension_2.2.33.0_x64__8wekyb3d8bbwe",
       "Name": "HEVC Video Extensions from Device Manufacturer",
-      "Version": "2.2.9.0",
+      "Version": "2.2.33.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4243,9 +5738,9 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.MicrosoftOfficeHub_18.2502.1252.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.MicrosoftOfficeHub_18.2503.12711.0_x64__8wekyb3d8bbwe",
       "Name": "Microsoft 365 Copilot",
-      "Version": "18.2502.1252.0",
+      "Version": "18.2503.12711.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4351,27 +5846,27 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.OfficePushNotificationUtility_16.0.18429.20158_neutral__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.OfficePushNotificationUtility_16.0.18623.20178_neutral__8wekyb3d8bbwe",
       "Name": "OfficePushNotificationsUtility",
-      "Version": "16.0.18429.20158",
+      "Version": "16.0.18623.20178",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.OneDriveSync_25015.126.2.0_neutral__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.OneDriveSync_25056.324.3.0_neutral__8wekyb3d8bbwe",
       "Name": "OneDrive",
-      "Version": "25015.126.2.0",
+      "Version": "25056.324.3.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.OutlookForWindows_1.2025.219.400_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.OutlookForWindows_1.2025.411.300_x64__8wekyb3d8bbwe",
       "Name": "Outlook for Windows",
-      "Version": "1.2025.219.400",
+      "Version": "1.2025.411.300",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.Paint_11.2411.471.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.Paint_11.2502.161.0_x64__8wekyb3d8bbwe",
       "Name": "Paint",
-      "Version": "11.2411.471.0",
+      "Version": "11.2502.161.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4381,9 +5876,9 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.PowerToys.ImageResizerContextMenu_0.88.0.0_neutral__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.PowerToys.ImageResizerContextMenu_0.90.1.0_neutral__8wekyb3d8bbwe",
       "Name": "PowerToys ImageResizer Context Menu",
-      "Version": "0.88.0.0",
+      "Version": "0.90.1.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4393,15 +5888,15 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.ScreenSketch_11.2409.25.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.ScreenSketch_11.2502.18.0_x64__8wekyb3d8bbwe",
       "Name": "Snipping Tool",
-      "Version": "11.2409.25.0",
+      "Version": "11.2502.18.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.SecHealthUI_1000.27703.1006.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.SecHealthUI_1000.27777.1008.0_x64__8wekyb3d8bbwe",
       "Name": "Windows Security",
-      "Version": "1000.27703.1006.0",
+      "Version": "1000.27777.1008.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4417,21 +5912,21 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.StartExperiencesApp_1.1.235.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.StartExperiencesApp_1.1.296.0_x64__8wekyb3d8bbwe",
       "Name": "Start Experiences App",
-      "Version": "1.1.235.0",
+      "Version": "1.1.296.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.StorePurchaseApp_22411.1401.1.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.StorePurchaseApp_22502.1401.1.0_x64__8wekyb3d8bbwe",
       "Name": "Store Experience Host",
-      "Version": "22411.1401.1.0",
+      "Version": "22502.1401.1.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.Todos_2.114.7122.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.Todos_2.143.2921.0_x64__8wekyb3d8bbwe",
       "Name": "Microsoft To Do",
-      "Version": "2.114.7122.0",
+      "Version": "2.143.2921.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4519,15 +6014,15 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.WidgetsPlatformRuntime_1.6.2.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.WidgetsPlatformRuntime_1.6.8.0_x64__8wekyb3d8bbwe",
       "Name": "Widgets Platform Runtime",
-      "Version": "1.6.2.0",
+      "Version": "1.6.8.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.Windows.Photos_2025.11020.11001.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.Windows.Photos_2025.11030.12002.0_x64__8wekyb3d8bbwe",
       "Name": "Microsoft Photos",
-      "Version": "2025.11020.11001.0",
+      "Version": "2025.11030.12002.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4663,15 +6158,39 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.WindowsAppRuntime.1.6_6000.401.2352.0_x86__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.WindowsAppRuntime.1.6_6000.424.1611.0_x64__8wekyb3d8bbwe",
       "Name": "WindowsAppRuntime.1.6",
-      "Version": "6000.401.2352.0",
+      "Version": "6000.424.1611.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.WindowsCalculator_11.2411.1.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.WindowsAppRuntime.1.6_6000.457.2140.0_x64__8wekyb3d8bbwe",
+      "Name": "WindowsAppRuntime.1.6",
+      "Version": "6000.457.2140.0",
+      "Source": "Microsoft Store"
+    },
+    {
+      "Id": "MSIX\\Microsoft.WindowsAppRuntime.1.6_6000.457.2140.0_x86__8wekyb3d8bbwe",
+      "Name": "WindowsAppRuntime.1.6",
+      "Version": "6000.457.2140.0",
+      "Source": "Microsoft Store"
+    },
+    {
+      "Id": "MSIX\\Microsoft.WindowsAppRuntime.1.7_7000.456.1632.0_x64__8wekyb3d8bbwe",
+      "Name": "WindowsAppRuntime.1.7",
+      "Version": "7000.456.1632.0",
+      "Source": "Microsoft Store"
+    },
+    {
+      "Id": "MSIX\\Microsoft.WindowsAppRuntime.1.7_7000.456.1632.0_x86__8wekyb3d8bbwe",
+      "Name": "WindowsAppRuntime.1.7",
+      "Version": "7000.456.1632.0",
+      "Source": "Microsoft Store"
+    },
+    {
+      "Id": "MSIX\\Microsoft.WindowsCalculator_11.2502.2.0_x64__8wekyb3d8bbwe",
       "Name": "Windows Calculator",
-      "Version": "11.2411.1.0",
+      "Version": "11.2502.2.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4681,45 +6200,45 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.WindowsNotepad_11.2412.16.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.WindowsNotepad_11.2501.31.0_x64__8wekyb3d8bbwe",
       "Name": "Windows Notepad",
-      "Version": "11.2412.16.0",
+      "Version": "11.2501.31.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.WindowsStore_22501.1401.7.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.WindowsStore_22503.1401.4.0_x64__8wekyb3d8bbwe",
       "Name": "Microsoft Store",
-      "Version": "22501.1401.7.0",
+      "Version": "22503.1401.4.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.Winget.Source_2025.302.411.3_neutral__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.Winget.Source_2025.422.632.48_neutral__8wekyb3d8bbwe",
       "Name": "Windows Package Manager Source (winget) V2",
-      "Version": "2025.302.411.3",
+      "Version": "2025.422.632.48",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.YourPhone_1.25012.100.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.YourPhone_1.25031.60.0_x64__8wekyb3d8bbwe",
       "Name": "Phone Link",
-      "Version": "1.25012.100.0",
+      "Version": "1.25031.60.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.ZuneMusic_11.2412.6.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.ZuneMusic_11.2502.4.0_x64__8wekyb3d8bbwe",
       "Name": "Windows Media Player",
-      "Version": "11.2412.6.0",
+      "Version": "11.2502.4.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\Microsoft.ZuneVideo_10.25011.10061.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\Microsoft.ZuneVideo_10.25021.10041.0_x64__8wekyb3d8bbwe",
       "Name": "Movies \u0026 TV",
-      "Version": "10.25011.10061.0",
+      "Version": "10.25021.10041.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\MicrosoftCorporationII.QuickAssist_2.0.32.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\MicrosoftCorporationII.QuickAssist_2.0.33.0_x64__8wekyb3d8bbwe",
       "Name": "Quick Assist",
-      "Version": "2.0.32.0",
+      "Version": "2.0.33.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4735,21 +6254,21 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\MicrosoftCorporationII.WinAppRuntime.Singleton_6000.401.2352.0_x64__8wekyb3d8bbwe",
+      "Id": "MSIX\\MicrosoftCorporationII.WinAppRuntime.Singleton_7000.456.1632.0_x64__8wekyb3d8bbwe",
       "Name": "WinAppRuntime.Singleton",
-      "Version": "6000.401.2352.0",
+      "Version": "7000.456.1632.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\MicrosoftWindows.Client.WebExperience_525.1301.30.0_x64__cw5n1h2txyewy",
+      "Id": "MSIX\\MicrosoftWindows.Client.WebExperience_525.5100.40.0_x64__cw5n1h2txyewy",
       "Name": "Windows Web Experience Pack",
-      "Version": "525.1301.30.0",
+      "Version": "525.5100.40.0",
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\MicrosoftWindows.CrossDevice_1.25012.50.0_x64__cw5n1h2txyewy",
+      "Id": "MSIX\\MicrosoftWindows.CrossDevice_1.25031.45.0_x64__cw5n1h2txyewy",
       "Name": "Cross Device Experience Host",
-      "Version": "1.25012.50.0",
+      "Version": "1.25031.45.0",
       "Source": "Microsoft Store"
     },
     {
@@ -4771,9 +6290,9 @@
       "Source": "Microsoft Store"
     },
     {
-      "Id": "MSIX\\SpotifyAB.SpotifyMusic_1.257.463.0_x64__zpdnekdrzrea0",
+      "Id": "MSIX\\SpotifyAB.SpotifyMusic_1.260.564.0_x64__zpdnekdrzrea0",
       "Name": "Spotify - Music and Podcasts",
-      "Version": "1.257.463.0",
+      "Version": "1.260.564.0",
       "Source": "Microsoft Store"
     },
     {

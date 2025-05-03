@@ -212,6 +212,9 @@ Set-PSReadLineKeyHandler -Key Backspace `
     }
 }
 
+#AiShell
+Start-AIShell
+
 #Fzf
 Import-Module PSFzf
 Set-PsFzfOption -PSreadLineChordProvider 'Ctrl+f' -PSReadLineChordReverseHistory 'Ctrl+r'
