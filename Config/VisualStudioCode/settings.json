@@ -116,5 +116,8 @@
   "terminal.integrated.fontSize": 15,
   "terminal.integrated.smoothScrolling": true,
   "mdb.useSampleDocsInCopilot": true,
-  "mdb.shell": "mongo"
+  "mdb.shell": "mongo",
+  "security.allowedUNCHosts": [
+    "wsl.localhost"
+  ]
 }
