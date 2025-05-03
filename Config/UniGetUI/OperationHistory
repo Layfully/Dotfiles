@@ -1,0 +1,319 @@
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Google.Chrome with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Google.Chrome" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/23/2025 10:23:59 AM"
+Found Google Chrome [Google.Chrome] Version 135.0.7049.115
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi
+  ██████████████████████████████   126 MB /  126 MB
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/23/2025 10:24:47 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Microsoft.Teams.Classic with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Microsoft.Teams.Classic" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/23/2025 10:23:31 AM"
+Found Microsoft Teams classic [Microsoft.Teams.Classic] Version 1.8.00.9760
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://statics.teams.cdn.office.net/production-windows-x64/1.8.00.9760/Teams_windows_x64.msi
+  ██████████████████████████████   160 MB /  160 MB
+Successfully verified installer hash
+Starting package install...
+Another version of this application is already installed.
+Installer failed with exit code: 1638
+Installer log is available at: C:\Users\dev422\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\DiagOutputDir\WinGet-Microsoft.Teams.Classic.1.8.00.9760-2025-04-23-10-23-57.510.log
+End Time: "4/23/2025 10:23:58 AM"
+Process return value: "-1978334963" (0x8A15010D)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Postman.Postman with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Postman.Postman" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/23/2025 10:23:09 AM"
+Found Postman [Postman.Postman] Version 11.42.3
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://dl.pstmn.io/download/version/11.42.3/windows_64
+  ██████████████████████████████   129 MB /  129 MB
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/23/2025 10:23:30 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Microsoft.AppInstaller with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=True;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Microsoft.AppInstaller" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/23/2025 8:23:45 AM"
+Found App Installer [Microsoft.AppInstaller] Version 1.25.390.0
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+This package requires the following dependencies:
+  - Packages
+      Microsoft.VCLibs.Desktop.14 [>= 14.0.33728.0]
+      Microsoft.UI.Xaml.2.8 [>= 8.2310.30001.0]
+Successfully verified installer hash
+Starting package install...
+  ████████████████████████████▒▒  95%
+Successfully installed. Restart the application to complete the upgrade.
+End Time: "4/23/2025 8:24:10 AM"
+Process return value: "-2147467260" (0x80004004)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=junegunn.fzf with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "junegunn.fzf" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/23/2025 8:23:35 AM"
+Found fzf [junegunn.fzf] Version 0.61.3
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://github.com/junegunn/fzf/releases/download/v0.61.3/fzf-0.61.3-windows_amd64.zip
+  ██████████████████████████████  1.74 MB / 1.74 MB
+Successfully verified installer hash
+Extracting archive...
+Successfully extracted archive
+Starting package install...
+Command line alias added: "fzf"
+Successfully installed
+End Time: "4/23/2025 8:23:45 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Microsoft.AppInstaller with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Microsoft.AppInstaller" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/23/2025 8:22:50 AM"
+Found App Installer [Microsoft.AppInstaller] Version 1.25.390.0
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+This package requires the following dependencies:
+  - Packages
+      Microsoft.VCLibs.Desktop.14 [>= 14.0.33728.0]
+      Microsoft.UI.Xaml.2.8 [>= 8.2310.30001.0]
+Successfully verified installer hash
+Starting package install...
+  ████████████████████████████▒▒  95%
+Successfully installed. Restart the application to complete the upgrade.
+End Time: "4/23/2025 8:23:35 AM"
+Process return value: "-2147467260" (0x80004004)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Zoom.Zoom.EXE with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Zoom.Zoom.EXE" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/22/2025 8:14:56 AM"
+Found Zoom Workplace (EXE) [Zoom.Zoom.EXE] Version 6.4.6 (64360)
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://zoom.us/client/6.4.6.64360/ZoomInstallerFull.exe?archType=x64
+  ██████████████████████████████   110 MB /  110 MB
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/22/2025 8:16:42 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=JanDeDobbeleer.OhMyPosh with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "JanDeDobbeleer.OhMyPosh" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/22/2025 8:14:02 AM"
+Found Oh My Posh [JanDeDobbeleer.OhMyPosh] Version 25.17.0
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v25.17.0/install-x64.msi
+  ██████████████████████████████  5.69 MB / 5.69 MB
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/22/2025 8:14:56 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Bitwarden.Bitwarden with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Bitwarden.Bitwarden" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/22/2025 8:07:57 AM"
+Found Bitwarden [Bitwarden.Bitwarden] Version 2025.3.1
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/22/2025 8:09:06 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Bitwarden.Bitwarden with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Bitwarden.Bitwarden" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/21/2025 8:01:14 AM"
+Found Bitwarden [Bitwarden.Bitwarden] Version 2025.3.1
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://github.com/bitwarden/clients/releases/download/desktop-v2025.3.1/Bitwarden-Installer-2025.3.1.exe
+  ██████████████████████████████   714 KB /  714 KB
+Successfully verified installer hash
+Starting package install...
+Installer failed with exit code: 2
+End Time: "4/21/2025 8:01:46 AM"
+Process return value: "-1978335226" (0x8A150006)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=JanDeDobbeleer.OhMyPosh with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "JanDeDobbeleer.OhMyPosh" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/21/2025 8:00:32 AM"
+Found Oh My Posh [JanDeDobbeleer.OhMyPosh] Version 25.16.1
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v25.16.1/install-x64.msi
+  ██████████████████████████████  5.69 MB / 5.69 MB
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/21/2025 8:00:54 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=junegunn.fzf with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "junegunn.fzf" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/21/2025 8:00:23 AM"
+Found fzf [junegunn.fzf] Version 0.61.2
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://github.com/junegunn/fzf/releases/download/v0.61.2/fzf-0.61.2-windows_amd64.zip
+  ██████████████████████████████  1.74 MB / 1.74 MB
+Successfully verified installer hash
+Extracting archive...
+Successfully extracted archive
+Starting package install...
+Command line alias added: "fzf"
+Successfully installed
+End Time: "4/21/2025 8:00:31 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Microsoft.VisualStudioCode with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Microsoft.VisualStudioCode" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/17/2025 9:17:52 AM"
+Found Microsoft Visual Studio Code [Microsoft.VisualStudioCode] Version 1.99.3
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/17/2025 9:18:58 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Microsoft.VisualStudioCode with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Microsoft.VisualStudioCode" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/17/2025 9:17:33 AM"
+Found Microsoft Visual Studio Code [Microsoft.VisualStudioCode] Version 1.99.3
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://vscode.download.prss.microsoft.com/dbazure/download/stable/17baf841131aa23349f217ca7c570c76ee87b957/VSCodeUserSetup-x64-1.99.3.exe
+  ██████████████████████████████   102 MB /  102 MB
+Successfully verified installer hash
+Starting package install...
+Installer failed with exit code: 1
+Installer log is available at: C:\Users\dev422\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\DiagOutputDir\WinGet-Microsoft.VisualStudioCode.1.99.3-2025-04-17-09-17-43.715.log
+End Time: "4/17/2025 9:17:45 AM"
+Process return value: "-1978335226" (0x8A150006)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Google.Chrome with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Google.Chrome" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/17/2025 9:16:10 AM"
+Found Google Chrome [Google.Chrome] Version 135.0.7049.96
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi
+  ██████████████████████████████   126 MB /  126 MB
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/17/2025 9:16:44 AM"
+Process return value: "0" (0x0)
+                           
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Package update operation for Package=Oracle.VirtualBox with Manager=Winget
+Installation options: <InstallationOptions: SkipHashCheck=False;InteractiveInstallation=False;RunAsAdministrator=False;Version=;Architecture=;InstallationScope=;InstallationScope=;CustomParameters=;RemoveDataOnUninstall=False>
+Overriden options: <Scope=;RunAsAdministrator=;WG_SpecifyVersion=;PS_NoScope=False>
+Executing process with StartInfo:
+ - FileName: "C:\Users\dev422\AppData\Local\Programs\UniGetUI\Assets\Utilities\UniGetUI Elevator.exe"
+ - Arguments: ""C:\Users\dev422\AppData\Local\Microsoft\WindowsApps\winget.exe"  update --id "Oracle.VirtualBox" --exact --source winget --accept-source-agreements --disable-interactivity --silent --include-unknown --accept-package-agreements --force"
+Start Time: "4/17/2025 9:15:02 AM"
+Found Oracle VM VirtualBox [Oracle.VirtualBox] Version 7.1.8
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+This package requires the following dependencies:
+  - Packages
+      Microsoft.VCRedist.2015+.x64
+Downloading https://download.virtualbox.org/virtualbox/7.1.8/VirtualBox-7.1.8-168469-Win.exe
+  ██████████████████████████████   118 MB /  118 MB
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+End Time: "4/17/2025 9:16:10 AM"
+Process return value: "0" (0x0)
+                           
