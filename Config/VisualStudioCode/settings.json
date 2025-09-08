@@ -101,5 +101,8 @@
   "application.shellEnvironmentResolutionTimeout": 60,
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "security.allowedUNCHosts": [
+    "wsl.localhost"
+  ]
 }

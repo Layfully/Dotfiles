@@ -69,14 +69,12 @@
     "microsoft.net.runtime.android.aot",
     "android",
     "Component.OpenJDK",
-    "Microsoft.VisualStudio.Component.MonoDebugger",
     "Microsoft.VisualStudio.ComponentGroup.Maui.Android",
     "runtimes.ios",
     "microsoft.net.runtime.ios",
     "runtimes.ios.net8",
     "microsoft.net.runtime.ios.net8",
     "ios",
-    "Component.Xamarin.RemotedSimulator",
     "Microsoft.VisualStudio.ComponentGroup.Maui.iOS",
     "runtimes.maccatalyst",
     "microsoft.net.runtime.maccatalyst",
@@ -109,7 +107,6 @@
   ],
   "extensions": [
     "https://marketplace.visualstudio.com/items?itemName=MLNET.ModelBuilder2022",
-    "https://marketplace.visualstudio.com/items?itemName=ProjectReunion.MicrosoftSingleProjectMSIXPackagingToolsDev17",
-    "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.upgradeassistant"
+    "https://marketplace.visualstudio.com/items?itemName=ProjectReunion.MicrosoftSingleProjectMSIXPackagingToolsDev17"
   ]
 }
