@@ -124,7 +124,6 @@
   "editor.mouseWheelZoom": true,
   "editor.autoIndentOnPaste": true,
   "editor.codeLensFontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
-  "editor.experimentalGpuAcceleration": "on",
   "editor.inertialScroll": true,
   "editor.inlayHints.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
   "diffEditor.experimental.showMoves": true,
