@@ -2,15 +2,49 @@ param (
     [switch]$SkipVisualStudio = $false
 )
 
-#--- Self-Elevation ---
-if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+$isAdministrator = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')
+$commandLine = (Get-CimInstance Win32_Process -Filter "ProcessId = $PID").CommandLine
+$isNoProfile = $commandLine -like '*-NoProfile*'
+
+if (-not $isAdministrator -or -not $isNoProfile) {
+    $relaunchReason = if (-not $isAdministrator) { "Administrator privileges are required." } else { "A clean, no-profile session is required." }
+    Write-Warning "$relaunchReason Attempting to relaunch correctly..."
+
     if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
-        $CommandLine = $MyInvocation.MyCommand.Path + $MyInvocation.UnboundArguments
-        Write-Output $CommandLine
-        Start-Process -Verb RunAs wt -ArgumentList "pwsh.exe", "-File", $CommandLine
+        $scriptPath = $MyInvocation.MyCommand.Path + $MyInvocation.UnboundArguments
+        Start-Process -Verb RunAs wt -ArgumentList "pwsh.exe", "-NoProfile", "-File", $scriptPath
+        Exit # Exit the current, incorrect session.
+    }
+}
+
+Write-Host "Script is running correctly (Administrator + No Profile)." -ForegroundColor Green
+
+$otherPwshProcesses = Get-Process -Name pwsh -ErrorAction SilentlyContinue | Where-Object { $_.Id -ne $PID }
+
+if ($otherPwshProcesses) {
+    Write-Warning "For a safe installation, all other PowerShell sessions must be closed to prevent file locks."
+    Write-Host "The following PowerShell processes were found:" -ForegroundColor Yellow
+    $otherPwshProcesses | Format-Table Id, ProcessName, MainWindowTitle -AutoSize
+
+    $confirmation = Read-Host -Prompt "Do you want to automatically close these sessions? (Y/N)"
+    if ($confirmation -cmatch "^y(es)?$") {
+        Write-Host "Closing other PowerShell processes..."
+        $otherPwshProcesses | ForEach-Object {
+            Write-Host "Stopping process with ID: $($_.Id)..."
+            Stop-Process -Id $_.Id -Force
+        }
+        Write-Host "All other PowerShell sessions have been closed." -ForegroundColor Green
+    }
+    else {
+        Write-Error "User aborted. The script cannot continue safely while other PowerShell sessions are running."
+        Read-Host -Prompt "Press Enter to exit..."
         Exit
     }
 }
+else {
+    Write-Host "No other PowerShell instances found. Environment is clean." -ForegroundColor Green
+}
+
 
 #--- Visual Studio ---
 if (-not $SkipVisualStudio) {
@@ -113,12 +147,18 @@ $psModules = @(
     "CompletionPredictor" # PSReadLine predictions
     "posh-git"           # prompt posh-git
     "Terminal-Icons"     # terminal icons
-    #"Az"                 # Azure PowerShell modules
+    "Az"                 # Azure PowerShell modules
 )
 
 foreach ($moduleName in $psModules) {
-    Write-Host "Installing PowerShell module '$moduleName'..."
-    Install-Module -Name $moduleName -Scope CurrentUser -Force
+    if (Get-InstalledModule -Name $moduleName -ErrorAction SilentlyContinue) {
+        Write-Host "Module '$moduleName' is already installed. Checking for updates..." -ForegroundColor Green
+        Update-Module -Name $moduleName -Force
+    }
+    else {
+        Write-Host "Module '$moduleName' not found. Installing..." -ForegroundColor Yellow
+        Install-Module -Name $moduleName -Scope CurrentUser -Force -AllowClobber
+    }
 }
 
 #--- Symbolic Links Setup ---
@@ -207,15 +247,16 @@ foreach ($moduleGroup in $modules) {
                 continue
 
             }
-            Write-Host "Uninstalling older version: $currentVersion (from $($currentModule.ModuleBase))" -ForegroundColor DarkYellow
+        }
 
-            try {
-                Remove-Item -Path $currentModule.ModuleBase -Recurse -Force -ErrorAction Stop
-                Write-Host "Version $currentVersion uninstalled successfully." -ForegroundColor Green
-            }
-            catch {
-                Write-Error "Failed to uninstall version $($currentVersion): $($_.Exception.Message)"
-            }
+        Write-Host "Uninstalling older version: $currentVersion (from $($currentModule.ModuleBase))" -ForegroundColor DarkYellow
+
+        try {
+            Remove-Item -Path $currentModule.ModuleBase -Recurse -Force -ErrorAction Stop
+            Write-Host "Version $currentVersion uninstalled successfully." -ForegroundColor Green
+        }
+        catch {
+            Write-Error "Failed to uninstall version $($currentVersion): $($_.Exception.Message)"
         }
     }
 }
