@@ -121,8 +121,6 @@ foreach ($moduleName in $psModules) {
     Install-Module -Name $moduleName -Scope CurrentUser -Force
 }
 
-Invoke-Expression "& { $(Invoke-RestMethod 'https://aka.ms/install-aishell.ps1') }"
-
 #--- Symbolic Links Setup ---
 Write-Host "Setting up symbolic links for configuration files..."
 # Define configuration paths and target files
