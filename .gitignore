@@ -1,3 +1,4 @@
 # Ignore all PowerToys backup files except the latest one
 Config/PowerToys/*.ptb
 !Config/PowerToys/latest_powertoys_backup.ptb
+Config/UniGetUI/OperationHistory

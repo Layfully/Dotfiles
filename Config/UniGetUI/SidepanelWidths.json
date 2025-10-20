@@ -1,1 +1,6 @@
-{"Discover":250,"Installed":250,"Bundles":250,"Updates":250}
+{
+  "Discover": 250,
+  "Installed": 250,
+  "Bundles": 250,
+  "Updates": 250
+}

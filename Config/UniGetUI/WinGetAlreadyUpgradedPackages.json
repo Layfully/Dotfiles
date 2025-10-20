@@ -1,1 +1,18 @@
-{"junegunn.fzf":"0.61.3","JanDeDobbeleer.OhMyPosh":"25.21.0","Bitwarden.Bitwarden":"2025.4.2","Microsoft.VisualStudioCode":"1.99.3","Spotify.Spotify":"1.2.63.380.g54ef49eb","Microsoft.VCRedist.2015\u002B.x86":"14.42.34438.0","Microsoft.PowerToys":"0.90.1","Mozilla.Firefox.DeveloperEdition":"139.0","GitHub.cli":"2.72.0","Microsoft.PowerShell":"7.5.1.0","Microsoft.WindowsTerminal":"1.22.11141.0","EpicGames.EpicGamesLauncher":"1.3.142.0"}
+{
+  "junegunn.fzf": "0.65.1",
+  "JanDeDobbeleer.OhMyPosh": "26.18.0",
+  "Bitwarden.Bitwarden": "2025.7.0",
+  "Microsoft.VisualStudioCode": "1.102.3",
+  "Spotify.Spotify": "1.2.66.447.g4e37e896",
+  "Microsoft.VCRedist.2015\u002B.x86": "14.44.35211.0",
+  "Microsoft.PowerToys": "0.92.1",
+  "Mozilla.Firefox.DeveloperEdition": "139.0",
+  "GitHub.cli": "2.76.2",
+  "Microsoft.PowerShell": "7.5.2.0",
+  "Microsoft.WindowsTerminal": "1.22.12111.0",
+  "EpicGames.EpicGamesLauncher": "1.3.151.0",
+  "Microsoft.OneDrive": "25.127.0701.0006",
+  "Microsoft.VCRedist.2015\u002B.x64": "14.44.35211.0",
+  "Microsoft.Teams": "25185.410.3812.8024",
+  "Git.Git": "2.50.1"
+}

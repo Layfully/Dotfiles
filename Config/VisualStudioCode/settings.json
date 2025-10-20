@@ -115,9 +115,16 @@
   "terminal.integrated.mouseWheelZoom": true,
   "terminal.integrated.fontSize": 15,
   "terminal.integrated.smoothScrolling": true,
+  "geminicodeassist.updateChannel": "Insiders",
   "mdb.useSampleDocsInCopilot": true,
   "mdb.shell": "mongo",
   "security.allowedUNCHosts": [
     "wsl.localhost"
-  ]
+  ],
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  }
 }
