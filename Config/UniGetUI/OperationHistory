@@ -1,4 +1,4 @@
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=EpicGames.EpicGamesLauncher with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -17,10 +17,11 @@ Downloading https://epicgames-download1.akamaized.net/Builds/UnrealEngineLaunche
   ██████████████████████████████   177 MB /  177 MB
 Successfully verified installer hash
 Starting package install...
+The installer will request to run as administrator. Expect a prompt.
 Successfully installed
 End Time: "6.08.2025 10:07:01"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=JanDeDobbeleer.OhMyPosh with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -42,7 +43,7 @@ Starting package install...
 Successfully installed
 End Time: "6.08.2025 10:05:10"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=junegunn.fzf with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -60,14 +61,11 @@ Microsoft is not responsible for, nor does it grant any licenses to, third-party
 Downloading https://github.com/junegunn/fzf/releases/download/v0.65.1/fzf-0.65.1-windows_amd64.zip
   ██████████████████████████████  1.77 MB / 1.77 MB
 Successfully verified installer hash
-Extracting archive...
-Successfully extracted archive
 Starting package install...
-Command line alias added: "fzf"
 Successfully installed
 End Time: "6.08.2025 10:03:06"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=Microsoft.WindowsTerminal with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -91,7 +89,7 @@ Starting package install...
 Successfully installed
 End Time: "3.08.2025 09:58:44"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=GitHub.cli with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -113,7 +111,7 @@ Starting package install...
 Successfully installed
 End Time: "3.08.2025 09:58:28"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=Microsoft.OneDrive with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -135,7 +133,7 @@ Starting package install...
 Successfully installed
 End Time: "30.07.2025 21:32:24"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=junegunn.fzf with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -160,7 +158,7 @@ Command line alias added: "fzf"
 Successfully installed
 End Time: "30.07.2025 21:31:50"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=Microsoft.VisualStudioCode with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -182,7 +180,7 @@ Starting package install...
 Successfully installed
 End Time: "30.07.2025 21:31:42"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=JanDeDobbeleer.OhMyPosh with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -204,7 +202,7 @@ Starting package install...
 Successfully installed
 End Time: "30.07.2025 21:30:53"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=PSFzf with Manager=PowerShell7
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -218,7 +216,7 @@ Executing process with StartInfo:
 Start Time: "30.07.2025 21:30:33"
 End Time: "30.07.2025 21:30:36"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=Spotify.Spotify with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -242,7 +240,7 @@ Installer failed with exit code: 26
 Installer log is available at: C:\Users\adria\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\DiagOutputDir\WinGet-Spotify.Spotify.1.2.69.448.ge76b8882-2025-07-26-09-48-48.902.log
 End Time: "26.07.2025 09:48:49"
 Process return value: "-1978334975" (0x8A150101)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=Microsoft.Teams with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -263,7 +261,7 @@ Starting package install...
 Successfully installed
 End Time: "25.07.2025 20:30:13"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=Bitwarden.Bitwarden with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -285,7 +283,7 @@ Starting package install...
 Successfully installed
 End Time: "24.07.2025 22:35:39"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=GitHub.cli with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
@@ -307,7 +305,7 @@ Starting package install...
 Successfully installed
 End Time: "24.07.2025 22:35:05"
 Process return value: "0" (0x0)
-                           
+
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 Package update operation for Package=Microsoft.VisualStudioCode with Manager=Winget
 Installation options: <InstallOptions instance (only non-default values are shown)
