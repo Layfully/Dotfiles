@@ -1,8 +1,6 @@
 {
   "editor.unicodeHighlight.nonBasicASCII": false,
-  "terminal.integrated.commandsToSkipShell": [
-    "matlab.interrupt"
-  ],
+  "terminal.integrated.commandsToSkipShell": ["matlab.interrupt"],
   "omnisharp.useModernNet": false,
   "editor.tabSize": 2,
   "workbench.iconTheme": "material-icon-theme",
@@ -21,9 +19,7 @@
   "workbench.colorCustomizations": {
     "terminal.background": "#00000000"
   },
-  "workbench.settings.applyToAllProfiles": [
-    "workbench.colorCustomizations"
-  ],
+  "workbench.settings.applyToAllProfiles": ["workbench.colorCustomizations"],
   "window.titleBarStyle": "custom",
   "vscode_vibrancy.opacity": 0.5,
   "synthwave84.brightness": 0.15,
@@ -54,7 +50,7 @@
   "telemetry.telemetryLevel": "off",
   "angular.view-engine": true,
   "workbench.colorTheme": "SynthWave '84",
-  "editor.minimap.autohide": true,
+  "editor.minimap.autohide": "mouseover",
   "files.autoSave": "afterDelay",
   "files.insertFinalNewline": true,
   "update.mode": "start",
@@ -118,6 +114,11 @@
   "geminicodeassist.updateChannel": "Insiders",
   "mdb.useSampleDocsInCopilot": true,
   "mdb.shell": "mongo",
+  "editor.multiCursorModifier": "ctrlCmd",
+  "application.shellEnvironmentResolutionTimeout": 60,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "security.allowedUNCHosts": [
     "wsl.localhost"
   ],
@@ -126,5 +127,13 @@
     "plaintext": false,
     "markdown": false,
     "scminput": false
-  }
+  },
+  "editor.mouseWheelZoom": true,
+  "editor.autoIndentOnPaste": true,
+  "editor.codeLensFontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
+  "editor.inertialScroll": true,
+  "editor.inlayHints.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
+  "diffEditor.experimental.showMoves": true,
+  "diffEditor.experimental.useTrueInlineView": true,
+  "diffEditor.hideUnchangedRegions.enabled": true
 }
