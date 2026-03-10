@@ -100,6 +100,7 @@ $wingetPackages = @(
     "Git.Git"
     "Bitwarden.Bitwarden"
     "Microsoft.VisualStudioCode"
+    "JesseDuffield.lazygit"
 )
 
 foreach ($packageId in $wingetPackages) {
