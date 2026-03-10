@@ -9,7 +9,7 @@
     "**/.git/**": true,
     "**/.node_modules/**": true,
     "**/dist/**": true,
-    "**/out-tsc/**": true
+    "**/out-tsc/**": true,
   },
   "typescript.suggest.paths": false,
   "javascript.suggest.paths": false,
@@ -17,7 +17,7 @@
   "editor.formatOnSaveMode": "modificationsIfAvailable",
   "editor.cursorSmoothCaretAnimation": "on",
   "workbench.colorCustomizations": {
-    "terminal.background": "#00000000"
+    "terminal.background": "#00000000",
   },
   "workbench.settings.applyToAllProfiles": ["workbench.colorCustomizations"],
   "window.titleBarStyle": "custom",
@@ -38,7 +38,7 @@
   "workbench.list.smoothScrolling": true,
   "workbench.reduceMotion": "off",
   "workbench.view.showQuietly": {
-    "workbench.panel.output": false
+    "workbench.panel.output": false,
   },
   "workbench.editor.highlightModifiedTabs": true,
   "workbench.editor.pinnedTabsOnSeparateRow": true,
@@ -73,8 +73,28 @@
       "trustServerCertificate": true,
       "connectTimeout": 15,
       "commandTimeout": 30,
-      "applicationName": "vscode-mssql"
-    }
+      "applicationName": "vscode-mssql",
+      "groupId": "F79D44AC-9EE0-4BEE-BEFF-D6BBD71DC98E",
+      "id": "89991319-87A1-4F1B-B553-312A8870E0B7",
+      "profileSource": 0,
+    },
+    {
+      "authenticationType": "SqlLogin",
+      "connectTimeout": 30,
+      "applicationName": "vscode-mssql",
+      "applicationIntent": "ReadWrite",
+      "server": "172.22.113.17",
+      "database": "",
+      "user": "sa",
+      "password": "",
+      "commandTimeout": 30,
+      "encrypt": "Mandatory",
+      "profileName": "FM1 Test DB",
+      "trustServerCertificate": true,
+      "savePassword": true,
+      "groupId": "F79D44AC-9EE0-4BEE-BEFF-D6BBD71DC98E",
+      "id": "54E0C8F4-0297-4426-A9A8-C0097B7527A6",
+    },
   ],
   "mssql.applyLocalization": true,
   "mssql.copyIncludeHeaders": true,
@@ -117,7 +137,7 @@
   "editor.multiCursorModifier": "ctrlCmd",
   "application.shellEnvironmentResolutionTimeout": 60,
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "security.allowedUNCHosts": [
     "wsl.localhost"
@@ -135,5 +155,21 @@
   "editor.inlayHints.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
   "diffEditor.experimental.showMoves": true,
   "diffEditor.experimental.useTrueInlineView": true,
-  "diffEditor.hideUnchangedRegions.enabled": true
+  "diffEditor.hideUnchangedRegions.enabled": true,
+  "mdb.mcp.server": "prompt",
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+  },
+  "mssql.connectionGroups": [
+    {
+      "name": "ROOT",
+      "id": "F79D44AC-9EE0-4BEE-BEFF-D6BBD71DC98E",
+    },
+  ],
+  "terminal.integrated.stickyScroll.enabled": false,
+  "editor.stickyScroll.enabled": false,
+  "sqldeveloper.datagrid.fontFamily": "Consolas, 'Courier New', monospace",
+  "claudeCode.preferredLocation": "sidebar",
+  "claudeCode.selectedModel": "default",
+  "claudeCode.useCtrlEnterToSend": true,
 }

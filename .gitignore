@@ -1,4 +1,12 @@
 # Ignore all PowerToys backup files except the latest one
 Config/PowerToys/*.ptb
 !Config/PowerToys/latest_powertoys_backup.ptb
+
+# UniGetUI machine-specific runtime state (not meaningful to track across machines)
 Config/UniGetUI/OperationHistory
+Config/UniGetUI/CurrentSessionToken
+Config/UniGetUI/WindowGeometry
+Config/UniGetUI/TelemetryClientToken
+
+# Work machine (DEV-WNW-422A) package bundle — private machine bundle tracked instead
+DEV-WNW-422A installed packages.ubundle
