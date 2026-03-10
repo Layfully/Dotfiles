@@ -2,7 +2,9 @@
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/UpdatePowerToysBackup.ps1"
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/SaveVsInstallProfile.ps1"
-powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/ExportWingetPackages.ps1"
+# Redirect to /dev/null: winget writes "not available from any source" warnings
+# directly to the console host, so PowerShell-level redirection has no effect.
+powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/ExportWingetPackages.ps1" > /dev/null 2>&1
 
 git add "$USERPROFILE/Dotfiles/Config/PowerToys/latest_powertoys_backup.ptb"
 git add "$USERPROFILE/Dotfiles/Config/VisualStudioCode/extensions"
