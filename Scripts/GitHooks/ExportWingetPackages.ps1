@@ -3,4 +3,6 @@
 # On machines whose filename is gitignored (e.g. the work machine), the git add in
 # the pre-commit hook is a no-op — only the private machine's bundle gets tracked.
 $bundlePath = "$env:USERPROFILE\Dotfiles\UniGetUI\$env:COMPUTERNAME installed packages.ubundle"
-winget export -o $bundlePath --accept-source-agreements
+# Redirect stderr to suppress the many "not available from any source" warnings
+# that winget emits for system/OEM/Store apps — the export itself still succeeds.
+winget export -o $bundlePath --accept-source-agreements 2>$null
