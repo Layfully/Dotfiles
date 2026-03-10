@@ -8,6 +8,9 @@ oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/cloud-context.omp.json" | I
 #Icons
 Import-Module -Name Terminal-Icons
 
+#ZLocation (z command for fast directory jumping)
+Import-Module ZLocation
+
 #PSReadLine
 Import-Module -Name CompletionPredictor
 
