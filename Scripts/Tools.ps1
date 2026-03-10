@@ -101,11 +101,30 @@ $wingetPackages = @(
     "Bitwarden.Bitwarden"
     "Microsoft.VisualStudioCode"
     "JesseDuffield.lazygit"
+    "CoreyButler.NVMforWindows"
 )
 
 foreach ($packageId in $wingetPackages) {
     Write-Host "Installing/Upgrading '$packageId' using winget..."
     winget install --id $packageId --silent --accept-package-agreements
+}
+
+#--- Node.js via nvm + Claude Code CLI ---
+# Refresh PATH so nvm is available without restarting the session
+$env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
+            [System.Environment]::GetEnvironmentVariable("PATH", "User")
+
+$nvmPath = (Get-Command nvm -ErrorAction SilentlyContinue)?.Source
+if ($nvmPath) {
+    Write-Host "Installing Node.js LTS via nvm..."
+    nvm install lts
+    nvm use lts
+
+    Write-Host "Installing Claude Code CLI..."
+    npm install -g @anthropic-ai/claude-code
+}
+else {
+    Write-Warning "nvm not found after install — relaunch this script in a new session to install Node.js and Claude Code."
 }
 
 # GitHub CLI Extension - gh-copilot
