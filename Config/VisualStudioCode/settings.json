@@ -9,7 +9,7 @@
     "**/.git/**": true,
     "**/.node_modules/**": true,
     "**/dist/**": true,
-    "**/out-tsc/**": true
+    "**/out-tsc/**": true,
   },
   "typescript.suggest.paths": false,
   "javascript.suggest.paths": false,
@@ -17,7 +17,7 @@
   "editor.formatOnSaveMode": "modificationsIfAvailable",
   "editor.cursorSmoothCaretAnimation": "on",
   "workbench.colorCustomizations": {
-    "terminal.background": "#00000000"
+    "terminal.background": "#00000000",
   },
   "workbench.settings.applyToAllProfiles": ["workbench.colorCustomizations"],
   "window.titleBarStyle": "custom",
@@ -38,7 +38,7 @@
   "workbench.list.smoothScrolling": true,
   "workbench.reduceMotion": "off",
   "workbench.view.showQuietly": {
-    "workbench.panel.output": false
+    "workbench.panel.output": false,
   },
   "workbench.editor.highlightModifiedTabs": true,
   "workbench.editor.pinnedTabsOnSeparateRow": true,
@@ -101,7 +101,7 @@
   "editor.multiCursorModifier": "ctrlCmd",
   "application.shellEnvironmentResolutionTimeout": 60,
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "security.allowedUNCHosts": [
     "wsl.localhost"
@@ -119,5 +119,16 @@
   "editor.inlayHints.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
   "diffEditor.experimental.showMoves": true,
   "diffEditor.experimental.useTrueInlineView": true,
-  "diffEditor.hideUnchangedRegions.enabled": true
+  "diffEditor.hideUnchangedRegions.enabled": true,
+  "mdb.mcp.server": "prompt",
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+  },
+  "mssql.connectionGroups": [],
+  "terminal.integrated.stickyScroll.enabled": false,
+  "editor.stickyScroll.enabled": false,
+  "sqldeveloper.datagrid.fontFamily": "Consolas, 'Courier New', monospace",
+  "claudeCode.preferredLocation": "sidebar",
+  "claudeCode.selectedModel": "default",
+  "claudeCode.useCtrlEnterToSend": true,
 }

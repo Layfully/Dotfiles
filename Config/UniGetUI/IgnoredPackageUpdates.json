@@ -1,1 +1,9 @@
-{"winget\\3TSoftwareLabs.Studio3T":"*","winget\\Fortinet.FortiClientVPN":"7.0.1.0083"}
+{
+  "winget\\3TSoftwareLabs.Studio3T": "*",
+  "winget\\Fortinet.FortiClientVPN": "7.0.1.0083",
+  "winget\\Docker.DockerDesktop": "4.46.0",
+  "winget\\Python.Python.3.13": "3.13.8",
+  "winget\\Microsoft.OneDrive": "25.194.1005.0003",
+  "winget\\Microsoft.Azure.FunctionsCoreTools": "4.5.0",
+  "winget\\Microsoft.VisualStudioCode": "1.110.1"
+}
