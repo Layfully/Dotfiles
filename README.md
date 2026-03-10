@@ -27,7 +27,8 @@ pwsh -NoProfile -File Scripts/Tools.ps1
 
 | Step | What happens |
 |------|-------------|
-| Installs winget packages | PowerToys, fzf, Windows Terminal, GitHub CLI, Oh My Posh, PowerShell 7, UniGetUI, Git, Bitwarden, VS Code |
+| Installs winget packages | PowerToys, fzf, Windows Terminal, GitHub CLI, Oh My Posh, PowerShell 7, UniGetUI, Git, Bitwarden, VS Code, lazygit, nvm-windows |
+| Installs Node.js LTS via nvm | Then installs Claude Code CLI (`@anthropic-ai/claude-code`) globally |
 | Installs Chocolatey | Used for JetBrainsMono Nerd Font |
 | Installs PowerShell modules | ZLocation, PSFzf, CompletionPredictor, posh-git, Terminal-Icons, Az |
 | Creates symbolic links | Links config files from this repo into their expected system locations (see table below) |
