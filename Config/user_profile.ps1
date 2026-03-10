@@ -250,3 +250,4 @@ Set-Alias gs Get-GitStatus
 Set-Alias -Name gl -Value Get-GitPull -Force
 Set-Alias -Name gp -Value Get-GitPush -Force
 Set-Alias gf Get-GitFetch
+Set-Alias lg lazygit
