@@ -59,7 +59,7 @@
   "git.blame.statusBarItem.enabled": true,
   "sqldeveloper.sqlHistory.historyLimit": 500,
   "sqldeveloper.telemetry.enabled": false,
-  "mssql.connections": [],
+  // mssql.connections intentionally omitted — contains machine-specific server names/IPs.
   "mssql.applyLocalization": true,
   "mssql.copyIncludeHeaders": true,
   "mssql.enableExperimentalFeatures": true,
@@ -124,7 +124,7 @@
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features",
   },
-  "mssql.connectionGroups": [],
+  // mssql.connectionGroups intentionally omitted — machine-specific.
   "terminal.integrated.stickyScroll.enabled": false,
   "editor.stickyScroll.enabled": false,
   "sqldeveloper.datagrid.fontFamily": "Consolas, 'Courier New', monospace",
