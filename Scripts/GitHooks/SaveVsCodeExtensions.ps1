@@ -4,7 +4,7 @@
 # run in a minimal shell environment where PATH may not include the VS Code bin directory.
 # Calling the raw Code.exe fails since it doesn't support CLI flags like --list-extensions —
 # only the code.cmd wrapper does. We try PATH first, then fall back to known install locations.
-$codePath = (Get-Command code.cmd -ErrorAction SilentlyContinue)?.Source
+$codePath = (Get-Command code.cmd -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source -ErrorAction SilentlyContinue)
 if (-not $codePath) {
     $candidates = @(
         "$env:LOCALAPPDATA\Programs\Microsoft VS Code\bin\code.cmd",  # per-user install (default)
