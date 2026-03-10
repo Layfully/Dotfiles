@@ -2,8 +2,9 @@
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/UpdatePowerToysBackup.ps1"
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/SaveVsInstallProfile.ps1"
-
+powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/ExportWingetPackages.ps1"
 
 git add "$USERPROFILE/Dotfiles/Config/PowerToys/latest_powertoys_backup.ptb"
 git add "$USERPROFILE/Dotfiles/Config/VisualStudioCode/extensions"
 git add "$USERPROFILE/Dotfiles/Config/VisualStudio/installationConfig2022.vsconfig"
+git add "$USERPROFILE/Dotfiles/UniGetUI/"
