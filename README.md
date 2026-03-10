@@ -82,3 +82,4 @@ git config --local core.hooksPath .githooks
 | `fgs` | Fuzzy git status |
 | `fe` | Fuzzy open file in editor |
 | `fkill` | Fuzzy kill process |
+| `lg` | lazygit (terminal git UI) |
