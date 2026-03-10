@@ -1,14 +1,14 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions":
+    "actions": 
     [
         {
             "command": "paste",
             "id": "User.paste"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "copy",
                 "singleLine": false
@@ -16,17 +16,17 @@
             "id": "User.copy.644BA8F2"
         },
         {
-            "command":
+            "command": "find",
+            "id": "User.find"
+        },
+        {
+            "command": 
             {
                 "action": "splitPane",
                 "split": "auto",
                 "splitMode": "duplicate"
             },
             "id": "User.splitPane.A6751878"
-        },
-        {
-            "command": "find",
-            "id": "User.find"
         }
     ],
     "alwaysShowNotificationIcon": false,
@@ -37,15 +37,15 @@
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
     "disableAnimations": false,
     "focusFollowMouse": true,
-    "keybindings":
+    "keybindings": 
     [
-        {
-            "id": "User.paste",
-            "keys": "ctrl+v"
-        },
         {
             "id": "User.find",
             "keys": "ctrl+shift+f"
+        },
+        {
+            "id": "User.paste",
+            "keys": "ctrl+v"
         },
         {
             "id": "User.copy.644BA8F2",
@@ -57,15 +57,15 @@
         }
     ],
     "minimizeToNotificationArea": false,
-    "newTabMenu":
+    "newTabMenu": 
     [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles":
+    "profiles": 
     {
-        "defaults":
+        "defaults": 
         {
             "adjustIndistinguishableColors": "always",
             "antialiasingMode": "cleartype",
@@ -74,7 +74,7 @@
             "cursorShape": "bar",
             "elevate": false,
             "experimental.retroTerminalEffect": false,
-            "font":
+            "font": 
             {
                 "face": "JetBrainsMono Nerd Font",
                 "size": 13,
@@ -84,7 +84,7 @@
             "padding": "8",
             "useAcrylic": true
         },
-        "list":
+        "list": 
         [
             {
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
@@ -143,10 +143,22 @@
                 "hidden": false,
                 "name": "Ubuntu",
                 "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{d2112246-6ed4-54e8-b780-e7b92795bce7}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 18",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{e71ecadd-d103-53d1-9bc9-5c160f4098a0}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 18",
+                "source": "Windows.Terminal.VisualStudio"
             }
         ]
     },
-    "schemes":
+    "schemes": 
     [
         {
             "background": "#001B26",
