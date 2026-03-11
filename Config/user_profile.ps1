@@ -219,6 +219,55 @@ Set-PSReadLineKeyHandler -Key Backspace `
 Import-Module PSFzf
 Set-PsFzfOption -PSreadLineChordProvider 'Ctrl+f' -PSReadLineChordReverseHistory 'Ctrl+r'
 
+#Cheatsheet
+function cheat {
+    $c = @{ Header = 'Cyan'; Key = 'Yellow'; Desc = 'Gray' }
+    function row($key, $desc) {
+        Write-Host "  " -NoNewline
+        Write-Host ("{0,-18}" -f $key) -ForegroundColor $c.Key -NoNewline
+        Write-Host $desc -ForegroundColor $c.Desc
+    }
+    function section($title) {
+        Write-Host ""
+        Write-Host "  $title" -ForegroundColor $c.Header
+        Write-Host ("  " + "-" * ($title.Length)) -ForegroundColor DarkGray
+    }
+
+    section "Navigation"
+    row "z <partial>"      "Jump to frecent directory (ZLocation)"
+    row "fd"               "Fuzzy cd into any directory"
+    row "Alt+C"            "Fuzzy cd (inline, fzf)"
+
+    section "Search & Edit"
+    row "Ctrl+F"           "Fuzzy find file (fzf)"
+    row "fe"               "Fuzzy find and open file in editor"
+    row "Ctrl+R"           "Fuzzy search command history"
+    row "fh"               "Fuzzy browse and run history entry"
+
+    section "Git"
+    row "lg"               "lazygit (full terminal git UI)"
+    row "gs"               "git status"
+    row "gl"               "git pull"
+    row "gp"               "git push"
+    row "gf"               "git fetch origin"
+    row "g"                "git (short alias)"
+    row "fgs"              "Fuzzy git status (stage/diff files)"
+    row "tig"              "Git history browser (TUI)"
+
+    section "Process & System"
+    row "fkill"            "Fuzzy kill a running process"
+    row "fz"               "Fuzzy jump (ZLocation via fzf)"
+    row "which <cmd>"      "Show full path of a command"
+
+    section "PSReadLine"
+    row "Ctrl+D"           "Delete character (like Unix)"
+    row "UpArrow"          "Search history backwards"
+    row "DownArrow"        "Search history forwards"
+    row "'  or  ("         "Auto-closes matching quote/brace"
+
+    Write-Host ""
+}
+
 #Utilities
 function which ($command) {
     Get-Command -Name $command -ErrorAction SilentlyContinue |
