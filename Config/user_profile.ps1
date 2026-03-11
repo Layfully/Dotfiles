@@ -234,7 +234,7 @@ function cheat {
     }
 
     section "Navigation"
-    row "z <partial>"      "Jump to frecent directory (ZLocation)"
+    row "z <partial>"      "Jump to recent directory (ZLocation)"
     row "fd"               "Fuzzy cd into any directory"
     row "Alt+C"            "Fuzzy cd (inline, fzf)"
 
