@@ -204,6 +204,10 @@ $configItems = @(
     @{
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "UniGetUI\Configuration"
         TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\UniGetUI"
+    },
+    @{
+        ProfileFullPath = 'C:\Tools\pwsh.exe'
+        TargetPath      = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Microsoft\WindowsApps\pwsh.exe"
     }
 )
 
