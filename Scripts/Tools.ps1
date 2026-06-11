@@ -98,6 +98,7 @@ $wingetPackages = @(
     "Microsoft.PowerShell",
     "MartiCliment.UniGetUI"
     "Git.Git"
+    "Bitwarden.CLI"
     "Bitwarden.Bitwarden"
     "Microsoft.VisualStudioCode"
     "JesseDuffield.lazygit"
