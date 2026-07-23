@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git ls-tree *)",
+      "Bash(awk '{print $4, $5}')",
+      "Bash(git count-objects *)",
+      "Bash(git rm *)",
+      "Bash(git add *)"
+    ]
+  }
+}
