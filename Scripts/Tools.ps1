@@ -1,7 +1,3 @@
-param (
-    [switch]$SkipVisualStudio = $false
-)
-
 $isAdministrator = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')
 $commandLine = (Get-CimInstance Win32_Process -Filter "ProcessId = $PID").CommandLine
 $isNoProfile = $commandLine -like '*-NoProfile*'
@@ -44,31 +40,6 @@ if ($otherPwshProcesses) {
 else {
     Write-Host "No other PowerShell instances found. Environment is clean." -ForegroundColor Green
 }
-
-
-#--- Visual Studio ---
-if (-not $SkipVisualStudio) {
-    $UserConfirmation = Read-Host -Prompt "Do you want to install Visual Studio? (Y/N)"
-
-    if ($UserConfirmation -cmatch "^y(es)?") {
-        # Use -cmatch for case-insensitive and more flexible matching
-        Write-Host "Continuing with Visual Studio installation..."
-        $vsConfigPath = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\VisualStudio\installationConfig2022.vsconfig"
-        winget install --id Microsoft.VisualStudio.2022.Professional --override "--wait --quiet --addProductLang En-us --config `"$vsConfigPath`"" # Quote config path in case it contains spaces
-    }
-    else {
-        Write-Host "Visual Studio installation cancelled by the user."
-    }
-}
-else {
-    Write-Host "Skipping Visual Studio installation as requested."
-}
-#--- Visual Studio extensions ---
-#this one could be nice test if this is good
-#choco install -y gitdiffmargin
-
-#resharper is alternative
-#choco install -y resharper-ultimate-all --package-parameters="'/NoCpp'"
 
 
 #--- Winget Setup ---

@@ -18,14 +18,12 @@ Config/               # All tracked config files (symlinked to system locations)
   WindowsTerminal/    # settings.json → %LOCALAPPDATA%\...\WindowsTerminal\
   UniGetUI/           # Config dir → %LOCALAPPDATA%\UniGetUI\Configuration (symlink)
   PowerToys/          # latest_powertoys_backup.ptb
-  VisualStudio/       # installationConfig2022.vsconfig
 Scripts/
   Tools.ps1           # Main setup script — run once on a new machine (requires Admin + pwsh 7+)
   WSLSetup.sh         # WSL first-time setup
   GitHooks/           # Scripts called by .githooks/pre-commit
     UpdatePowerToysBackup.ps1
     SaveVsCodeExtensions.ps1   # Uses code.cmd (not Code.exe) — see file for why
-    SaveVsInstallProfile.ps1
     ExportWingetPackages.ps1   # Named after $env:COMPUTERNAME; gitignored on work machine
 UniGetUI/             # Winget package bundles (private machine bundle tracked here)
 .githooks/

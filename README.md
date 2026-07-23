@@ -60,7 +60,6 @@ Hooks run automatically on every commit to keep config snapshots up to date:
 |------|-------------|
 | `UpdatePowerToysBackup.ps1` | Renames the latest `.ptb` backup to `latest_powertoys_backup.ptb` |
 | `SaveVsCodeExtensions.ps1` | Exports installed VS Code extensions list |
-| `SaveVsInstallProfile.ps1` | Exports Visual Studio 2022 installation config |
 | `ExportWingetPackages.ps1` | Exports winget package list (named after the machine) |
 
 To enable hooks after cloning:
