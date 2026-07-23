@@ -17,5 +17,10 @@ git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git
 # Required for Azure DevOps repos (uses full path as key, not just hostname)
 git config --global credential.https://dev.azure.com.useHttpPath true
 
-# Install JetBrains Rider via snap
-sudo snap install rider --classic
+# Install JetBrains Rider via snap (optional)
+read -rp "Do you want to install JetBrains Rider? (Y/N) " rider_confirmation
+if [[ "$rider_confirmation" =~ ^[Yy]([Ee][Ss])?$ ]]; then
+    sudo snap install rider --classic
+else
+    echo "Skipping JetBrains Rider installation."
+fi
