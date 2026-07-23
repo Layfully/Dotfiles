@@ -8,7 +8,7 @@ Configs are symlinked from this repo into their expected system locations by `Sc
 - **Work machine**: `DEV-WNW-422A` — currently the active machine in this session
 - **Private machine**: different hostname — the "source of truth" for personal configs in the repo
 
-Key implication: work-machine-specific files (UniGetUI runtime state, winget bundle named `DEV-WNW-422A*`) are gitignored. The private machine's bundle (different filename) is what gets tracked.
+Key implication: work-machine-specific files (UniGetUI runtime state, winget bundle matching `DEV-WNW-*`) are gitignored. The private machine's bundle (different filename) is what gets tracked.
 
 ## Repo Structure
 ```

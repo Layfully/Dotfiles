@@ -8,5 +8,5 @@ Config/UniGetUI/CurrentSessionToken
 Config/UniGetUI/WindowGeometry
 Config/UniGetUI/TelemetryClientToken
 
-# Work machine (DEV-WNW-422A) package bundle — private machine bundle tracked instead
-DEV-WNW-422A installed packages.ubundle
+# Work machine (DEV-WNW-* naming convention) package bundle — private machine bundle tracked instead
+DEV-WNW-* installed packages.ubundle
