@@ -42,6 +42,7 @@ pwsh -NoProfile -File Scripts/Tools.ps1
 | `%APPDATA%\Code\User\settings.json` | `Config/VisualStudioCode/settings.json` |
 | `%LOCALAPPDATA%\...\WindowsTerminal\settings.json` | `Config/WindowsTerminal/settings.json` |
 | `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI\` |
+| `%LOCALAPPDATA%\Microsoft\WindowsApps\pwsh.exe` | `C:\Tools\pwsh.exe` |
 
 ## WSL Setup
 
