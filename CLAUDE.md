@@ -8,7 +8,7 @@ Configs are symlinked from this repo into their expected system locations by `Sc
 - **Work machine**: `WORK-PC` — currently the active machine in this session
 - **Private machine**: different hostname — the "source of truth" for personal configs in the repo
 
-Key implication: work-machine-specific files (UniGetUI runtime state, winget bundle named `WORK-PC`) are gitignored. The private machine's bundle (different filename) is what gets tracked.
+Key implication: work-machine-specific files (UniGetUI runtime state, winget bundle matching `WORK-PC`) are gitignored. The private machine's bundle (different filename) is what gets tracked.
 
 ## Repo Structure
 ```

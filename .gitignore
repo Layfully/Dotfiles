@@ -8,5 +8,5 @@ Config/UniGetUI/CurrentSessionToken
 Config/UniGetUI/WindowGeometry
 Config/UniGetUI/TelemetryClientToken
 
-# Work machine (WORK-PC) package bundle — private machine bundle tracked instead
+# Work machine (WORK-PC naming convention) package bundle — private machine bundle tracked instead
 WORK-PC installed packages.ubundle
