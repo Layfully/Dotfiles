@@ -64,7 +64,6 @@ $wingetPackages = @(
     "Microsoft.PowerToys"
     "junegunn.fzf"
     "Microsoft.WindowsTerminal"
-    "GitHub.cli"
     "JanDeDobbeleer.OhMyPosh"
     "Microsoft.PowerShell",
     "MartiCliment.UniGetUI"
@@ -79,6 +78,28 @@ $wingetPackages = @(
 foreach ($packageId in $wingetPackages) {
     Write-Host "Installing/Upgrading '$packageId' using winget..."
     winget install --id $packageId --silent --accept-package-agreements
+}
+
+#--- GitHub CLI (optional) ---
+$UserConfirmation = Read-Host -Prompt "Do you want to install GitHub CLI? (Y/N)"
+if ($UserConfirmation -cmatch "^y(es)?") {
+    Write-Host "Installing/Upgrading 'GitHub.cli' using winget..."
+    winget install --id GitHub.cli --silent --accept-package-agreements
+
+    # Refresh PATH so gh is available without restarting the session
+    $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
+                [System.Environment]::GetEnvironmentVariable("PATH", "User")
+
+    if (Get-Command gh -ErrorAction SilentlyContinue) {
+        Write-Host "Ensuring GitHub CLI extension 'gh-copilot' is installed and up-to-date..."
+        (gh extension list | Select-String gh-copilot) ? (gh extension upgrade gh-copilot) : (gh extension install github/gh-copilot)
+    }
+    else {
+        Write-Warning "gh not found after install — relaunch this script in a new session to install the gh-copilot extension."
+    }
+}
+else {
+    Write-Host "GitHub CLI installation skipped."
 }
 
 #--- Node.js via nvm + Claude Code CLI ---
@@ -98,10 +119,6 @@ if ($nvmPath) {
 else {
     Write-Warning "nvm not found after install — relaunch this script in a new session to install Node.js and Claude Code."
 }
-
-# GitHub CLI Extension - gh-copilot
-Write-Host "Ensuring GitHub CLI extension 'gh-copilot' is installed and up-to-date..."
-(gh extension list | Select-String gh-copilot) ? (gh extension upgrade gh-copilot) : (gh extension install github/gh-copilot)
 
 #--- PowerShell Module Installation ---
 Write-Host "Setting up PowerShell modules..."
@@ -175,7 +192,7 @@ $configItems = @(
     },
     @{
         ProfileFullPath = 'C:\Tools\pwsh.exe'
-        TargetPath      = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Microsoft\WindowsApps\pwsh.exe"
+        TargetPath      = Join-Path -Path $PSHOME -ChildPath "pwsh.exe"
     }
 )
 
