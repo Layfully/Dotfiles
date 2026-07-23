@@ -14,4 +14,4 @@ if (-not $codePath) {
 }
 if (-not $codePath) { Write-Error "VS Code CLI (code.cmd) not found. Skipping extension backup."; exit 1 }
 
-& $codePath --list-extensions > "$env:USERPROFILE\Dotfiles\Config\VisualStudioCode\extensions"
+& $codePath --list-extensions | Out-File -FilePath "$env:USERPROFILE\Dotfiles\Config\VisualStudioCode\extensions" -Encoding utf8
