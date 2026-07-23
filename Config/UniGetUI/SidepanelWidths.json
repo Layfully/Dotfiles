@@ -2,5 +2,9 @@
   "Discover": 250,
   "Installed": 250,
   "Bundles": 250,
-  "Updates": 250
+  "Updates": 250,
+  "SoftwarePages.DiscoverSoftwarePage": 220,
+  "SoftwarePages.SoftwareUpdatesPage": 220,
+  "SoftwarePages.InstalledPackagesPage": 220,
+  "SoftwarePages.PackageBundlesPage": 220
 }

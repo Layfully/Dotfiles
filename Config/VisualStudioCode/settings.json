@@ -93,7 +93,7 @@
   "terminal.integrated.experimental.windowsUseConptyDll": true,
   "terminal.integrated.fontLigatures.enabled": true,
   "terminal.integrated.mouseWheelZoom": true,
-  "terminal.integrated.fontSize": 15,
+  "terminal.integrated.fontSize": 16,
   "terminal.integrated.smoothScrolling": true,
   "geminicodeassist.updateChannel": "Insiders",
   "mdb.useSampleDocsInCopilot": true,
@@ -131,4 +131,64 @@
   "claudeCode.preferredLocation": "sidebar",
   "claudeCode.selectedModel": "default",
   "claudeCode.useCtrlEnterToSend": true,
+  "mssql.connectionGroups": [
+    {
+      "name": "ROOT",
+      "id": "ROOT"
+    },
+    {
+      "name": "Test",
+      "color": "#00CC6A",
+      "id": "8f852423-0ab7-4681-b4c2-3a71d2a860b2",
+      "parentId": "ROOT"
+    },
+    {
+      "name": "Prod",
+      "color": "#00CC6A",
+      "id": "41dc4f40-55ac-4f60-ae9f-2bf5a8b70a35",
+      "parentId": "ROOT"
+    }
+  ],
+  "mssql.enableQueryHistoryCapture": true,
+  "mssql.connections": [
+    {
+      "authenticationType": "SqlLogin",
+      "connectTimeout": 30,
+      "applicationName": "vscode-mssql",
+      "applicationIntent": "ReadWrite",
+      "server": "172.22.113.17",
+      "database": "master",
+      "user": "sa",
+      "password": "",
+      "commandTimeout": 30,
+      "encrypt": "Mandatory",
+      "profileName": "FM1 Test DB",
+      "trustServerCertificate": true,
+      "savePassword": true,
+      "groupId": "8f852423-0ab7-4681-b4c2-3a71d2a860b2",
+      "id": "54E0C8F4-0297-4426-A9A8-C0097B7527A6",
+      "profileSource": 1
+    },
+    {
+      "server": "ASXVPWARK013022",
+      "database": "master",
+      "authenticationType": "SqlLogin",
+      "user": "sa",
+      "password": "",
+      "emptyPasswordInput": false,
+      "savePassword": true,
+      "profileName": "Production",
+      "encrypt": "Mandatory",
+      "trustServerCertificate": true,
+      "connectTimeout": 15,
+      "commandTimeout": 30,
+      "applicationName": "vscode-mssql",
+      "groupId": "41dc4f40-55ac-4f60-ae9f-2bf5a8b70a35",
+      "id": "89991319-87A1-4F1B-B553-312A8870E0B7",
+      "profileSource": 1
+    }
+  ],
+  "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
+  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
+  "workbench.experimental.modernUI": true,
 }

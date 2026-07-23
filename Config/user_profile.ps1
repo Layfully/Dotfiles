@@ -282,6 +282,18 @@ function Get-GitPush { & git push $args }
 
 function Get-GitFetch { & git fetch origin $args}
 
+function sanitize {
+    param(
+        [string] $RootPath = 'D:\AI',
+        [switch] $DryRun
+    )
+    $arguments = @('-ExecutionPolicy', 'Bypass', '-File', 'D:\AI\APM\Sanitize-LocalRepo_generic.ps1', '-RootPath', $RootPath)
+    if ($DryRun) { $arguments += '-DryRun' }
+    powershell @arguments
+}
+
+
+
 #Alias
 Set-Alias vim nvim
 Set-Alias ll ls
