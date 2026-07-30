@@ -23,7 +23,7 @@ if ($otherPwshProcesses) {
     $otherPwshProcesses | Format-Table Id, ProcessName, MainWindowTitle -AutoSize
 
     $confirmation = Read-Host -Prompt "Do you want to automatically close these sessions? (Y/N)"
-    if ($confirmation -cmatch "^y(es)?$") {
+    if ($confirmation -match "^y(es)?$") {
         Write-Host "Closing other PowerShell processes..."
         $otherPwshProcesses | ForEach-Object {
             Write-Host "Stopping process with ID: $($_.Id)..."
@@ -82,7 +82,7 @@ foreach ($packageId in $wingetPackages) {
 
 #--- GitHub CLI (optional) ---
 $UserConfirmation = Read-Host -Prompt "Do you want to install GitHub CLI? (Y/N)"
-if ($UserConfirmation -cmatch "^y(es)?") {
+if ($UserConfirmation -match "^y(es)?$") {
     Write-Host "Installing/Upgrading 'GitHub.cli' using winget..."
     winget install --id GitHub.cli --silent --accept-package-agreements
 
@@ -156,7 +156,6 @@ $psModules = @(
     "CompletionPredictor" # PSReadLine predictions
     "posh-git"           # prompt posh-git
     "Terminal-Icons"     # terminal icons
-    "Az"                 # Azure PowerShell modules
 )
 
 foreach ($moduleName in $psModules) {
@@ -168,6 +167,22 @@ foreach ($moduleName in $psModules) {
         Write-Host "Module '$moduleName' not found. Installing..." -ForegroundColor Yellow
         Install-Module -Name $moduleName -Scope CurrentUser -Force -AllowClobber
     }
+}
+
+#--- Az PowerShell modules (optional) ---
+$UserConfirmation = Read-Host -Prompt "Do you want to install the Az PowerShell modules? (Y/N)"
+if ($UserConfirmation -match "^y(es)?$") {
+    if (Get-InstalledModule -Name "Az" -ErrorAction SilentlyContinue) {
+        Write-Host "Module 'Az' is already installed. Checking for updates..." -ForegroundColor Green
+        Update-Module -Name "Az" -Force
+    }
+    else {
+        Write-Host "Module 'Az' not found. Installing..." -ForegroundColor Yellow
+        Install-Module -Name "Az" -Scope CurrentUser -Force -AllowClobber
+    }
+}
+else {
+    Write-Host "Az PowerShell modules installation skipped."
 }
 
 #--- Symbolic Links Setup ---
