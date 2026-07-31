@@ -102,22 +102,44 @@ else {
     Write-Host "GitHub CLI installation skipped."
 }
 
-#--- Node.js via nvm + Claude Code CLI ---
+
+#--- Node.js via nvm (optional) ---
 # Refresh PATH so nvm is available without restarting the session
 $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
             [System.Environment]::GetEnvironmentVariable("PATH", "User")
 
-$nvmPath = (Get-Command nvm -ErrorAction SilentlyContinue)?.Source
-if ($nvmPath) {
-    Write-Host "Installing Node.js LTS via nvm..."
-    nvm install lts
-    nvm use lts
+$UserConfirmation = Read-Host -Prompt "Do you want to install the latest Node.js LTS via nvm? (Y/N)"
+if ($UserConfirmation -match "^y(es)?$") {
+    if (Get-Command nvm -ErrorAction SilentlyContinue) {
+        Write-Host "Installing Node.js LTS via nvm..."
+        nvm install lts
+        nvm use lts
 
-    Write-Host "Installing Claude Code CLI..."
-    npm install -g @anthropic-ai/claude-code
+        # nvm switches the active version by repointing the symlink — refresh PATH again
+        $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
+                    [System.Environment]::GetEnvironmentVariable("PATH", "User")
+    }
+    else {
+        Write-Warning "nvm not found on PATH — relaunch this script in a new session to install Node.js."
+    }
 }
 else {
-    Write-Warning "nvm not found after install — relaunch this script in a new session to install Node.js and Claude Code."
+    Write-Host "Node.js installation skipped."
+}
+
+#--- Claude Code CLI (optional) ---
+$UserConfirmation = Read-Host -Prompt "Do you want to install the Claude Code CLI? (Y/N)"
+if ($UserConfirmation -match "^y(es)?$") {
+    if (Get-Command npm -ErrorAction SilentlyContinue) {
+        Write-Host "Installing Claude Code CLI..."
+        npm install -g @anthropic-ai/claude-code
+    }
+    else {
+        Write-Warning "npm not found on PATH — install Node.js first, then relaunch this script."
+    }
+}
+else {
+    Write-Host "Claude Code CLI installation skipped."
 }
 
 #--- PowerShell Module Installation ---
