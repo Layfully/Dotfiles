@@ -1,10 +1,18 @@
 #!/bin/sh
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/UpdatePowerToysBackup.ps1"
 powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
-# Redirect to /dev/null: winget writes "not available from any source" warnings
-# directly to the console host, so PowerShell-level redirection has no effect.
-powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/ExportWingetPackages.ps1" > /dev/null 2>&1
+# The winget bundle is only exported where the UniGetUI/ folder exists: winget can't create it,
+# and git drops the folder once it's empty (it was emptied upstream, so no bundle is tracked now).
+unigetui="$USERPROFILE/Dotfiles/UniGetUI"
+if [ -d "$unigetui" ]; then
+    # Redirect to /dev/null: winget writes "not available from any source" warnings
+    # directly to the console host, so PowerShell-level redirection has no effect.
+    powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/ExportWingetPackages.ps1" > /dev/null 2>&1
+fi
 
 git add "$USERPROFILE/Dotfiles/Config/PowerToys/latest_powertoys_backup.ptb"
 git add "$USERPROFILE/Dotfiles/Config/VisualStudioCode/extensions"
-git add "$USERPROFILE/Dotfiles/UniGetUI/"
+# git add fails (and aborts the commit) on a folder that doesn't exist
+if ls "$unigetui"/*.ubundle > /dev/null 2>&1; then
+    git add "$unigetui/"
+fi
