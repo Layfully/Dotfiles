@@ -8,7 +8,7 @@ Configs are symlinked from this repo into their expected system locations by `Sc
 - **Work machine**: `DEV-WNW-422A` — currently the active machine in this session
 - **Private machine**: different hostname — the "source of truth" for personal configs in the repo
 
-Key implication: work-machine-specific files (UniGetUI runtime state, winget bundle matching `DEV-WNW-*`) are gitignored. The private machine's bundle (different filename) is what gets tracked.
+Key implication: work-machine-specific files (UniGetUI runtime state, winget bundle matching `DEV-WNW-*`) are gitignored. The private machine's bundle (different filename) is what gets tracked, but only if the top-level `UniGetUI/` folder exists (winget can't create it). It was emptied upstream, so currently no bundle is exported or tracked.
 
 ## Repo Structure
 ```
@@ -24,8 +24,8 @@ Scripts/
   GitHooks/           # Scripts called by .githooks/pre-commit
     UpdatePowerToysBackup.ps1
     SaveVsCodeExtensions.ps1   # Uses code.cmd (not Code.exe) — see file for why
-    ExportWingetPackages.ps1   # Named after $env:COMPUTERNAME; gitignored on work machine
-UniGetUI/             # Winget package bundles (private machine bundle tracked here)
+    ExportWingetPackages.ps1   # Named after $env:COMPUTERNAME; gitignored on work machine; skipped if UniGetUI/ is missing
+UniGetUI/             # Winget package bundles, only if this folder exists (currently absent)
 .githooks/
   pre-commit          # Runs all GitHooks scripts + stages their output automatically
 ```
