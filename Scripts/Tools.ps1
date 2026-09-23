@@ -73,6 +73,7 @@ $wingetPackages = @(
     "Microsoft.VisualStudioCode"
     "JesseDuffield.lazygit"
     "CoreyButler.NVMforWindows"
+    "ajeetdsouza.zoxide"
 )
 
 foreach ($packageId in $wingetPackages) {
@@ -173,7 +174,6 @@ foreach ($package in $chocoPackages) {
 
 # PowerShell Modules
 $psModules = @(
-    "ZLocation"          # z for faster folder navigation
     "PSFzf"              # PSFzf to use fzf in PowerShell
     "CompletionPredictor" # PSReadLine predictions
     "posh-git"           # prompt posh-git
@@ -206,6 +206,12 @@ if ($UserConfirmation -match "^y(es)?$") {
 else {
     Write-Host "Az PowerShell modules installation skipped."
 }
+
+#--- PowerShell startup settings ---
+# Skip pwsh's update check and telemetry on every shell start
+Write-Host "Disabling PowerShell update check and telemetry..."
+[Environment]::SetEnvironmentVariable('POWERSHELL_UPDATECHECK', 'Off', 'User')
+[Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', '1', 'User')
 
 #--- Symbolic Links Setup ---
 Write-Host "Setting up symbolic links for configuration files..."
