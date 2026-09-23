@@ -14,6 +14,8 @@ Key implication: work-machine-specific files (UniGetUI runtime state, winget bun
 ```
 Config/               # All tracked config files (symlinked to system locations)
   user_profile.ps1    # PowerShell profile → $PROFILE
+  user_profile_autopairing.ps1  # Quote/bracket key handlers; loaded by the profile when idle (not symlinked)
+  oh-my-posh/         # cloud-context.omp.json — local prompt theme used by the profile
   VisualStudioCode/   # settings.json, extensions list → %APPDATA%\Code\User\
   WindowsTerminal/    # settings.json → %LOCALAPPDATA%\...\WindowsTerminal\
   UniGetUI/           # Config dir → %LOCALAPPDATA%\UniGetUI\Configuration (symlink)
@@ -36,16 +38,17 @@ UniGetUI/             # Winget package bundles, only if this folder exists (curr
 - **Pre-commit hook**: runs in Windows PowerShell 5.1 (via `powershell.exe`), NOT pwsh 7. Avoid PS7-only syntax (e.g. `?.`) in GitHooks scripts. `Tools.ps1` itself runs under pwsh 7 and can use modern syntax.
 - **Gitignored UniGetUI files**: `CurrentSessionToken`, `OperationHistory`, `WindowGeometry`, `TelemetryClientToken` — these are runtime state, don't try to commit them
 - **mssql connections**: intentionally omitted from `settings.json` (contain work server names/IPs)
+- **Profile startup is tuned** (see comments in `user_profile.ps1`): nothing before the first prompt may use cmdlets from Microsoft.PowerShell.Management/Utility (`Get-Item`, `Test-Path`, `Set-Alias`, `Register-EngineEvent`, ...) — use .NET/engine APIs instead; modules load lazily on first use; oh-my-posh/zoxide init scripts are cached and patched in `%LOCALAPPDATA%\PowerShellProfileCache` (bump the `v4` cache key after changing a `$Generate` block). Never set `Set-PSReadLineOption -EditMode` below custom key bindings — it resets them.
 
 ## Common Tasks
 - **Sync configs to GitHub**: just `git add` the changed files and commit — hooks auto-update backups
 - **New machine setup**: clone repo → enable hooks → run `Scripts/Tools.ps1` as Admin in pwsh 7
 - **Add a new tool**: add winget ID to `$wingetPackages` in `Scripts/Tools.ps1`
-- **Add a new PS alias**: add to the `#Alias` section in `Config/user_profile.ps1`
+- **Add a new PS alias**: add a `${alias:name} = 'target'` line to the `#Alias` section in `Config/user_profile.ps1` (not `Set-Alias` — it loads the Utility module at startup)
 - **Add a new symlink**: add entry to `$configItems` in `Scripts/Tools.ps1`
 
 ## Installed Tools (via Tools.ps1)
-winget: PowerToys, fzf, Windows Terminal, GitHub CLI, Oh My Posh, PowerShell 7, UniGetUI, Git, Bitwarden, VS Code, lazygit, nvm-windows
+winget: PowerToys, fzf, Windows Terminal, GitHub CLI, Oh My Posh, PowerShell 7, UniGetUI, Git, Bitwarden, VS Code, lazygit, nvm-windows, zoxide
 npm (via nvm): Claude Code CLI (`@anthropic-ai/claude-code`)
 choco: JetBrainsMono Nerd Font
-PS modules: ZLocation, PSFzf, CompletionPredictor, posh-git, Terminal-Icons, Az
+PS modules: PSFzf, CompletionPredictor, posh-git, Terminal-Icons, Az

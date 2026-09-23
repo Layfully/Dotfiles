@@ -1,0 +1,146 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "palette": {
+    "background-color": "transparent",
+    "cloud-text-amazon": "#4285F4",
+    "cloud-text-azure": "#4285F4",
+    "cloud-text-firebase": "#FFA000",
+    "cloud-text-gcp": "#4285F4",
+    "error-background": "#dd0033",
+    "error-text": "#242424",
+    "git-text": "#238636",
+    "kubernetes-text": "#FFBB00",
+    "symbol-color": "#ffffff",
+    "talosctl-text": "#FF6C00",
+    "timer-text": "#dd0033"
+  },
+  "upgrade": {
+    "source": "cdn",
+    "interval": "168h",
+    "auto": false,
+    "notice": false
+  },
+  "console_title_template": "{{ if or .Root .Segments.Git.RepoName }}[ {{ if .Root }}Admin{{ end }}{{ if and .Root .Segments.Git.RepoName }}@{{ end }}{{ if .Segments.Git.RepoName }}{{ .Segments.Git.RepoName }}{{ end }} ]{{ end }} {{ .Folder }}",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "time_format": "15:04:05"
+          },
+          "template": " <p:symbol-color></> {{ dateInZone .Format .CurrentDate \"UTC\" }} ",
+          "foreground": "p:timer-text",
+          "background": "p:background-color",
+          "type": "time",
+          "style": "powerline"
+        },
+        {
+          "template": " <p:symbol-color></> {{ .RepoName }}",
+          "foreground": "p:git-text",
+          "powerline_symbol": "",
+          "background": "p:background-color",
+          "type": "git",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "style": "austin",
+            "threshold": 1
+          },
+          "template": " <p:symbol-color></> {{ .FormattedMs }}",
+          "foreground": "p:timer-text",
+          "powerline_symbol": "",
+          "background": "p:background-color",
+          "type": "executiontime",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "always_enabled": true
+          },
+          "template": "{{ if eq .Code 0 }}  {{ end }}",
+          "foreground": "p:symbol-color",
+          "powerline_symbol": "",
+          "background": "p:background-color",
+          "type": "status",
+          "style": "powerline"
+        },
+        {
+          "leading_diamond": " ",
+          "trailing_diamond": "",
+          "template": "{{ if ne .Code 0 }}  {{ .Code }}{{ if (ne (reason .Code) (toString .Code)) }} - {{ reason .Code }}{{else}}{{ end }} {{ end }}",
+          "foreground": "p:error-text",
+          "background": "p:error-background",
+          "type": "status",
+          "style": "diamond"
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "time_format": "15:04:05"
+          },
+          "template": " <p:symbol-color></> {{ .CurrentDate | date .Format }} ",
+          "foreground": "p:timer-text",
+          "background": "p:background-color",
+          "type": "time",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "folder_separator_icon": "/",
+            "style": "folder"
+          },
+          "template": " {{ path .Path .Location }} ",
+          "foreground": "p:symbol-color",
+          "powerline_symbol": "",
+          "background": "p:background-color",
+          "type": "path",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "fetch_status": true
+          },
+          "template": "{{ .HEAD }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{ end }} ",
+          "foreground": "p:git-text",
+          "powerline_symbol": "",
+          "background": "p:background-color",
+          "type": "git",
+          "style": "powerline"
+        }
+      ],
+      "newline": true
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": "  ",
+          "foreground": "p:background-color",
+          "background": "p:error-background",
+          "type": "root",
+          "style": "diamond"
+        },
+        {
+          "template": "{{ if .Root }}{{ else }}<p:symbol-color> > </>{{ end }}",
+          "foreground": "p:git-text",
+          "background": "p:background-color",
+          "type": "text",
+          "style": "plain"
+        }
+      ],
+      "newline": true
+    }
+  ],
+  "version": 3
+}
