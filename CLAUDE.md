@@ -39,6 +39,7 @@ UniGetUI/             # Winget package bundles, only if this folder exists (curr
 - **Gitignored UniGetUI files**: `CurrentSessionToken`, `OperationHistory`, `WindowGeometry`, `TelemetryClientToken` — these are runtime state, don't try to commit them
 - **mssql connections**: intentionally omitted from `settings.json` (contain work server names/IPs)
 - **Profile startup is tuned** (see comments in `user_profile.ps1`): nothing before the first prompt may use cmdlets from Microsoft.PowerShell.Management/Utility (`Get-Item`, `Test-Path`, `Set-Alias`, `Register-EngineEvent`, ...) — use .NET/engine APIs instead; modules load lazily on first use; oh-my-posh/zoxide init scripts are cached and patched in `%LOCALAPPDATA%\PowerShellProfileCache` (bump the `v4` cache key after changing a `$Generate` block). Never set `Set-PSReadLineOption -EditMode` below custom key bindings — it resets them.
+- **User PATH edits**: `HKCU:\Environment\Path` is `REG_EXPAND_SZ` and contains `%USERPROFILE%`, `%NVM_HOME%` and `%NVM_SYMLINK%` tokens. Write it with `Set-ItemProperty -Type ExpandString` and read it with `GetValue('Path','','DoNotExpandEnvironmentNames')`. `[Environment]::SetEnvironmentVariable(...,'User')` expands those tokens and bakes them out permanently, breaking the nvm indirection.
 
 ## Common Tasks
 - **Sync configs to GitHub**: just `git add` the changed files and commit — hooks auto-update backups
@@ -49,6 +50,6 @@ UniGetUI/             # Winget package bundles, only if this folder exists (curr
 
 ## Installed Tools (via Tools.ps1)
 winget: PowerToys, fzf, Windows Terminal, GitHub CLI, Oh My Posh, PowerShell 7, UniGetUI, Git, Bitwarden, VS Code, lazygit, nvm-windows, zoxide
-npm (via nvm): Claude Code CLI (`@anthropic-ai/claude-code`)
+native installer: Claude Code CLI → `%USERPROFILE%\.local\bin\claude.exe` (`Tools.ps1` also adds that folder to the User PATH)
 choco: JetBrainsMono Nerd Font
 PS modules: PSFzf, CompletionPredictor, posh-git, Terminal-Icons, Az

@@ -1,0 +1,21 @@
+[user]
+	email = git@adriangaborek.dev
+	name = Adrian Gaborek
+[core]
+	fsmonitor = true
+	untrackedCache = true
+	longpaths = true
+[checkout]
+	workers = 0
+[difftool]
+	prompt = false
+[mergetool]
+	prompt = false
+	keepBackup = false
+[fetch]
+	prune = true
+	pruneTags = false
+[include]
+	path = ~/.gitconfig-local
+[credential "https://git.devnet.de"]
+	provider = generic
