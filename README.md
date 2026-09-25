@@ -27,10 +27,11 @@ pwsh -NoProfile -File Scripts/Tools.ps1
 
 | Step | What happens |
 |------|-------------|
-| Installs winget packages | PowerToys, fzf, Windows Terminal, GitHub CLI, Oh My Posh, PowerShell 7, UniGetUI, Git, Bitwarden, VS Code, lazygit, nvm-windows |
-| Installs Node.js LTS via nvm | Then installs Claude Code CLI (`@anthropic-ai/claude-code`) globally |
+| Installs winget packages | PowerToys, fzf, Windows Terminal, GitHub CLI, Oh My Posh, PowerShell 7, UniGetUI, Git, Bitwarden, VS Code, lazygit, nvm-windows, zoxide |
+| Installs Node.js LTS via nvm | Optional — prompts first |
+| Installs Claude Code CLI | Optional — native build to `%USERPROFILE%\.local\bin`, and adds that folder to the User PATH |
 | Installs Chocolatey | Used for JetBrainsMono Nerd Font |
-| Installs PowerShell modules | ZLocation, PSFzf, CompletionPredictor, posh-git, Terminal-Icons, Az |
+| Installs PowerShell modules | PSFzf, CompletionPredictor, posh-git, Terminal-Icons, Az |
 | Creates symbolic links | Links config files from this repo into their expected system locations (see table below) |
 | Cleans up old PS modules | Removes all but the latest version of each installed module |
 
@@ -75,7 +76,7 @@ git config --local core.hooksPath .githooks
 | `Ctrl+F` | Fuzzy finder (fzf) |
 | `Ctrl+R` | Fuzzy search command history |
 | `Alt+C` | Fuzzy cd into directory |
-| `z <partial>` | Jump to a frecent directory (ZLocation) |
+| `z <partial>` | Jump to a frecent directory (zoxide) |
 | `gs` | `git status` |
 | `gl` | `git pull` |
 | `gp` | `git push` |
