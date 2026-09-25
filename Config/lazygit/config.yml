@@ -1,0 +1,12 @@
+customCommands:
+  - key: 'V'
+    context: 'worktrees'
+    description: 'Open selected worktree in this VS Code window'
+    # Prefer a .code-workspace inside the worktree: opening a plain folder while a workspace
+    # occupies the window makes VS Code spawn a second window instead of reusing this one.
+    command: >-
+      pwsh -NoProfile -Command "$w='{{ .SelectedWorktree.Path }}';
+      $f=Get-ChildItem -LiteralPath $w -Filter *.code-workspace -File -Recurse -Depth 3 -ErrorAction SilentlyContinue |
+      Sort-Object {$_.FullName.Length} | Select-Object -First 1;
+      code -r $(if($f){$f.FullName}else{$w})"
+    output: 'none'

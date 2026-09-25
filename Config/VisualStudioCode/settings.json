@@ -1,6 +1,8 @@
 {
   "editor.unicodeHighlight.nonBasicASCII": false,
-  "terminal.integrated.commandsToSkipShell": ["matlab.interrupt"],
+  "terminal.integrated.commandsToSkipShell": [
+    "matlab.interrupt"
+  ],
   "omnisharp.useModernNet": false,
   "editor.tabSize": 2,
   "workbench.iconTheme": "material-icon-theme",
@@ -19,7 +21,9 @@
   "workbench.colorCustomizations": {
     "terminal.background": "#00000000",
   },
-  "workbench.settings.applyToAllProfiles": ["workbench.colorCustomizations"],
+  "workbench.settings.applyToAllProfiles": [
+    "workbench.colorCustomizations"
+  ],
   "window.titleBarStyle": "custom",
   "vscode_vibrancy.opacity": 0.5,
   "synthwave84.brightness": 0.15,
@@ -103,6 +107,7 @@
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
+  "security.workspace.trust.enabled": false,
   "security.allowedUNCHosts": [
     "wsl.localhost"
   ],
@@ -119,7 +124,6 @@
   "editor.inlayHints.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
   "diffEditor.experimental.showMoves": true,
   "diffEditor.experimental.useTrueInlineView": true,
-  "diffEditor.hideUnchangedRegions.enabled": true,
   "mdb.mcp.server": "prompt",
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features",
@@ -191,4 +195,6 @@
   "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
   "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
   "workbench.experimental.modernUI": true,
+  "claudeCode.focusView": false,
+  "chat.mcp.gallery.enabled": true,
 }

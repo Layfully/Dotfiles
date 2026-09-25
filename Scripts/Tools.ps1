@@ -129,15 +129,34 @@ else {
 }
 
 #--- Claude Code CLI (optional) ---
+# Native build rather than `npm install -g @anthropic-ai/claude-code`: it self-updates in place and
+# does not disappear when nvm switches the active Node version. Installs to %USERPROFILE%\.local\bin,
+# which the installer does NOT put on PATH itself — without that, the VS Code extension cannot launch it.
 $UserConfirmation = Read-Host -Prompt "Do you want to install the Claude Code CLI? (Y/N)"
 if ($UserConfirmation -match "^y(es)?$") {
-    if (Get-Command npm -ErrorAction SilentlyContinue) {
-        Write-Host "Installing Claude Code CLI..."
-        npm install -g @anthropic-ai/claude-code
+    Write-Host "Installing Claude Code CLI (native build)..."
+    Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression
+
+    # HKCU:\Environment\Path is REG_EXPAND_SZ and holds %USERPROFILE%, %NVM_HOME% and %NVM_SYMLINK%
+    # tokens, so it has to be written through the registry with the value kind preserved.
+    # [Environment]::SetEnvironmentVariable would expand those tokens and bake them out permanently.
+    $claudeBinPath = '%USERPROFILE%\.local\bin'
+    $rawUserPath = (Get-Item 'HKCU:\Environment').GetValue('Path', '', 'DoNotExpandEnvironmentNames')
+    $userPathEntries = $rawUserPath -split ';' | Where-Object { $_ }
+
+    if ($userPathEntries -contains $claudeBinPath -or $userPathEntries -contains "$env:USERPROFILE\.local\bin") {
+        Write-Host "'$claudeBinPath' is already on the User PATH." -ForegroundColor Green
     }
     else {
-        Write-Warning "npm not found on PATH — install Node.js first, then relaunch this script."
+        $updatedUserPath = ($userPathEntries + $claudeBinPath) -join ';'
+        Set-ItemProperty -Path 'HKCU:\Environment' -Name 'Path' -Value $updatedUserPath -Type ExpandString
+        Write-Host "Added '$claudeBinPath' to the User PATH." -ForegroundColor Green
+        Write-Warning "VS Code reads PATH at startup — restart it before using the Claude Code extension."
     }
+
+    # Refresh PATH so claude is available without restarting the session
+    $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
+                [System.Environment]::GetEnvironmentVariable("PATH", "User")
 }
 else {
     Write-Host "Claude Code CLI installation skipped."
@@ -232,6 +251,18 @@ $configItems = @(
     @{
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "UniGetUI\Configuration"
         TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\UniGetUI"
+    },
+    @{
+        ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "lazygit\config.yml"
+        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\lazygit\config.yml"
+    },
+    @{
+        ProfileFullPath = Join-Path -Path $env:USERPROFILE -ChildPath ".gitconfig"
+        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\Git\gitconfig"
+    },
+    @{
+        ProfileFullPath = Join-Path -Path $env:USERPROFILE -ChildPath ".claude\settings.json"
+        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\Claude\settings.json"
     },
     @{
         ProfileFullPath = 'C:\Tools\pwsh.exe'
