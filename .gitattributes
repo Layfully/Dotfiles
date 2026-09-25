@@ -1,0 +1,7 @@
+# Check text files out with LF on every machine, overriding Git for Windows' system-wide
+# core.autocrlf=true. Bash scripts (WSLSetup.sh, .githooks/pre-commit) break with CRLF, and the
+# apps behind the symlinked configs (Windows Terminal, VS Code, UniGetUI, ...) save LF anyway,
+# which made git warn "LF will be replaced by CRLF" on every status.
+* text=auto eol=lf
+
+*.ptb binary
