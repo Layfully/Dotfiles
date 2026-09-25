@@ -1,0 +1,49 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  powershell:
+    # windows-latest ships Windows PowerShell 5.1 next to pwsh 7, which the first step needs
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # .githooks/pre-commit runs these through powershell.exe (5.1), so parse them with 5.1 itself:
+      # PowerShell 7-only syntax such as ?., ?? or ternaries fails here instead of in the hook
+      - name: Parse hook scripts with Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          $failed = $false
+          foreach ($file in Get-ChildItem Scripts/GitHooks -Filter *.ps1) {
+              $parseErrors = $null
+              [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$null, [ref]$parseErrors) | Out-Null
+              foreach ($parseError in $parseErrors) {
+                  Write-Output "::error file=Scripts/GitHooks/$($file.Name),line=$($parseError.Extent.StartLineNumber)::$($parseError.Message)"
+                  $failed = $true
+              }
+          }
+          if ($failed) { exit 1 }
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          $results = @(Invoke-ScriptAnalyzer -Path . -Recurse -Settings ./PSScriptAnalyzerSettings.psd1)
+          # 5.1 reads a BOM-less file as the system code page, so non-ASCII characters in the hook
+          # scripts turn into other characters (some of which it treats as quotes)
+          $results += @(Invoke-ScriptAnalyzer -Path Scripts/GitHooks -Settings @{ IncludeRules = @('PSUseBOMForUnicodeEncodedFile') })
+
+          foreach ($result in $results) {
+              $level = if ($result.Severity -eq 'Error') { 'error' } else { 'warning' }
+              $file = [IO.Path]::GetRelativePath($PWD, $result.ScriptPath) -replace '\\', '/'
+              $line = if ($result.Line) { $result.Line } else { 1 }  # file-level rules (e.g. the BOM one) have no line
+              Write-Output "::$level file=$file,line=${line}::$($result.RuleName): $($result.Message)"
+          }
+          if ($results) { exit 1 }
