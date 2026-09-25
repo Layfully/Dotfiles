@@ -233,7 +233,7 @@ Register-ArgumentCompleter -Native -CommandName git, g -ScriptBlock {
 
 # Terminal-Icons: just before the first directory listing
 $ExecutionContext.InvokeCommand.PreCommandLookupAction = {
-    param($commandName, $eventArgs)
+    param($commandName, $lookupEventArgs)
     if ($commandName -in 'ls', 'll', 'dir', 'gci', 'Get-ChildItem') {
         $ExecutionContext.InvokeCommand.PreCommandLookupAction = $null
         Import-Module Terminal-Icons -Global
@@ -324,16 +324,6 @@ function Invoke-GitPush { & git push $args }
 
 function Invoke-GitFetch { & git fetch origin $args}
 
-function sanitize {
-    param(
-        [string] $RootPath = 'D:\AI',
-        [switch] $DryRun
-    )
-    $arguments = @('-ExecutionPolicy', 'Bypass', '-File', 'D:\AI\APM\Sanitize-LocalRepo_generic.ps1', '-RootPath', $RootPath)
-    if ($DryRun) { $arguments += '-DryRun' }
-    powershell @arguments
-}
-
 #Alias
 # ${alias:name} = ... rather than Set-Alias, which would load the Utility module at startup (~10ms).
 # The read-only built-ins gl and gp have to be forced through the provider API.
@@ -354,3 +344,8 @@ ${alias:gf} = 'Invoke-GitFetch'
 ${alias:lg} = 'lazygit'
 $null = $ExecutionContext.InvokeProvider.Item.Set('Alias:\gl', 'Invoke-GitPull', $true, $true)
 $null = $ExecutionContext.InvokeProvider.Item.Set('Alias:\gp', 'Invoke-GitPush', $true, $true)
+
+#Machine-local
+# Functions and aliases for this machine only (work tools, local paths...) go in an untracked file, as
+# ~/.gitconfig-local does for git. Loaded last, so it can override anything above.
+if ([IO.File]::Exists("$HOME\.user_profile_local.ps1")) { . "$HOME\.user_profile_local.ps1" }
