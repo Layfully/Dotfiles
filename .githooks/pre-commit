@@ -1,18 +1,15 @@
 #!/bin/sh
-powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/UpdatePowerToysBackup.ps1"
-powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
-# The winget bundle is only exported where the UniGetUI/ folder exists: winget can't create it,
-# and git drops the folder once it's empty (it was emptied upstream, so no bundle is tracked now).
-unigetui="$USERPROFILE/Dotfiles/UniGetUI"
-if [ -d "$unigetui" ]; then
-    # Redirect to /dev/null: winget writes "not available from any source" warnings
-    # directly to the console host, so PowerShell-level redirection has no effect.
-    powershell.exe -ExecutionPolicy RemoteSigned -File "$USERPROFILE/Dotfiles/Scripts/GitHooks/ExportWingetPackages.ps1" > /dev/null 2>&1
-fi
+# Resolve the repo from git rather than assuming a clone location
+repo="$(git rev-parse --show-toplevel)"
 
-git add "$USERPROFILE/Dotfiles/Config/PowerToys/latest_powertoys_backup.ptb"
-git add "$USERPROFILE/Dotfiles/Config/VisualStudioCode/extensions"
-# git add fails (and aborts the commit) on a folder that doesn't exist
-if ls "$unigetui"/*.ubundle > /dev/null 2>&1; then
-    git add "$unigetui/"
-fi
+powershell.exe -NoProfile -ExecutionPolicy RemoteSigned -File "$repo/Scripts/GitHooks/UpdatePowerToysBackup.ps1"
+powershell.exe -NoProfile -ExecutionPolicy RemoteSigned -File "$repo/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
+
+git add "$repo/Config/PowerToys/latest_powertoys_backup.ptb"
+# The private machine writes extensions, work machines extensions.work (see SaveVsCodeExtensions.ps1).
+# git add fails, aborting the commit, on a file that doesn't exist yet.
+for list in extensions extensions.work; do
+    if [ -f "$repo/Config/VisualStudioCode/$list" ]; then
+        git add "$repo/Config/VisualStudioCode/$list"
+    fi
+done

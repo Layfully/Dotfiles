@@ -1,4 +1,5 @@
-$backupDir = "$env:USERPROFILE\Dotfiles\Config\PowerToys"
+$repoRoot = Split-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -Parent  # Scripts\GitHooks -> repo root
+$backupDir = "$repoRoot\Config\PowerToys"
 $latestBackupName = "latest_powertoys_backup.ptb"
 $latestFile = Get-ChildItem -Path $backupDir -Filter "*.ptb" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 

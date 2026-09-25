@@ -1,3 +1,22 @@
+<#
+.SYNOPSIS
+Sets up this machine: tools, PowerShell modules and the config symlinks.
+
+.DESCRIPTION
+Each optional component has a switch: pass it to install the component (-Node), or pass it as
+:$false to skip it (-Node:$false). Components left out are asked about once, before anything is
+installed, so the rest of the run needs no input.
+
+.EXAMPLE
+pwsh -NoProfile -File Scripts/Tools.ps1 -GitHubCli -Node -Claude -Az:$false
+#>
+param(
+    [switch]$GitHubCli,  # GitHub CLI
+    [switch]$Node,       # latest Node.js LTS via nvm
+    [switch]$Claude,     # Claude Code CLI (native build)
+    [switch]$Az          # Az PowerShell modules
+)
+
 $isAdministrator = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')
 $commandLine = (Get-CimInstance Win32_Process -Filter "ProcessId = $PID").CommandLine
 $isNoProfile = $commandLine -like '*-NoProfile*'
@@ -6,14 +25,23 @@ if (-not $isAdministrator -or -not $isNoProfile) {
     $relaunchReason = if (-not $isAdministrator) { "Administrator privileges are required." } else { "A clean, no-profile session is required." }
     Write-Warning "$relaunchReason Attempting to relaunch correctly..."
 
-    if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
-        $scriptPath = $MyInvocation.MyCommand.Path + $MyInvocation.UnboundArguments
-        Start-Process -Verb RunAs wt -ArgumentList "pwsh.exe", "-NoProfile", "-File", $scriptPath
-        Exit # Exit the current, incorrect session.
-    }
+    # Forward the switches as -Name:True / -Name:False, which pwsh -File binds back to the switch.
+    # Start-Process joins -ArgumentList with spaces and does not quote, so the script path is quoted by hand.
+    $forwardedArguments = $PSBoundParameters.GetEnumerator() | ForEach-Object { "-$($_.Key):$([bool]$_.Value)" }
+    Start-Process -Verb RunAs wt -ArgumentList (@("pwsh.exe", "-NoProfile", "-File", "`"$PSCommandPath`"") + $forwardedArguments)
+    Exit # Exit the current, incorrect session.
 }
 
 Write-Host "Script is running correctly (Administrator + No Profile)." -ForegroundColor Green
+
+# The repo root is the parent of Scripts\, so the clone works from any location
+$repoRoot = Split-Path -Path $PSScriptRoot -Parent
+
+# Reloads PATH from the registry, so tools installed during this run can be found without a new session
+function Sync-SessionPath {
+    $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
+                [System.Environment]::GetEnvironmentVariable("PATH", "User")
+}
 
 $otherPwshProcesses = Get-Process -Name pwsh -ErrorAction SilentlyContinue | Where-Object { $_.Id -ne $PID }
 
@@ -21,6 +49,9 @@ if ($otherPwshProcesses) {
     Write-Warning "For a safe installation, all other PowerShell sessions must be closed to prevent file locks."
     Write-Host "The following PowerShell processes were found:" -ForegroundColor Yellow
     $otherPwshProcesses | Format-Table Id, ProcessName, MainWindowTitle -AutoSize
+    # Processes without a window title are usually hosted by other apps, not terminals the user opened
+    Write-Warning ("This includes processes without a window, such as VS Code's PowerShell extension and the shells " +
+        "of Claude Code or other tools - closing them breaks those until they are restarted.")
 
     $confirmation = Read-Host -Prompt "Do you want to automatically close these sessions? (Y/N)"
     if ($confirmation -match "^y(es)?$") {
@@ -41,19 +72,22 @@ else {
     Write-Host "No other PowerShell instances found. Environment is clean." -ForegroundColor Green
 }
 
-
-#--- Winget Setup ---
-# Add winget cdn source if not already present.
-$sourcesList = winget source list | Out-String
-$sourceName = "winget"
-$sourceURL = "https://cdn.winget.microsoft.com/cache"
-
-if ($sourcesList -like "*$sourceName*") {
-    Write-Output "The winget source '$sourceName' is already added."
+#--- Optional components ---
+# Everything not decided by a switch is asked here, before anything is installed, so the run needs no input after this
+$optionalComponents = [ordered]@{
+    GitHubCli = "GitHub CLI"
+    Node      = "the latest Node.js LTS via nvm"
+    Claude    = "the Claude Code CLI"
+    Az        = "the Az PowerShell modules"
 }
-else {
-    Write-Output "The winget source '$sourceName' is not added. Adding now..."
-    winget source add --name $sourceName --url $sourceURL
+$install = @{}
+foreach ($componentName in $optionalComponents.Keys) {
+    $install[$componentName] = if ($PSBoundParameters.ContainsKey($componentName)) {
+        [bool]$PSBoundParameters[$componentName]
+    }
+    else {
+        (Read-Host -Prompt "Do you want to install $($optionalComponents[$componentName])? (Y/N)") -match "^y(es)?$"
+    }
 }
 
 #--- Tool Installation and Upgrade ---
@@ -65,7 +99,7 @@ $wingetPackages = @(
     "junegunn.fzf"
     "Microsoft.WindowsTerminal"
     "JanDeDobbeleer.OhMyPosh"
-    "Microsoft.PowerShell",
+    "Microsoft.PowerShell"
     "MartiCliment.UniGetUI"
     "Git.Git"
     "Bitwarden.CLI"
@@ -76,52 +110,46 @@ $wingetPackages = @(
     "ajeetdsouza.zoxide"
 )
 
+#--- GitHub CLI (optional) ---
+if ($install.GitHubCli) { $wingetPackages += "GitHub.cli" }
+else { Write-Host "GitHub CLI installation skipped." }
+
+# Failed installs don't stop the run; they are listed at the end
+$failures = [System.Collections.Generic.List[string]]::new()
+
+# Exit codes that mean there was nothing to do rather than a failure
+$wingetNothingToDo = @(
+    -1978335189  # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE: installed, no newer version available
+    -1978335135  # APPINSTALLER_CLI_ERROR_PACKAGE_ALREADY_INSTALLED
+)
+
 foreach ($packageId in $wingetPackages) {
     Write-Host "Installing/Upgrading '$packageId' using winget..."
-    winget install --id $packageId --silent --accept-package-agreements
-}
-
-#--- GitHub CLI (optional) ---
-$UserConfirmation = Read-Host -Prompt "Do you want to install GitHub CLI? (Y/N)"
-if ($UserConfirmation -match "^y(es)?$") {
-    Write-Host "Installing/Upgrading 'GitHub.cli' using winget..."
-    winget install --id GitHub.cli --silent --accept-package-agreements
-
-    # Refresh PATH so gh is available without restarting the session
-    $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
-                [System.Environment]::GetEnvironmentVariable("PATH", "User")
-
-    if (Get-Command gh -ErrorAction SilentlyContinue) {
-        Write-Host "Ensuring GitHub CLI extension 'gh-copilot' is installed and up-to-date..."
-        (gh extension list | Select-String gh-copilot) ? (gh extension upgrade gh-copilot) : (gh extension install github/gh-copilot)
-    }
-    else {
-        Write-Warning "gh not found after install — relaunch this script in a new session to install the gh-copilot extension."
+    # --source winget: without it the msstore source is searched too, and on a new machine winget stops
+    # to ask for that source's agreement. --exact: match the ID exactly, not as a substring.
+    winget install --id $packageId --exact --source winget --silent --accept-package-agreements --accept-source-agreements
+    if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -notin $wingetNothingToDo) {
+        $failures.Add("winget: $packageId (exit code $LASTEXITCODE)")
     }
 }
-else {
-    Write-Host "GitHub CLI installation skipped."
-}
-
 
 #--- Node.js via nvm (optional) ---
 # Refresh PATH so nvm is available without restarting the session
-$env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
-            [System.Environment]::GetEnvironmentVariable("PATH", "User")
+Sync-SessionPath
 
-$UserConfirmation = Read-Host -Prompt "Do you want to install the latest Node.js LTS via nvm? (Y/N)"
-if ($UserConfirmation -match "^y(es)?$") {
+if ($install.Node) {
     if (Get-Command nvm -ErrorAction SilentlyContinue) {
         Write-Host "Installing Node.js LTS via nvm..."
         nvm install lts
         nvm use lts
+        if ($LASTEXITCODE -ne 0) { $failures.Add("Node.js LTS via nvm (exit code $LASTEXITCODE)") }
 
         # nvm switches the active version by repointing the symlink — refresh PATH again
-        $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
-                    [System.Environment]::GetEnvironmentVariable("PATH", "User")
+        Sync-SessionPath
     }
     else {
         Write-Warning "nvm not found on PATH — relaunch this script in a new session to install Node.js."
+        $failures.Add("Node.js LTS: nvm not found on PATH")
     }
 }
 else {
@@ -132,8 +160,7 @@ else {
 # Native build rather than `npm install -g @anthropic-ai/claude-code`: it self-updates in place and
 # does not disappear when nvm switches the active Node version. Installs to %USERPROFILE%\.local\bin,
 # which the installer does NOT put on PATH itself — without that, the VS Code extension cannot launch it.
-$UserConfirmation = Read-Host -Prompt "Do you want to install the Claude Code CLI? (Y/N)"
-if ($UserConfirmation -match "^y(es)?$") {
+if ($install.Claude) {
     Write-Host "Installing Claude Code CLI (native build)..."
     Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression
 
@@ -155,11 +182,24 @@ if ($UserConfirmation -match "^y(es)?$") {
     }
 
     # Refresh PATH so claude is available without restarting the session
-    $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
-                [System.Environment]::GetEnvironmentVariable("PATH", "User")
+    Sync-SessionPath
 }
 else {
     Write-Host "Claude Code CLI installation skipped."
+}
+
+#--- Nerd Font ---
+# oh-my-posh (installed above) ships a font installer; in an elevated session it installs for all users.
+# Windows Terminal and VS Code use this font by its family name, "JetBrainsMono Nerd Font".
+Write-Host "Installing JetBrainsMono Nerd Font using oh-my-posh..."
+Sync-SessionPath
+if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    oh-my-posh font install JetBrainsMono
+    if ($LASTEXITCODE -ne 0) { $failures.Add("JetBrainsMono Nerd Font (exit code $LASTEXITCODE)") }
+}
+else {
+    Write-Warning "oh-my-posh not found on PATH. Skipping the Nerd Font install."
+    $failures.Add("JetBrainsMono Nerd Font: oh-my-posh not found on PATH")
 }
 
 #--- PowerShell Module Installation ---
@@ -168,28 +208,6 @@ Write-Host "Setting up PowerShell modules..."
 # Trust PSGallery
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted -ErrorAction SilentlyContinue
 
-# Install chocolatey
-if (-not (Test-Path "C:\ProgramData\chocolatey\bin\choco.exe")) {
-    Write-Host "Installing Chocolatey..."
-    Set-ExecutionPolicy Bypass -Scope Process -Force
-    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072
-    iex ((New-Object Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-}
-else {
-    Write-Host "Upgrading Chocolatey..."
-    choco upgrade chocolatey -y --no-progress # Add -y and --no-progress for unattended install
-}
-
-# Chocolatey Packages
-$chocoPackages = @(
-    "nerd-fonts-jetbrainsmono"
-    #"ripgrep"
-)
-
-foreach ($package in $chocoPackages) {
-    Write-Host "Upgrading/Installing '$package' using Chocolatey..."
-    choco upgrade $package -y --no-progress
-}
 
 # PowerShell Modules
 $psModules = @(
@@ -211,8 +229,7 @@ foreach ($moduleName in $psModules) {
 }
 
 #--- Az PowerShell modules (optional) ---
-$UserConfirmation = Read-Host -Prompt "Do you want to install the Az PowerShell modules? (Y/N)"
-if ($UserConfirmation -match "^y(es)?$") {
+if ($install.Az) {
     if (Get-InstalledModule -Name "Az" -ErrorAction SilentlyContinue) {
         Write-Host "Module 'Az' is already installed. Checking for updates..." -ForegroundColor Green
         Update-Module -Name "Az" -Force
@@ -238,31 +255,31 @@ Write-Host "Setting up symbolic links for configuration files..."
 $configItems = @(
     @{
         ProfileFullPath = $PROFILE
-        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\user_profile.ps1"
+        TargetPath      = Join-Path -Path $repoRoot -ChildPath "Config\user_profile.ps1"
     },
     @{
         ProfileFullPath = Join-Path -Path $env:APPDATA -ChildPath "Code\User\settings.json"
-        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\VisualStudioCode\settings.json"
+        TargetPath      = Join-Path -Path $repoRoot -ChildPath "Config\VisualStudioCode\settings.json"
     },
     @{
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\WindowsTerminal\settings.json"
+        TargetPath      = Join-Path -Path $repoRoot -ChildPath "Config\WindowsTerminal\settings.json"
     },
     @{
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "UniGetUI\Configuration"
-        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\UniGetUI"
+        TargetPath      = Join-Path -Path $repoRoot -ChildPath "Config\UniGetUI"
     },
     @{
         ProfileFullPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "lazygit\config.yml"
-        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\lazygit\config.yml"
+        TargetPath      = Join-Path -Path $repoRoot -ChildPath "Config\lazygit\config.yml"
     },
     @{
         ProfileFullPath = Join-Path -Path $env:USERPROFILE -ChildPath ".gitconfig"
-        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\Git\gitconfig"
+        TargetPath      = Join-Path -Path $repoRoot -ChildPath "Config\Git\gitconfig"
     },
     @{
         ProfileFullPath = Join-Path -Path $env:USERPROFILE -ChildPath ".claude\settings.json"
-        TargetPath      = Join-Path -Path $env:USERPROFILE -ChildPath "Dotfiles\Config\Claude\settings.json"
+        TargetPath      = Join-Path -Path $repoRoot -ChildPath "Config\Claude\settings.json"
     },
     @{
         ProfileFullPath = 'C:\Tools\pwsh.exe'
@@ -275,82 +292,142 @@ foreach ($item in $configItems) {
     $TargetPath = $item.TargetPath
     $ProfilePath = Split-Path -Path $ProfileFullPath # Get the directory path
 
-    Write-Host "Creating symbolic link for '$ProfileFullPath' pointing to '$TargetPath'..."
+    if (-not (Test-Path -LiteralPath $TargetPath)) {
+        Write-Warning "Link target '$TargetPath' does not exist. Skipping '$ProfileFullPath'."
+        continue
+    }
+
+    # -Force so hidden items and broken symlinks (whose target is gone) are found too; Test-Path misses the latter
+    $existingItem = Get-Item -LiteralPath $ProfileFullPath -Force -ErrorAction SilentlyContinue
+
+    if ($existingItem.LinkType -eq 'SymbolicLink' -and
+        [IO.Path]::GetFullPath($existingItem.Target).TrimEnd('\') -eq [IO.Path]::GetFullPath($TargetPath).TrimEnd('\')) {
+        Write-Host "'$ProfileFullPath' already links to '$TargetPath'." -ForegroundColor Green
+        continue
+    }
+
+    if ($existingItem.LinkType) {
+        # A link pointing elsewhere holds no data of its own. Delete() removes only the link, never the folder it points to.
+        Write-Host "Replacing link '$ProfileFullPath' (was pointing to '$($existingItem.Target)')..."
+        $existingItem.Delete()
+    }
+    elseif ($existingItem) {
+        # A real file or folder may hold settings not yet in the repo — keep it for a manual merge
+        $backupPath = "$ProfileFullPath.$(Get-Date -Format 'yyyyMMdd-HHmmss').bak"
+        Write-Warning "'$ProfileFullPath' already exists. Moving it to '$backupPath'."
+        Move-Item -LiteralPath $ProfileFullPath -Destination $backupPath -ErrorAction Stop
+    }
 
     # Create profile directory if it doesn't exist
     if (!(Test-Path -Path $ProfilePath)) {
         New-Item -ItemType Directory -Path $ProfilePath -Force | Out-Null
     }
 
-    # Remove existing profile file and create symbolic link in one line, suppressing errors if file doesn't exist to remove
-    Remove-Item -Path $ProfileFullPath -Force -ErrorAction SilentlyContinue
-    New-Item -ItemType SymbolicLink -Path $ProfileFullPath -Target $TargetPath
+    Write-Host "Creating symbolic link for '$ProfileFullPath' pointing to '$TargetPath'..."
+    New-Item -ItemType SymbolicLink -Path $ProfileFullPath -Target $TargetPath | Out-Null
+}
+
+# UniGetUI's package backup folder is a path on this machine, so the file is gitignored and written here
+# (through the Config\UniGetUI link) instead of being shared between machines
+$uniGetUIBackupSetting = Join-Path -Path $repoRoot -ChildPath "Config\UniGetUI\ChangeBackupOutputDirectory"
+[IO.File]::WriteAllText($uniGetUIBackupSetting, $repoRoot)
+Write-Host "UniGetUI package backups go to '$repoRoot'." -ForegroundColor Green
+
+#--- Git hooks ---
+# The pre-commit hook keeps the PowerToys backup and the VS Code extension list up to date
+Sync-SessionPath
+git -C $repoRoot config --local core.hooksPath .githooks
+if ($LASTEXITCODE -eq 0) { Write-Host "Git hooks enabled (core.hooksPath = .githooks)." -ForegroundColor Green }
+else { $failures.Add("git hooks: git config core.hooksPath failed (exit code $LASTEXITCODE)") }
+
+#--- VS Code extensions ---
+# Reinstalls the list the pre-commit hook saves (SaveVsCodeExtensions.ps1). code.cmd is resolved the same
+# way as there: VS Code was only just installed by winget, so it may not be on this session's PATH yet.
+$codePath = (Get-Command code.cmd -ErrorAction SilentlyContinue).Source
+if (-not $codePath) {
+    $codePath = @(
+        "$env:LOCALAPPDATA\Programs\Microsoft VS Code\bin\code.cmd",  # per-user install (default)
+        "C:\Program Files\Microsoft VS Code\bin\code.cmd"             # system-wide install
+    ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+}
+# Work machines (DEV-WNW-* hostnames) have their own list; until the first commit from one creates it,
+# the private list is used instead
+$extensionsFile = Join-Path -Path $repoRoot -ChildPath "Config\VisualStudioCode\extensions"
+if ($env:COMPUTERNAME -like 'DEV-WNW-*') {
+    $workExtensionsFile = Join-Path -Path $repoRoot -ChildPath "Config\VisualStudioCode\extensions.work"
+    if (Test-Path $workExtensionsFile) { $extensionsFile = $workExtensionsFile }
+    else { Write-Warning "'$workExtensionsFile' not found yet. Installing the extensions of the private list instead." }
+}
+
+if (-not $codePath) {
+    Write-Warning "VS Code CLI (code.cmd) not found. Skipping extension install."
+}
+elseif (-not (Test-Path $extensionsFile)) {
+    Write-Warning "'$extensionsFile' not found. Skipping extension install."
+}
+else {
+    # Extension IDs are case-insensitive, and -notin compares case-insensitively
+    $installedExtensions = & $codePath --list-extensions
+    $missingExtensions = Get-Content $extensionsFile |
+        ForEach-Object { $_.Trim() } |
+        Where-Object { $_ -and $_ -notin $installedExtensions }
+
+    if ($missingExtensions) {
+        Write-Host "Installing $(@($missingExtensions).Count) missing VS Code extension(s)..."
+        # One code.cmd call for all of them: every launch of the CLI takes a few seconds
+        $installArguments = $missingExtensions | ForEach-Object { '--install-extension', $_ }
+        & $codePath @installArguments
+        if ($LASTEXITCODE -ne 0) { $failures.Add("VS Code extensions (exit code $LASTEXITCODE)") }
+    }
+    else {
+        Write-Host "All VS Code extensions from '$extensionsFile' are already installed." -ForegroundColor Green
+    }
 }
 
 #--- Remove older modules ---
+# Only modules installed from the gallery (Install-Module) are cleaned up. Get-Module -ListAvailable
+# would also return the modules that ship with Windows (Pester 3.4, PackageManagement 1.0.0.1,
+# PSReadLine, ...) under Program Files\WindowsPowerShell and System32, which Windows PowerShell 5.1
+# still loads — deleting those breaks it. Those modules have no PSGetModuleInfo.xml, so
+# Get-InstalledModule never returns them.
+Write-Host "Removing older versions of gallery-installed modules..."
 
-$modules = Get-Module -ListAvailable | Group-Object -Property Name
+# Versions are strings and may be prereleases ("2.4.0-beta0"), which [version] cannot parse. Get-InstalledModule
+# without -AllVersions already returns the newest one, so every other installed version is older.
+foreach ($installedModule in Get-InstalledModule) {
+    $moduleName = $installedModule.Name
+    $olderVersions = Get-InstalledModule -Name $moduleName -AllVersions |
+        Where-Object { $_.Version -ne $installedModule.Version }
 
-foreach ($moduleGroup in $modules) {
-    $moduleName = $moduleGroup.Name
-    $moduleVersions = Get-Module -Name $moduleName -ListAvailable | Sort-Object Version -Descending
-
-    if ($moduleVersions -eq $null -or $moduleVersions.Count -le 1) {
-        continue  # Nothing to do if only one or zero versions
-    }
-
-    $latestVersion = $moduleVersions[0].Version
-    Write-Host "Latest version of '$moduleName' is: $latestVersion"
-
-    for ($i = 1; $i -lt $moduleVersions.Count; $i++) {
-        $currentVersion = $moduleVersions[$i].Version
-        $currentModule = $moduleVersions[$i]
-
-        $isLoaded = $false
-        if (Get-Module -Name $moduleName -ErrorAction SilentlyContinue) {
-            # Check if *this specific version* is loaded.
-            $loadedModules = Get-Module -Name $moduleName
-            foreach ($loadedModule in $loadedModules) {
-                if ($loadedModule.Version -eq $currentVersion) {
-                    $isLoaded = $true
-                    break;
-                }
-            }
+    foreach ($olderVersion in $olderVersions) {
+        # A loaded module's version has no prerelease label, so compare against the numeric part only
+        $numericVersion = [version]($olderVersion.Version -replace '-.*$')
+        if (Get-Module -Name $moduleName | Where-Object { $_.Version -eq $numericVersion }) {
+            Write-Warning "Module '$moduleName' version '$($olderVersion.Version)' is loaded in this session. Skipping."
+            continue
         }
 
-        if ($isLoaded) {
-            Write-Host "Module '$moduleName' version '$currentVersion' is currently loaded." -ForegroundColor Yellow
+        Write-Host "Uninstalling '$moduleName' $($olderVersion.Version) (latest is $($installedModule.Version))..." -ForegroundColor DarkYellow
 
-            try {
-                Write-Host "Attempting to remove module '$moduleName' version '$currentVersion' from session."
-                Remove-Module -Name $moduleName -RequiredVersion $currentVersion -Force -ErrorAction Stop  # Remove from current session
-            }
-            catch {
-                Write-Warning "Could not remove loaded module '$moduleName' version '$currentVersion' from session.  Skipping uninstallation. Error: $($_.Exception.Message)"
-                continue
-
-            }
-        }
-
-        Write-Host "Uninstalling older version: $currentVersion (from $($currentModule.ModuleBase))" -ForegroundColor DarkYellow
-
+        # Remove the folder directly: Uninstall-Module refuses when another module (e.g. Az) depends on
+        # this one, even though the dependency is satisfied by the newer version we keep.
         try {
-            Remove-Item -Path $currentModule.ModuleBase -Recurse -Force -ErrorAction Stop
-            Write-Host "Version $currentVersion uninstalled successfully." -ForegroundColor Green
+            Remove-Item -Path $olderVersion.InstalledLocation -Recurse -Force -ErrorAction Stop
+            Write-Host "'$moduleName' $($olderVersion.Version) uninstalled." -ForegroundColor Green
         }
         catch {
-            Write-Error "Failed to uninstall version $($currentVersion): $($_.Exception.Message)"
+            Write-Error "Failed to uninstall '$moduleName' $($olderVersion.Version): $($_.Exception.Message)"
         }
     }
 }
 
-git config --global user.email "git@adriangaborek.dev"
-git config --global user.name "Adrian Gaborek"
-
 #--- Final Steps ---
-Write-Host "Setup complete."
-
-# Reload profile so that changes are applied
-Write-Host "Reloading PowerShell profile..."
-. $profile
+if ($failures.Count) {
+    Write-Warning "Setup finished with $($failures.Count) failure(s):"
+    $failures | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
+}
+else {
+    Write-Host "Setup complete." -ForegroundColor Green
+}
+Write-Host "Open a new terminal to load the profile and the updated PATH."
 Read-Host -Prompt "Press Enter to exit..."

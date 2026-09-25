@@ -7,6 +7,10 @@ Config/UniGetUI/OperationHistory
 Config/UniGetUI/CurrentSessionToken
 Config/UniGetUI/WindowGeometry
 Config/UniGetUI/TelemetryClientToken
+Config/UniGetUI/IpcApiEndpoints/
 
-# Work machine (DEV-WNW-* naming convention) package bundle — private machine bundle tracked instead
+# UniGetUI package backup of the work machine (DEV-WNW-* hostnames), written to the repo root - see ChangeBackupOutputDirectory
 DEV-WNW-* installed packages.ubundle
+
+# UniGetUI's package backup folder is a local path; Scripts/Tools.ps1 writes it on each machine
+Config/UniGetUI/ChangeBackupOutputDirectory
