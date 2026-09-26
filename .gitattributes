@@ -3,5 +3,3 @@
 # apps behind the symlinked configs (Windows Terminal, VS Code, UniGetUI, ...) save LF anyway,
 # which made git warn "LF will be replaced by CRLF" on every status.
 * text=auto eol=lf
-
-*.ptb binary

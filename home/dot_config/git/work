@@ -1,0 +1,5 @@
+# Included by config for repositories with a remote on git.devnet.de
+[user]
+	email = A.Gaborek@devnet.de
+[credential "https://git.devnet.de"]
+	provider = generic

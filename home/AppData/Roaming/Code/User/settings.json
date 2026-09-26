@@ -3,7 +3,6 @@
   "terminal.integrated.commandsToSkipShell": [
     "matlab.interrupt"
   ],
-  "omnisharp.useModernNet": false,
   "editor.tabSize": 2,
   "workbench.iconTheme": "material-icon-theme",
   "editor.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
@@ -52,7 +51,6 @@
   "debug.autoExpandLazyVariables": "on",
   "debug.showVariableTypes": true,
   "telemetry.telemetryLevel": "off",
-  "angular.view-engine": true,
   "workbench.colorTheme": "SynthWave '84",
   "editor.minimap.autohide": "mouseover",
   "files.autoSave": "afterDelay",
@@ -63,7 +61,7 @@
   "git.blame.statusBarItem.enabled": true,
   "sqldeveloper.sqlHistory.historyLimit": 500,
   "sqldeveloper.telemetry.enabled": false,
-  // mssql.connections intentionally omitted — contains machine-specific server names/IPs.
+  // mssql.connections: work-only, in the encrypted work overlay (~/work.code-workspace) - see the pre-commit hook.
   "mssql.applyLocalization": true,
   "mssql.copyIncludeHeaders": true,
   "mssql.enableExperimentalFeatures": true,
@@ -128,7 +126,6 @@
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features",
   },
-  // mssql.connectionGroups intentionally omitted — machine-specific.
   "terminal.integrated.stickyScroll.enabled": false,
   "editor.stickyScroll.enabled": false,
   "sqldeveloper.datagrid.fontFamily": "Consolas, 'Courier New', monospace",
@@ -154,44 +151,6 @@
     }
   ],
   "mssql.enableQueryHistoryCapture": true,
-  "mssql.connections": [
-    {
-      "authenticationType": "SqlLogin",
-      "connectTimeout": 30,
-      "applicationName": "vscode-mssql",
-      "applicationIntent": "ReadWrite",
-      "server": "REDACTED-IP",
-      "database": "master",
-      "user": "sa",
-      "password": "",
-      "commandTimeout": 30,
-      "encrypt": "Mandatory",
-      "profileName": "FM1 Test DB",
-      "trustServerCertificate": true,
-      "savePassword": true,
-      "groupId": "8f852423-0ab7-4681-b4c2-3a71d2a860b2",
-      "id": "54E0C8F4-0297-4426-A9A8-C0097B7527A6",
-      "profileSource": 1
-    },
-    {
-      "server": "REDACTED-HOST",
-      "database": "master",
-      "authenticationType": "SqlLogin",
-      "user": "sa",
-      "password": "",
-      "emptyPasswordInput": false,
-      "savePassword": true,
-      "profileName": "Production",
-      "encrypt": "Mandatory",
-      "trustServerCertificate": true,
-      "connectTimeout": 15,
-      "commandTimeout": 30,
-      "applicationName": "vscode-mssql",
-      "groupId": "41dc4f40-55ac-4f60-ae9f-2bf5a8b70a35",
-      "id": "89991319-87A1-4F1B-B553-312A8870E0B7",
-      "profileSource": 1
-    }
-  ],
   "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
   "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
   "workbench.experimental.modernUI": true,

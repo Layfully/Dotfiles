@@ -152,9 +152,23 @@ if (-not [Console]::IsOutputRedirected -and $PWD.Provider.Name -eq 'FileSystem')
                 '$output = Get-PoshPrompt $script:PromptType'
                 '$output = if ($global:_ompFirstPrompt) { Get-PoshFirstPrompt } else { Get-PoshPrompt $script:PromptType }'
             )
-            for ($i = 0; $i -lt $patches.Count; $i += 2) { $code = $code.Replace($patches[$i], $patches[$i + 1]) }
+            # A pattern that no longer matches leaves oh-my-posh working, just slower - so say which one, once: this
+            # only runs when the cache is rebuilt. ($Host.UI rather than Write-Warning, a Utility cmdlet.)
+            $warnUnmatched = { param($pattern) $Host.UI.WriteWarningLine("Profile: an oh-my-posh startup patch no longer matches (oh-my-posh upgrade?), so that speedup is lost: $($pattern.Split([char]10)[0].Trim())") }
+            for ($i = 0; $i -lt $patches.Count; $i += 2) {
+                if (-not $code.Contains($patches[$i])) { & $warnUnmatched $patches[$i] }
+                $code = $code.Replace($patches[$i], $patches[$i + 1])
+            }
             # The theme-path check at init uses Test-Path/Resolve-Path (Management) too
-            $code -replace "\(Test-Path -LiteralPath ('[^']*')\)", '([System.IO.File]::Exists($1))' -replace "\(Resolve-Path -Path ('[^']*')\)\.ProviderPath", '[System.IO.Path]::GetFullPath($1)'
+            $themeChecks = @(
+                "\(Test-Path -LiteralPath ('[^']*')\)", '([System.IO.File]::Exists($1))'
+                "\(Resolve-Path -Path ('[^']*')\)\.ProviderPath", '[System.IO.Path]::GetFullPath($1)'
+            )
+            for ($i = 0; $i -lt $themeChecks.Count; $i += 2) {
+                if ($code -notmatch $themeChecks[$i]) { & $warnUnmatched $themeChecks[$i] }
+                $code = $code -replace $themeChecks[$i], $themeChecks[$i + 1]
+            }
+            $code
         }
     }
     if ($ompInit) { & ([scriptblock]::Create($ompInit)) }
@@ -345,7 +359,11 @@ ${alias:lg} = 'lazygit'
 $null = $ExecutionContext.InvokeProvider.Item.Set('Alias:\gl', 'Invoke-GitPull', $true, $true)
 $null = $ExecutionContext.InvokeProvider.Item.Set('Alias:\gp', 'Invoke-GitPush', $true, $true)
 
-#Machine-local
-# Functions and aliases for this machine only (work tools, local paths...) go in an untracked file, as
-# ~/.gitconfig-local does for git. Loaded last, so it can override anything above.
-if ([IO.File]::Exists("$HOME\.user_profile_local.ps1")) { . "$HOME\.user_profile_local.ps1" }
+#Work overlay
+# Work-only functions, aliases and paths: chezmoi decrypts ~/.config/powershell/profile.work.ps1 on machines
+# with the work role only (home/.chezmoiignore). Loaded last, so it can override anything above.
+if ([IO.File]::Exists("$HOME\.config\powershell\profile.work.ps1")) { . "$HOME\.config\powershell\profile.work.ps1" }
+# The untracked file the overlay replaces is no longer loaded
+if ([IO.File]::Exists("$HOME\.user_profile_local.ps1")) {
+    $Host.UI.WriteWarningLine('~/.user_profile_local.ps1 is no longer loaded. Move it into the work overlay (chezmoi edit ~/.config/powershell/profile.work.ps1), then delete it.')
+}

@@ -1,7 +1,3 @@
-# Ignore all PowerToys backup files except the latest one
-Config/PowerToys/*.ptb
-!Config/PowerToys/latest_powertoys_backup.ptb
-
 # UniGetUI machine-specific runtime state (not meaningful to track across machines)
 Config/UniGetUI/OperationHistory
 Config/UniGetUI/CurrentSessionToken
@@ -9,8 +5,8 @@ Config/UniGetUI/WindowGeometry
 Config/UniGetUI/TelemetryClientToken
 Config/UniGetUI/IpcApiEndpoints/
 
-# UniGetUI package backup of the work machine (DEV-WNW-* hostnames), written to the repo root - see ChangeBackupOutputDirectory
-DEV-WNW-* installed packages.ubundle
+# UniGetUI package backups an older setup wrote to the repo root (the WinGet lists in Config/WinGet replace them)
+/*.ubundle
 
-# UniGetUI's package backup folder is a local path; Scripts/Tools.ps1 writes it on each machine
+# UniGetUI's package backup folder, a local path
 Config/UniGetUI/ChangeBackupOutputDirectory

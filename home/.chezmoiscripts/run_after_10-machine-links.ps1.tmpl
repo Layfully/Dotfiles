@@ -1,0 +1,4 @@
+# Every apply: the links whose path chezmoi can't know in advance ($PROFILE, which OneDrive may move) or that
+# are outside the home folder. The logic is in Scripts/Setup, where CI lints it; these files only say when.
+& {{ joinPath .chezmoi.workingTree "Scripts/Setup/Set-MachineLinks.ps1" | squote }}
+exit $LASTEXITCODE

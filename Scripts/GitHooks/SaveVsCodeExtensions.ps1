@@ -15,10 +15,26 @@ if (-not $codePath) {
 if (-not $codePath) { Write-Error "VS Code CLI (code.cmd) not found. Skipping extension backup."; exit 1 }
 
 $repoRoot = Split-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -Parent  # Scripts\GitHooks -> repo root
+$listFolder = "$repoRoot\Config\VisualStudioCode"
+
+# The machine's role is in chezmoi's config (written by home/.chezmoi.toml.tmpl). Without it, guessing could
+# overwrite the other machine's list, so nothing is written.
+$chezmoiConfig = "$env:USERPROFILE\.config\chezmoi\chezmoi.toml"
+$roleLine = if (Test-Path $chezmoiConfig) { Select-String -Path $chezmoiConfig -Pattern '^\s*role\s*=\s*"(\w+)"' | Select-Object -First 1 }
+if (-not $roleLine) { Write-Host "No role in '$chezmoiConfig' (run chezmoi init). Skipping the VS Code extension list."; exit 0 }
+$role = $roleLine.Matches[0].Groups[1].Value
+
+$extensions = & $codePath --list-extensions
+if ($role -eq 'work') {
+    # The work list is an overlay: only what the work machine has on top of the base (private) list.
+    # Extension IDs are case-insensitive, and -notin compares case-insensitively.
+    $baseExtensions = Get-Content "$listFolder\extensions" | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+    $extensions = $extensions | Where-Object { $_ -notin $baseExtensions }
+    $listName = 'extensions.work'
+}
+else {
+    $listName = 'extensions'
+}
 # WriteAllText instead of Out-File: in Windows PowerShell 5.1, Out-File writes CRLF and a UTF-8 BOM, and
 # .gitattributes checks text out as LF, so git would warn about this file after every commit
-$extensions = & $codePath --list-extensions
-# Work machines (DEV-WNW-* hostnames, the convention .gitignore uses too) keep a list of their own, so
-# work-only extensions stay out of the private list and the other way round. Tools.ps1 picks the same way.
-$listName = if ($env:COMPUTERNAME -like 'DEV-WNW-*') { 'extensions.work' } else { 'extensions' }
-[IO.File]::WriteAllText("$repoRoot\Config\VisualStudioCode\$listName", (($extensions -join "`n") + "`n"))
+[IO.File]::WriteAllText("$listFolder\$listName", (($extensions -join "`n") + "`n"))
