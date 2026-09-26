@@ -7,10 +7,13 @@ set -e
 # Update packages
 sudo apt update && sudo apt upgrade -y
 
-# Git configuration: include the repo's gitconfig (identity and shared settings) from the Windows clone
-# this script runs from, instead of repeating it. Machine-specific settings go in the WSL ~/.gitconfig-local.
+# Git configuration: include the repo's git config (identity and shared settings) from the Windows clone
+# this script runs from, instead of repeating it. Its conditional includes (work) resolve next
+# to it; they need git 2.36+ (Ubuntu 24.04 and later).
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-shared_gitconfig="$repo/Config/Git/gitconfig"
+shared_gitconfig="$repo/home/dot_config/git/config"
+# It used to be Config/Git/gitconfig; drop an include of that path left by an earlier run
+git config --global --fixed-value --unset-all include.path "$repo/Config/Git/gitconfig" || true
 if ! git config --global --get-all include.path | grep -qxF "$shared_gitconfig"; then
     git config --global --add include.path "$shared_gitconfig"
 fi

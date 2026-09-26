@@ -1,0 +1,4 @@
+# Runs again whenever the PowerToys settings change:
+# {{ include (joinPath .chezmoi.workingTree "Config/PowerToys/settings.json") | sha256sum }}
+& {{ joinPath .chezmoi.workingTree "Scripts/Setup/Set-PowerToysSettings.ps1" | squote }}
+exit $LASTEXITCODE

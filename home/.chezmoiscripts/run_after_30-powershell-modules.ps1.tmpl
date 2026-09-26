@@ -1,0 +1,4 @@
+# Every apply: installs missing modules and removes superseded versions. Both only look at the local module
+# folders unless something is missing, and UniGetUI installs new versions next to the old ones.
+& {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-PowerShellModules.ps1" | squote }} -Az:${{ .az }}
+exit $LASTEXITCODE

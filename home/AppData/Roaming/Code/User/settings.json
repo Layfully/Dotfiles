@@ -3,7 +3,6 @@
   "terminal.integrated.commandsToSkipShell": [
     "matlab.interrupt"
   ],
-  "omnisharp.useModernNet": false,
   "editor.tabSize": 2,
   "workbench.iconTheme": "material-icon-theme",
   "editor.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
@@ -52,7 +51,6 @@
   "debug.autoExpandLazyVariables": "on",
   "debug.showVariableTypes": true,
   "telemetry.telemetryLevel": "off",
-  "angular.view-engine": true,
   "workbench.colorTheme": "SynthWave '84",
   "editor.minimap.autohide": "mouseover",
   "files.autoSave": "afterDelay",
@@ -63,7 +61,7 @@
   "git.blame.statusBarItem.enabled": true,
   "sqldeveloper.sqlHistory.historyLimit": 500,
   "sqldeveloper.telemetry.enabled": false,
-  // mssql.connections intentionally omitted — contains machine-specific server names/IPs.
+  // mssql.connections: work-only, in the encrypted work overlay (~/work.code-workspace) - see the pre-commit hook.
   "mssql.applyLocalization": true,
   "mssql.copyIncludeHeaders": true,
   "mssql.enableExperimentalFeatures": true,
@@ -128,7 +126,6 @@
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features",
   },
-  // mssql.connectionGroups intentionally omitted — machine-specific.
   "terminal.integrated.stickyScroll.enabled": false,
   "editor.stickyScroll.enabled": false,
   "sqldeveloper.datagrid.fontFamily": "Consolas, 'Courier New', monospace",
@@ -137,7 +134,6 @@
   "claudeCode.useCtrlEnterToSend": true,
   "mssql.connectionGroups": [],
   "mssql.enableQueryHistoryCapture": true,
-  "mssql.connections": [],
   "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
   "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
   "workbench.experimental.modernUI": true,

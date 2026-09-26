@@ -1,0 +1,8 @@
+{{- /*
+  Everything in home/ is the shared base setup. The work overlay - encrypted, so the public repo shows
+  nothing of it - only goes to machines with the work role.
+*/ -}}
+{{ if ne .role "work" -}}
+.config/powershell/profile.work.ps1
+work.code-workspace
+{{ end -}}

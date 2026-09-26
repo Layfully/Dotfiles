@@ -30,7 +30,7 @@ jobs:
 
       - name: Install PSScriptAnalyzer
         shell: pwsh
-        run: Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+        run: Install-PSResource -Name PSScriptAnalyzer -TrustRepository
 
       - name: Run PSScriptAnalyzer
         shell: pwsh
@@ -47,3 +47,88 @@ jobs:
               Write-Output "::$level file=$file,line=${line}::$($result.RuleName): $($result.Message)"
           }
           if ($results) { exit 1 }
+
+      # The symlinked configs are edited by hand as well as by their apps; a broken one only shows when the app
+      # next starts. VS Code and Windows Terminal read comments and trailing commas, the rest must be strict JSON.
+      - name: Parse JSON configs
+        shell: pwsh
+        run: |
+          $jsonWithComments = @(
+              'home/AppData/Roaming/Code/User/settings.json'
+              'home/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json'
+          )
+          $failed = $false
+          foreach ($file in git ls-files '*.json') {
+              $options = [System.Text.Json.JsonDocumentOptions]::new()
+              if ($file -in $jsonWithComments) {
+                  $options.CommentHandling = [System.Text.Json.JsonCommentHandling]::Skip
+                  $options.AllowTrailingCommas = $true
+              }
+              try { [System.Text.Json.JsonDocument]::Parse([IO.File]::ReadAllText($file), $options).Dispose() }
+              catch {
+                  $jsonError = $_.Exception.InnerException  # the JsonException, which has a 0-based LineNumber
+                  Write-Output "::error file=$file,line=$($jsonError.LineNumber + 1)::$($jsonError.Message)"
+                  $failed = $true
+              }
+          }
+          if ($failed) { exit 1 }
+
+  chezmoi:
+    # Renders every template - config, ignore rules, symlinks, scripts - for both roles, as `chezmoi apply` would,
+    # without running anything. There is no age key here, so the encrypted work overlay is left out.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install chezmoi
+        shell: pwsh
+        run: |
+          iex "&{$(irm 'https://get.chezmoi.io/ps1')} -b '$env:RUNNER_TEMP\bin'"
+          "$env:RUNNER_TEMP\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Render the private and work setups
+        shell: pwsh
+        run: |
+          $answers = 'Install the GitHub CLI=true,Install Node.js LTS through nvm=true,Install the Claude Code CLI=true,Install the Az PowerShell modules=true'
+          foreach ($role in 'private', 'work') {
+              $config = "$env:RUNNER_TEMP\chezmoi-$role.toml"
+              $isolated = "--config=$config", "--destination=$env:RUNNER_TEMP\home-$role", "--persistent-state=$env:RUNNER_TEMP\state-$role.boltdb"
+              chezmoi init --no-tty --source $PWD @isolated --promptBool $answers
+              if ($LASTEXITCODE) { Write-Output "::error::chezmoi init failed for the $role role"; exit 1 }
+              (Get-Content $config -Raw) -replace 'role = "\w+"', "role = `"$role`"" | Set-Content $config
+              chezmoi apply --no-tty --dry-run --exclude=encrypted @isolated
+              if ($LASTEXITCODE) { Write-Output "::error::chezmoi could not render the $role setup"; exit 1 }
+          }
+
+  shell:
+    # ubuntu-latest ships ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: ShellCheck
+        run: shellcheck Scripts/WSLSetup.sh .githooks/pre-commit
+
+  leaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # gitleaks scans the commits of the push or pull request
+
+      # This repo is public, and the VS Code settings are shared with the work machine, where the mssql extension
+      # saves its connections. Reports file and line only, so the log doesn't repeat what it found.
+      - name: Check for work infrastructure
+        run: |
+          pattern='"mssql\.connections"|(?<![\d.])(10\.\d{1,3}|172\.(1[6-9]|2\d|3[01])|192\.168)\.\d{1,3}\.\d{1,3}(?![\d.])'
+          matches="$(git grep -nIP "$pattern" || true)"
+          if [ -n "$matches" ]; then
+              printf '%s\n' "$matches" | while IFS=: read -r file line _; do
+                  echo "::error file=$file,line=$line::Work database connection or private network address in a public repo"
+              done
+              exit 1
+          fi
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

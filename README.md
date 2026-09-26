@@ -1,64 +1,123 @@
 # Dotfiles
 
-Windows dotfiles and machine setup: PowerShell profile, Windows Terminal, VS Code, Git, lazygit, Claude Code, UniGetUI and PowerToys configs, plus a script that installs the tools and links these configs into place on a new machine.
+Windows dotfiles and machine setup for two machines, managed with [chezmoi](https://www.chezmoi.io/): PowerShell profile, Windows Terminal, VS Code, Git, lazygit, Claude Code, UniGetUI and PowerToys, plus the packages, modules and extensions that go with them.
 
-## Prerequisites
+## How It Works
 
-- [Git](https://git-scm.com/) — required to clone and run hooks
-- [winget](https://learn.microsoft.com/en-us/windows/package-manager/) — built into Windows 11
-- [PowerShell 7+](https://github.com/PowerShell/PowerShell) (`winget install Microsoft.PowerShell`)
+- **One base, one overlay.** Everything in `home/` is the base setup, the private machine's. A machine with the **work** role also gets the work overlay: files encrypted with [age](https://age-encryption.org/), so this public repo shows nothing of them, plus its own package and extension lists.
+- **The role is set once per machine.** `chezmoi init` stores it in `~/.config/chezmoi/chezmoi.toml`, along with the answers about optional components. Machines named `WORK-PC` start out as work, every other machine as private. `chezmoi edit-config` changes it.
+- **Configs are symlinks into the repo** (chezmoi's symlink mode). When an app changes its own settings, the change is already in the repo; commit it. Only the encrypted overlay files are copies.
+- **Setup scripts run from `chezmoi apply`.** `home/.chezmoiscripts/` says when a script runs: every apply, or when a list it depends on changes. `Scripts/Setup/` holds what the script does, where CI can lint it.
 
-## First-Time Setup
+## Repo Layout
+
+| Path | What it is |
+|------|-----------|
+| `home/` | chezmoi's source: each file lands at the same path under `%USERPROFILE%` (`dot_config` is `.config`) |
+| `home/.chezmoi.toml.tmpl` | The per-machine config: role, optional components, symlink mode, age encryption |
+| `home/.chezmoiignore` | Leaves the work overlay out unless the role is work |
+| `home/.chezmoiscripts/` | When the setup scripts run |
+| `Config/` | Data the setup scripts read: WinGet package lists, VS Code extension lists, PowerToys settings, and the UniGetUI folder (linked as a whole) |
+| `Scripts/Setup/` | The setup scripts |
+| `Scripts/Bootstrap.ps1` | First-time setup of a new machine |
+| `.githooks/`, `Scripts/GitHooks/` | The pre-commit hook |
+| `Scripts/WSLSetup.sh` | WSL first-time setup |
+
+## New Machine
+
+Prerequisites: [Git](https://git-scm.com/), [winget](https://learn.microsoft.com/en-us/windows/package-manager/) (built into Windows 11) and [PowerShell 7](https://github.com/PowerShell/PowerShell) (`winget install Microsoft.PowerShell`). On a work machine, have the age key from Bitwarden at hand.
 
 ```powershell
-# 1. Clone the repo (any location works; scripts and hooks find the repo themselves)
+# 1. Clone the repo (any location works)
 git clone https://github.com/Layfully/Dotfiles "$env:USERPROFILE\Dotfiles"
 cd "$env:USERPROFILE\Dotfiles"
 
-# 2. Run the main setup script (installs tools, creates symlinks, sets up PS modules, enables git hooks)
-#    Run as Administrator in a clean PowerShell 7 session
-pwsh -NoProfile -File Scripts/Tools.ps1
+# 2. Run the bootstrap as Administrator (it relaunches itself elevated if needed)
+pwsh -NoProfile -File Scripts/Bootstrap.ps1
 ```
 
-Optional components are asked about once at the start. To answer ahead of time, pass a switch to install (`-Node`) or skip (`-Node:$false`); with all four given the run needs no input:
+The bootstrap installs chezmoi, runs `chezmoi init`, asks for the age key on a work machine, and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once about the optional components (GitHub CLI, Node.js LTS through nvm, Claude Code CLI, Az modules). To answer ahead of time, pass switches: `-GitHubCli -Node:$false -ClaudeCode -Az:$false`.
 
-```powershell
-pwsh -NoProfile -File Scripts/Tools.ps1 -GitHubCli -Node -Claude -Az:$false
-```
+## Day to Day
 
-## What the Setup Script Does (`Scripts/Tools.ps1`)
+| To... | Do |
+|-------|----|
+| Keep a setting you changed in an app | Nothing to copy, it's already in the repo: commit it |
+| Get what the other machine committed | `chezmoi update` (git pull, then apply) |
+| See whether this machine matches the repo | `chezmoi status --exclude=scripts` (empty = in sync), `chezmoi verify --exclude=scripts`. Without `--exclude=scripts` both always list the two every-apply scripts (`10-machine-links`, `30-powershell-modules`) |
+| Change the role or an optional component | `chezmoi edit-config`, then `chezmoi apply` |
+| Add a package every machine gets | A `Microsoft.WinGet.DSC/WinGetPackage` entry in `Config/WinGet/configuration.dsc.yaml` |
+| Add a package only work machines get | The same, in `Config/WinGet/configuration.work.dsc.yaml` (create it the first time) |
+| Edit the work profile overlay | `chezmoi edit ~/.config/powershell/profile.work.ps1` (on a machine with the age key) |
 
-| Step | What happens |
-|------|-------------|
-| Installs winget packages | PowerToys, fzf, Windows Terminal, Oh My Posh, PowerShell 7, UniGetUI, Git, Bitwarden (app and CLI), VS Code, lazygit, nvm-windows, zoxide |
-| Installs GitHub CLI | Optional (`-GitHubCli`) |
-| Installs Node.js LTS via nvm | Optional (`-Node`) |
-| Installs Claude Code CLI | Optional (`-Claude`): native build to `%USERPROFILE%\.local\bin`, and adds that folder to the User PATH |
-| Installs JetBrainsMono Nerd Font | Through `oh-my-posh font install` |
-| Installs PowerShell modules | PSFzf, CompletionPredictor, posh-git, Terminal-Icons |
-| Installs Az modules | Optional (`-Az`) |
-| Creates symbolic links | Links config files from this repo into their expected system locations (see table below). Links that are already correct are skipped; an existing real file or folder is renamed to `<name>.<timestamp>.bak` first |
-| Sets UniGetUI's backup folder | Writes this clone's path to `Config/UniGetUI/ChangeBackupOutputDirectory` (gitignored, as the path differs per machine) |
-| Enables git hooks | Sets `core.hooksPath` to `.githooks` |
-| Installs VS Code extensions | Installs whatever in `Config/VisualStudioCode/extensions` (or `extensions.work` on a work machine) is missing |
-| Cleans up old PS modules | Removes all but the latest version of each module installed from the PowerShell Gallery (modules that ship with Windows are left alone) |
+`winget configure test --file <list>` shows what a package list would change, without changing anything.
 
-## Symbolic Links
+## What Gets Linked
 
-| Symlink location | Points to |
-|-----------------|-----------|
-| `$PROFILE` | `Config/user_profile.ps1` |
-| `%APPDATA%\Code\User\settings.json` | `Config/VisualStudioCode/settings.json` |
-| `%LOCALAPPDATA%\...\WindowsTerminal\settings.json` | `Config/WindowsTerminal/settings.json` |
-| `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI/` |
-| `%LOCALAPPDATA%\lazygit\config.yml` | `Config/lazygit/config.yml` |
-| `%USERPROFILE%\.gitconfig` | `Config/Git/gitconfig` (machine-specific settings go in `~/.gitconfig-local`, which it includes) |
-| `%USERPROFILE%\.claude\settings.json` | `Config/Claude/settings.json` |
-| `C:\Tools\pwsh.exe` | `pwsh.exe` of the running PowerShell 7 install (`$PSHOME`) |
+| Location | Source in the repo |
+|----------|-------------------|
+| `$PROFILE` | → `~/.config/powershell/user_profile.ps1` → `home/dot_config/powershell/user_profile.ps1` |
+| `~/.config/git/config`, `work` | `home/dot_config/git/` (see [Git Config](#git-config)) |
+| `%APPDATA%\Code\User\settings.json` | `home/AppData/Roaming/Code/User/settings.json` |
+| `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_...\LocalState\settings.json` | `home/AppData/Local/Packages/.../settings.json` |
+| `%LOCALAPPDATA%\lazygit\config.yml` | `home/AppData/Local/lazygit/config.yml` |
+| `~/.claude/settings.json` | `home/dot_claude/settings.json` |
+| `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI/`: the whole folder, because UniGetUI turns some settings off by deleting a file. Its runtime state is gitignored, so it stays on each machine |
+| `C:\Tools\pwsh.exe` | `pwsh.exe` of the PowerShell 7 install (`$PSHOME`) |
 
-## Machine-Local Profile
+`$PROFILE` and `C:\Tools\pwsh.exe` are linked by `Scripts/Setup/Set-MachineLinks.ps1`, not by chezmoi. OneDrive moves `Documents` on the work machine, so the profile's path is only known at run time, and `C:\Tools` is outside the home folder.
 
-Functions and aliases for one machine only (work tools, local paths) go in `%USERPROFILE%\.user_profile_local.ps1`. It is not part of the repo; the profile loads it last if it exists, the way the gitconfig includes `~/.gitconfig-local`.
+## Setup Scripts
+
+| Script | Runs | What it does |
+|--------|------|-------------|
+| `Set-MachineLinks.ps1` | Every apply | Links `$PROFILE` and `C:\Tools\pwsh.exe`, enables the git hooks, and retires what the old setup left: `~/.gitconfig` (git reads it ahead of `~/.config/git`), and UniGetUI package backups pointed at the repo |
+| `Install-Packages.ps1` | When a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
+| `Install-PowerShellModules.ps1` | Every apply | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons, optionally Az) through PSResourceGet, and removes versions a newer one replaced |
+| `Install-VsCodeExtensions.ps1` | When an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
+| `Set-PowerToysSettings.ps1` | When `Config/PowerToys/settings.json` changes | See [PowerToys Settings](#powertoys-settings) |
+
+A script that fails makes `chezmoi apply` report it, and it runs again on the next apply.
+
+## The Work Overlay
+
+| File | Lands at | What it holds |
+|------|----------|---------------|
+| `home/dot_config/powershell/encrypted_profile.work.ps1.age` | `~/.config/powershell/profile.work.ps1` | Work-only profile code; the profile dot-sources it last |
+| `home/encrypted_work.code-workspace.age` | `~/work.code-workspace` | The work database connections. The mssql extension reads connections from the open workspace |
+| `Config/WinGet/configuration.work.dsc.yaml` | — | Packages only work machines get (plain text) |
+| `Config/VisualStudioCode/extensions.work` | — | Extensions the work machine has on top of the base list (plain text) |
+
+The age key is at `~/.config/chezmoi/key.txt`, and a copy belongs in Bitwarden. Work machines need it; the private machine applies nothing encrypted, so only needs it to edit the overlay. After changing `~/work.code-workspace`, save it back with `chezmoi add --encrypt ~/work.code-workspace`.
+
+## Git Config
+
+Git reads `~/.config/git/config`. Settings for one context live in their own file, included by a condition:
+
+| File | Applies to |
+|------|-----------|
+| `home/dot_config/git/config` | Everything: personal identity and shared settings |
+| `home/dot_config/git/work` | Repositories with a remote on `git.devnet.de` (`includeIf "hasconfig:remote.*.url:..."`): work email and credential settings, on either machine, and already while cloning one |
+
+Remote-based conditions need git 2.36 or later.
+
+## PowerToys Settings
+
+`Config/PowerToys/settings.json` maps a module name (as `PowerToys.DSC.exe modules --resource settings` lists them) to the settings it should have. `Set-PowerToysSettings.ps1` applies each one with `PowerToys.DSC.exe set`:
+
+- `App` holds the general settings and which modules are on (`enabled`). PowerToys merges it into what is there, so it can list just the settings that matter.
+- Any other module is compared and replaced as a whole, so add it as the complete `settings` object printed by `PowerToys.DSC.exe get --module <Name> --resource settings`.
+
+`PowerToys.DSC.exe` sits in the PowerToys install folder (`%LOCALAPPDATA%\PowerToys` for a per-user install). PowerToys' PowerShell DSC module, the one `winget configure` could use, fails to find the installation in PowerToys 0.101, which is why these settings aren't in the WinGet package list.
+
+## Git Hooks
+
+The pre-commit hook:
+
+- refuses a commit whose staged VS Code settings contain work database connections (the mssql extension saves new ones there), and says how to move them into the work overlay;
+- runs `SaveVsCodeExtensions.ps1`, which saves the installed VS Code extensions: the full list to `extensions` on the private machine, or just what's on top of that list to `extensions.work` on a work machine. The role comes from chezmoi's config.
+
+`Set-MachineLinks.ps1` enables the hook. It runs under Windows PowerShell 5.1, so `Scripts/GitHooks/*.ps1` must avoid PowerShell 7-only syntax and non-ASCII characters.
 
 ## WSL Setup
 
@@ -69,30 +128,22 @@ After running `wsl --install` and launching Ubuntu:
 bash "$(wslpath "$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')")/Dotfiles/Scripts/WSLSetup.sh"
 ```
 
-The WSL `~/.gitconfig` includes `Config/Git/gitconfig` from the Windows clone, so the identity and shared settings are defined once.
-
-## Git Hooks
-
-Hooks run automatically on every commit to keep config snapshots up to date:
-
-| Hook | What it does |
-|------|-------------|
-| `UpdatePowerToysBackup.ps1` | Renames the latest `.ptb` backup to `latest_powertoys_backup.ptb` |
-| `SaveVsCodeExtensions.ps1` | Exports the installed VS Code extensions: to `extensions` on the private machine, to `extensions.work` on work machines (`WORK-PC` hostnames) |
-
-`Scripts/Tools.ps1` enables them; to do it by hand without running setup:
-
-```bash
-git config --local core.hooksPath .githooks
-```
-
-The hooks run under Windows PowerShell 5.1, so `Scripts/GitHooks/*.ps1` must avoid PowerShell 7-only syntax and non-ASCII characters.
+The WSL `~/.gitconfig` includes `home/dot_config/git/config` from the Windows clone, so the identity, shared settings and the work include are defined once.
 
 ## Linting
 
-`.github/workflows/lint.yml` runs on every push to `main` and on pull requests. It parses the hook scripts with Windows PowerShell 5.1 and runs PSScriptAnalyzer over every `.ps1`, using the rules in `PSScriptAnalyzerSettings.psd1`. The VS Code PowerShell extension reads the same settings file, so the editor shows the same warnings.
+`.github/workflows/lint.yml` runs on every push to `main` and on pull requests:
+
+| Job | What it checks |
+|-----|---------------|
+| `powershell` | Parses the hook scripts with Windows PowerShell 5.1, runs PSScriptAnalyzer over every `.ps1` (rules in `PSScriptAnalyzerSettings.psd1`, which the VS Code PowerShell extension reads too), and parses every tracked `.json` (VS Code's and Windows Terminal's settings may have comments and trailing commas) |
+| `chezmoi` | Renders every template (config, ignore rules, links, scripts) for both roles, without running anything or needing the age key |
+| `shell` | ShellCheck on `Scripts/WSLSetup.sh` and `.githooks/pre-commit` |
+| `leaks` | Fails on work infrastructure in this public repo (a VS Code mssql connections key, private network addresses), reporting only file and line; gitleaks scans the pushed commits for secrets |
 
 ## Shell Shortcuts (PowerShell profile)
+
+`cheat` prints this list in the terminal.
 
 | Shortcut | Action |
 |----------|--------|
@@ -100,11 +151,18 @@ The hooks run under Windows PowerShell 5.1, so `Scripts/GitHooks/*.ps1` must avo
 | `Ctrl+R` | Fuzzy search command history |
 | `Alt+C` | Fuzzy cd into directory |
 | `z <partial>` | Jump to a frecent directory (zoxide) |
+| `zi` / `fz` | Fuzzy jump to a frecent directory (zoxide via fzf) |
+| `fd` | Fuzzy cd into any directory |
+| `fe` | Fuzzy open file in editor |
+| `fh` | Fuzzy browse and run a history entry |
+| `g` | `git` |
 | `gs` | `git status` |
 | `gl` | `git pull` |
 | `gp` | `git push` |
 | `gf` | `git fetch origin` |
 | `fgs` | Fuzzy git status |
-| `fe` | Fuzzy open file in editor |
-| `fkill` | Fuzzy kill process |
 | `lg` | lazygit (terminal git UI) |
+| `tig` | Git history browser (TUI) |
+| `fkill` | Fuzzy kill process |
+| `which <cmd>` | Full path of a command |
+| `cheat` | Print these shortcuts |
