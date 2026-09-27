@@ -25,10 +25,16 @@ if [[ -f "$HOME/.gitconfig" ]]; then
     git config --file "$HOME/.gitconfig" --unset core.fsmonitor || true
     git config --file "$HOME/.gitconfig" --unset credential.helper || true
     git config --file "$HOME/.gitconfig" --unset credential.https://dev.azure.com.useHttpPath || true
-    # Nothing left but empty section headers: remove the file
+    git config --file "$HOME/.gitconfig" --unset core.autocrlf || true
     if ! grep -qE '^\s*[^[#;[:space:]]' "$HOME/.gitconfig"; then
+        # Nothing left but empty section headers
         rm "$HOME/.gitconfig"
         echo "Removed the old ~/.gitconfig."
+    else
+        # Anything else (an old [user], say) would override the repo's config, as on Windows: keep it aside
+        backup="$HOME/.gitconfig.$(date +%Y%m%d-%H%M%S).bak"
+        mv "$HOME/.gitconfig" "$backup"
+        echo "Moved the old ~/.gitconfig to $backup - merge what you need into the repo."
     fi
 fi
 

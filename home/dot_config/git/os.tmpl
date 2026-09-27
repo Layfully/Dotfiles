@@ -6,6 +6,8 @@
 {{- else -}}
 [core]
 	fsmonitor = false
+	# Commit LF even if a Windows tool wrote CRLF into a file under /mnt/c
+	autocrlf = input
 [credential]
 	# WSL uses Windows' Git Credential Manager, so both share the same credentials
 	helper = /mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe
