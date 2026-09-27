@@ -16,7 +16,7 @@
         $cacheFile = [IO.Path]::Combine($env:LOCALAPPDATA, 'PowerShellProfileCache', "$Name.ps1")
         $makeKey = {
             param([string] $Exe)
-            $key = '# key: v5' # bump when a $Generate block changes
+            $key = '# key: v6' # bump when a $Generate block changes
             foreach ($path in @($Exe) + $Inputs) {
                 $file = [IO.FileInfo]::new($path)
                 if ($file.Exists -and $file.Attributes -band [IO.FileAttributes]::ReparsePoint) { $file = $file.ResolveLinkTarget($true) }
@@ -48,10 +48,15 @@
     $ompInit = if ([IO.File]::Exists($ompTheme)) {
         Get-CachedInitScript 'oh-my-posh' $ompTheme { (Get-Command oh-my-posh -CommandType Application -TotalCount 1 -ErrorAction Ignore).Source } {
             param($exe)
-            # `init` prints "& '<init script>'" - cache the script itself, as oh-my-posh deletes old copies
-            $init = (& $exe init pwsh --config $ompTheme) -join "`n"
-            if ($init -notmatch "^& '(.+)'$") { return $init }
-            $code = [IO.File]::ReadAllText($Matches[1])
+            # `init` prints a line that sets a few variables and ends in "& '<init script>'" - cache the script
+            # itself, as oh-my-posh deletes old copies. The variables include this session's ID, which each
+            # shell must make anew (sessions sharing one ID share oh-my-posh's per-session cache).
+            $init = ((& $exe init pwsh --config $ompTheme) -join "`n") -replace '\$env:POSH_SESSION_ID = "[^"]*"', '$env:POSH_SESSION_ID = [guid]::NewGuid().ToString()'
+            if ($init -notmatch "(?s)^(.*?)& '([^']+)'\s*$") {
+                $Host.UI.WriteWarningLine("Profile: oh-my-posh's init output changed (oh-my-posh upgrade?), so its startup patches are lost.")
+                return $init
+            }
+            $code = $Matches[1] + "`n" + [IO.File]::ReadAllText($Matches[2])
             $secondary = ((& $exe print secondary --shell=pwsh --config $ompTheme) -join "`n").Replace("'", "''")
             $gitCmd = (Get-Command git -CommandType Application -TotalCount 1 -ErrorAction Ignore).Source
             $gitBin = if ($gitCmd) { [IO.Path]::GetFullPath([IO.Path]::Combine($gitCmd, '..', '..', 'mingw64', 'bin')) }
@@ -59,10 +64,7 @@
             # Literal find/replace pairs for oh-my-posh's generated code. A pair that stops matching (after an
             # oh-my-posh upgrade) is simply skipped, leaving the original code in place.
             $patches = @(
-                # A process launch just to make a session GUID...
-                '(& $global:_ompExecutable get uuid)'
-                '([guid]::NewGuid().ToString())'
-                # ...and one at every start to render the continuation prompt, which is static (~60ms)
+                # A process launch at every start to render the continuation prompt, which is static (~60ms)
                 '(Invoke-Utf8Posh @("print", "secondary", "--shell=$script:ShellName")) -join "`n"'
                 "'$secondary'"
                 # Management/Utility cmdlets and pipelines in the per-prompt code -> engine/.NET equivalents
@@ -93,15 +95,6 @@
             for ($i = 0; $i -lt $patches.Count; $i += 2) {
                 if (-not $code.Contains($patches[$i])) { & $warnUnmatched $patches[$i] }
                 $code = $code.Replace($patches[$i], $patches[$i + 1])
-            }
-            # The theme-path check at init uses Test-Path/Resolve-Path (Management) too
-            $themeChecks = @(
-                "\(Test-Path -LiteralPath ('[^']*')\)", '([System.IO.File]::Exists($1))'
-                "\(Resolve-Path -Path ('[^']*')\)\.ProviderPath", '[System.IO.Path]::GetFullPath($1)'
-            )
-            for ($i = 0; $i -lt $themeChecks.Count; $i += 2) {
-                if ($code -notmatch $themeChecks[$i]) { & $warnUnmatched $themeChecks[$i] }
-                $code = $code -replace $themeChecks[$i], $themeChecks[$i + 1]
             }
             $code
         }
