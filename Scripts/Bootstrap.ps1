@@ -11,7 +11,7 @@ Elevated, those run without UAC prompts. After this, `chezmoi update` keeps the 
 Optional components are asked once. Pass a switch to answer ahead: -Node to install, -Node:$false to skip.
 
 .EXAMPLE
-pwsh -NoProfile -File Scripts/Bootstrap.ps1 -GitHubCli -Node:$false -ClaudeCode -Az:$false
+pwsh -NoProfile -File Scripts/Bootstrap.ps1 -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false
 #>
 #Requires -Version 7
 param(
@@ -19,6 +19,7 @@ param(
     [switch]$Node,       # latest Node.js LTS via nvm
     [switch]$ClaudeCode, # Claude Code CLI (native build)
     [switch]$Az,         # Az PowerShell modules
+    [switch]$Rider,      # JetBrains Rider
     # Set when the script relaunches itself elevated: that new window then stays open at the end
     [switch]$Relaunched
 )
@@ -60,6 +61,7 @@ $promptTexts = [ordered]@{
     Node       = "Install Node.js LTS through nvm"
     ClaudeCode = "Install the Claude Code CLI"
     Az         = "Install the Az PowerShell modules"
+    Rider      = "Install JetBrains Rider"
 }
 $answers = foreach ($componentName in $promptTexts.Keys) {
     if ($PSBoundParameters.ContainsKey($componentName)) {
@@ -76,17 +78,18 @@ if ($LASTEXITCODE -ne 0) {
 
 #--- age key (work machines) ---
 # The work overlay is encrypted with it. A private machine never decrypts anything, so it doesn't need the key.
+# The repo holds the key itself encrypted with a passphrase (kept in Bitwarden); chezmoi asks for it here.
 $role = (chezmoi data --format json | ConvertFrom-Json).role
 $keyFile = Join-Path -Path $HOME -ChildPath ".config\chezmoi\key.txt"
 if ($role -eq 'work' -and -not (Test-Path -LiteralPath $keyFile)) {
-    Write-Host "This machine has the work role. The work overlay is encrypted with the age key kept in Bitwarden." -ForegroundColor Cyan
-    $secretKey = (Read-Host -Prompt "Paste the key's AGE-SECRET-KEY-... line").Trim()
-    if ($secretKey -notmatch '^AGE-SECRET-KEY-1[0-9A-Z]+$') {
-        Write-Error "That is not an age secret key. Put the key file at '$keyFile' and run this script again."
+    Write-Host "This machine has the work role. Enter the age key's passphrase (in Bitwarden) to decrypt the work overlay." -ForegroundColor Cyan
+    $null = New-Item -ItemType Directory -Path (Split-Path -Path $keyFile) -Force
+    chezmoi age decrypt --passphrase --output $keyFile (Join-Path -Path $repoRoot -ChildPath 'Config\age\key.txt.age')
+    if ($LASTEXITCODE -ne 0) {
+        Remove-Item -LiteralPath $keyFile -ErrorAction SilentlyContinue
+        Write-Error "Decrypting the age key failed. Run this script again, or put the key file at '$keyFile'."
         Exit-Bootstrap 1
     }
-    $null = New-Item -ItemType Directory -Path (Split-Path -Path $keyFile) -Force
-    [IO.File]::WriteAllText($keyFile, "$secretKey`n")
 }
 
 #--- chezmoi apply ---

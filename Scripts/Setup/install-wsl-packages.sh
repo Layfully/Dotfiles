@@ -3,9 +3,9 @@
 # ~/.bashrc. chezmoi runs this in WSL when this script changes (home/.chezmoiscripts/run_onchange_after_20-packages-wsl.sh.tmpl).
 set -euo pipefail
 
-# fzf and zoxide from Ubuntu (asks for your password once)
+# fzf, zoxide and delta (git's pager, see home/dot_config/git/config) from Ubuntu (asks for your password once)
 sudo apt-get update -qq
-sudo apt-get install -y -qq fzf zoxide
+sudo apt-get install -y -qq fzf zoxide git-delta
 
 # oh-my-posh isn't packaged for Ubuntu; its installer puts one binary in ~/.local/bin
 if ! command -v oh-my-posh >/dev/null && [[ ! -x "$HOME/.local/bin/oh-my-posh" ]]; then

@@ -13,7 +13,8 @@ param(
     [string] $Role = 'private',
     [switch] $GitHubCli,  # GitHub CLI
     [switch] $Node,       # latest Node.js LTS via nvm
-    [switch] $ClaudeCode  # Claude Code CLI (native build)
+    [switch] $ClaudeCode, # Claude Code CLI (native build)
+    [switch] $Rider       # JetBrains Rider
 )
 
 $repoRoot = Split-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -Parent  # Scripts\Setup -> repo root
@@ -65,15 +66,17 @@ foreach ($configurationFile in $configurationFiles) {
 }
 Sync-SessionPath
 
-#--- GitHub CLI (optional) ---
-if ($GitHubCli) {
-    Write-Host "Installing GitHub CLI using winget..."
+#--- Optional winget packages ---
+$optionalPackages = [ordered]@{ 'GitHub.cli' = $GitHubCli; 'JetBrains.Rider' = $Rider }
+foreach ($packageId in $optionalPackages.Keys) {
+    if (-not $optionalPackages[$packageId]) { continue }
+    Write-Host "Installing $packageId using winget..."
     # --source winget: without it the msstore source is searched too, and on a new machine winget stops
     # to ask for that source's agreement. --exact: match the ID exactly, not as a substring.
-    winget install --id GitHub.cli --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
+    winget install --id $packageId --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
     # Exit codes that mean there was nothing to do: APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE (installed,
     # no newer version available) and APPINSTALLER_CLI_ERROR_PACKAGE_ALREADY_INSTALLED
-    if ($LASTEXITCODE -notin 0, -1978335189, -1978335135) { $failures.Add("winget: GitHub.cli (exit code $LASTEXITCODE)") }
+    if ($LASTEXITCODE -notin 0, -1978335189, -1978335135) { $failures.Add("winget: $packageId (exit code $LASTEXITCODE)") }
 }
 
 #--- Node.js via nvm (optional) ---

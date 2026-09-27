@@ -5,6 +5,6 @@
 {{- if and (eq .role "work") (stat $workPackages) }}
 # work packages: {{ include $workPackages | sha256sum }}
 {{- end }}
-& {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-Packages.ps1" | squote }} -Role {{ .role }} -GitHubCli:${{ .gitHubCli }} -Node:${{ .node }} -ClaudeCode:${{ .claudeCode }}
+& {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-Packages.ps1" | squote }} -Role {{ .role }} -GitHubCli:${{ .gitHubCli }} -Node:${{ .node }} -ClaudeCode:${{ .claudeCode }} -Rider:${{ and (hasKey . "rider") .rider }}
 exit $LASTEXITCODE
 {{ end -}}

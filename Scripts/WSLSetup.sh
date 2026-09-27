@@ -38,13 +38,5 @@ if [[ -f "$HOME/.gitconfig" ]]; then
     fi
 fi
 
-# Links the configs and runs the WSL setup script (fzf, zoxide, oh-my-posh, the ~/.bashrc hook)
+# Copies the configs and runs the WSL setup script (fzf, zoxide, oh-my-posh, delta, the ~/.bashrc hook)
 chezmoi init --apply --source "$repo"
-
-# Install JetBrains Rider via snap (optional)
-read -rp "Do you want to install JetBrains Rider? (Y/N) " rider_confirmation
-if [[ "$rider_confirmation" =~ ^[Yy]([Ee][Ss])?$ ]]; then
-    sudo snap install rider --classic
-else
-    echo "Skipping JetBrains Rider installation."
-fi

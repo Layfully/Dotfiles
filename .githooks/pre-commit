@@ -12,6 +12,12 @@ if git diff --cached --name-only | grep -qxF "$vscode_settings" &&
     exit 1
 fi
 
+# The extension lists are Windows' VS Code; a commit from WSL (same clone) leaves them alone
+case "$(uname -s)" in
+    MINGW* | MSYS*) ;;
+    *) exit 0 ;;
+esac
+
 powershell.exe -NoProfile -ExecutionPolicy RemoteSigned -File "$repo/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
 
 # The private machine writes extensions, work machines extensions.work (see SaveVsCodeExtensions.ps1).

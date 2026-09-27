@@ -1,6 +1,7 @@
 <#
 .SYNOPSIS
-Installs missing PowerShell modules and removes superseded versions. chezmoi runs this on every apply.
+Installs missing PowerShell modules and removes superseded versions. chezmoi runs this when it changes and once a
+week (home/.chezmoiscripts/run_onchange_after_30-powershell-modules.ps1.tmpl).
 
 .DESCRIPTION
 PSResourceGet (built into pwsh 7.4+) rather than PowerShellGet's Install-Module: it is much faster, and

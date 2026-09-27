@@ -4,7 +4,8 @@
 # prompt below - so those modules (~10ms each) load later, on first use or when the shell is idle.
 # The & { } scope keeps the helper variables out of the session.
 & {
-    # $PROFILE is a symlink into the repo - resolve it so repo-relative files can be found
+    # $PROFILE dot-sources ~/.config/powershell/user_profile.ps1, a link into the repo: resolve it to find this
+    # file's companions there (user_profile_autopairing.ps1, ../oh-my-posh)
     $profileFile = [IO.FileInfo]::new($PSCommandPath)
     $global:DotfilesConfig = ($profileFile.ResolveLinkTarget($true) ?? $profileFile).DirectoryName
 
@@ -15,7 +16,7 @@
         $cacheFile = [IO.Path]::Combine($env:LOCALAPPDATA, 'PowerShellProfileCache', "$Name.ps1")
         $makeKey = {
             param([string] $Exe)
-            $key = '# key: v4' # bump when a $Generate block changes
+            $key = '# key: v5' # bump when a $Generate block changes
             foreach ($path in @($Exe) + $Inputs) {
                 $file = [IO.FileInfo]::new($path)
                 if ($file.Exists -and $file.Attributes -band [IO.FileAttributes]::ReparsePoint) { $file = $file.ResolveLinkTarget($true) }
@@ -86,73 +87,6 @@
                 $patches += "`$StartInfo.UseShellExecute = `$false; $gitPathLine"
             }
 
-            # Render the first prompt at init, in parallel with the rest of startup (~50ms saved). The prompt
-            # function only uses it if nothing that prompt depends on has changed in between.
-            $prefetch = @'
-$env:POSH_SESSION_ID = ([guid]::NewGuid().ToString())
-# (Added by user_profile.ps1) Start rendering the first prompt now - see Get-PoshFirstPrompt
-if (-not [Console]::IsOutputRedirected -and $PWD.Provider.Name -eq 'FileSystem') {
-    # the environment oh-my-posh-core sets up below, which the render needs
-    $env:POWERLINE_COMMAND = 'oh-my-posh'
-    $env:POSH_SHELL = 'pwsh'
-    $env:POSH_SHELL_VERSION = $PSVersionTable.PSVersion.ToString()
-    $env:CONDA_PROMPT_MODIFIER = $false
-    $env:POSH_THEME = 'THEME_PATH'
-    $width = $Host.UI.RawUI.WindowSize.Width
-    if (-not $width) { $width = 0 }
-    $env:POSH_CURSOR_LINE = $Host.UI.RawUI.CursorPosition.Y + 1
-    $env:POSH_CURSOR_COLUMN = $Host.UI.RawUI.CursorPosition.X + 1
-    # same arguments Get-PoshPrompt passes for a session's first prompt
-    $StartInfo = [System.Diagnostics.ProcessStartInfo]::new($global:_ompExecutable)
-    foreach ($argument in 'print', 'primary', '--save-cache', '--shell=pwsh', "--shell-version=$env:POSH_SHELL_VERSION", '--status=0', '--no-status=True', '--execution-time=0', '--pswd=', '--stack-count=0', "--terminal-width=$width", '--job-count=0') {
-        $StartInfo.ArgumentList.Add($argument)
-    }
-    $StartInfo.StandardErrorEncoding = $StartInfo.StandardOutputEncoding = [System.Text.Encoding]::UTF8
-    $StartInfo.RedirectStandardError = $StartInfo.RedirectStandardInput = $StartInfo.RedirectStandardOutput = $true
-    $StartInfo.UseShellExecute = $false
-    $StartInfo.CreateNoWindow = $true
-    $StartInfo.WorkingDirectory = $PWD.ProviderPath
-    GIT_PATH_LINE
-    $process = [System.Diagnostics.Process]::Start($StartInfo)
-    $global:_ompFirstPrompt = @{
-        Process   = $process
-        Stdout    = $process.StandardOutput.ReadToEndAsync()
-        Stderr    = $process.StandardError.ReadToEndAsync()
-        Directory = $PWD.ProviderPath
-        Width     = $width
-    }
-}
-'@.Replace('THEME_PATH', [IO.Path]::GetFullPath($ompTheme).Replace("'", "''")).Replace('GIT_PATH_LINE', $gitPathLine)
-            $consumer = @'
-    # (Added by user_profile.ps1) Use the first prompt rendered at init, unless something it depends on changed
-    function Get-PoshFirstPrompt {
-        $first = $global:_ompFirstPrompt
-        $global:_ompFirstPrompt = $null
-        $first.Process.WaitForExit()
-        $stdout = $first.Stdout.Result
-        $stderr = $first.Stderr.Result.Trim()
-        $first.Process.Dispose()
-        if ($script:PromptType -ne 'primary' -or -not $script:NoExitCode -or $PWD.ProviderPath -ne $first.Directory -or
-            (Get-TerminalWidth) -ne $first.Width -or (Get-PoshStackCount) -ne 0) {
-            return Get-PoshPrompt $script:PromptType
-        }
-        if ($stderr) {
-            $Host.UI.WriteErrorLine($stderr)
-        }
-        $stdout
-    }
-
-    function Get-PoshPrompt {
-'@
-            $patches += @(
-                # (these anchor on text the uuid patch above has already produced)
-                '$env:POSH_SESSION_ID = ([guid]::NewGuid().ToString())'
-                $prefetch.TrimEnd()
-                '    function Get-PoshPrompt {'
-                $consumer.TrimEnd()
-                '$output = Get-PoshPrompt $script:PromptType'
-                '$output = if ($global:_ompFirstPrompt) { Get-PoshFirstPrompt } else { Get-PoshPrompt $script:PromptType }'
-            )
             # A pattern that no longer matches leaves oh-my-posh working, just slower - so say which one, once: this
             # only runs when the cache is rebuilt. ($Host.UI rather than Write-Warning, a Utility cmdlet.)
             $warnUnmatched = { param($pattern) $Host.UI.WriteWarningLine("Profile: an oh-my-posh startup patch no longer matches (oh-my-posh upgrade?), so that speedup is lost: $($pattern.Split([char]10)[0].Trim())") }
