@@ -1,0 +1,6 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+# WSL only (empty elsewhere, so chezmoi skips it). Runs again when the install script changes:
+# {{ include (joinPath .chezmoi.workingTree "Scripts/Setup/install-wsl-packages.sh") | sha256sum }}
+exec bash {{ joinPath .chezmoi.workingTree "Scripts/Setup/install-wsl-packages.sh" | squote }}
+{{ end -}}

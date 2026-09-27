@@ -9,6 +9,7 @@ Windows dotfiles and machine setup for **Adrian Gaborek**, managed with **chezmo
 - The role lives in `~/.config/chezmoi/chezmoi.toml` (`[data] role`), written by `chezmoi init` from `home/.chezmoi.toml.tmpl`, together with the optional components (`gitHubCli`, `node`, `claudeCode`, `az`). **Read the role from there — never add hostname checks.** chezmoi templates use `.role`; the pre-commit hook reads the toml file; `Scripts/Setup` scripts get `-Role` from their chezmoi trigger.
 - **Work overlay**: age-encrypted files (`encrypted_*.age`, key at `~/.config/chezmoi/key.txt`, a copy in Bitwarden), listed in `home/.chezmoiignore` so only the work role gets them, plus the plain-text lists `Config/WinGet/configuration.work.dsc.yaml` and `Config/VisualStudioCode/extensions.work` (only what work has on top of the base). No untracked machine-local files: anything work-only goes in the overlay.
 - The work machine's Documents folder is in OneDrive, so never hard-code `Documents\...` — `$PROFILE` is linked at run time by `Scripts/Setup/Set-MachineLinks.ps1`.
+- **WSL** runs chezmoi from the Windows clone (`Scripts/WSLSetup.sh`) and gets git (`config`, `work`, its own `os`), the prompt theme, Claude settings and `~/.config/bash/dotfiles.sh` — `.chezmoiignore` drops `AppData`, `.config/powershell` and the work overlay there. The `.ps1` triggers are wrapped in `{{ if eq .chezmoi.os "windows" }}` (an empty script is skipped); WSL's own trigger is `run_onchange_after_20-packages-wsl.sh.tmpl` → `Scripts/Setup/install-wsl-packages.sh`. The Windows-only prompts in `.chezmoi.toml.tmpl` aren't asked on Linux.
 
 ## Repo Structure
 ```
@@ -17,8 +18,10 @@ home/                  # Lands in %USERPROFILE% (dot_ = ".", encrypted_…age = 
   .chezmoi.toml.tmpl   # Per-machine config: role, optional components, mode = "symlink", age, pwsh -NoProfile for scripts
   .chezmoiignore       # Work overlay only for role work
   .chezmoiscripts/     # Thin triggers (run_after_ = every apply, run_onchange_after_ = when a hashed input changes) → Scripts/Setup
-  dot_config/git/      # config (shared) + work (includeIf by remote)
-  dot_config/powershell/  # user_profile.ps1 (+ autopairing, oh-my-posh/ theme), encrypted_profile.work.ps1.age (overlay)
+  dot_config/git/      # config (shared, lazygit-oriented defaults) + os.tmpl (per-OS copy: fsmonitor / WSL credential helper) + work (includeIf by remote)
+  dot_config/powershell/  # user_profile.ps1 (+ autopairing), encrypted_profile.work.ps1.age (overlay)
+  dot_config/oh-my-posh/  # cloud-context.omp.json: prompt theme shared by pwsh and WSL bash (profile finds it at $DotfilesConfig\..\oh-my-posh)
+  dot_config/bash/dotfiles.sh  # WSL bash setup, sourced from ~/.bashrc
   dot_claude/settings.json
   AppData/Roaming/Code/User/settings.json            # VS Code
   AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json
@@ -34,9 +37,10 @@ Scripts/
   Bootstrap.ps1        # New machine: installs chezmoi, chezmoi init, age key on work, chezmoi apply (Admin, pwsh 7)
   Setup/               # Set-MachineLinks, Install-Packages, Install-PowerShellModules, Install-VsCodeExtensions, Set-PowerToysSettings
   GitHooks/SaveVsCodeExtensions.ps1   # Uses code.cmd (not Code.exe) — see file for why
-  WSLSetup.sh          # WSL first-time setup; WSL ~/.gitconfig includes home/dot_config/git/config
+  WSLSetup.sh          # WSL first-time setup: installs chezmoi, cleans the old ~/.gitconfig entries, chezmoi init --apply
 .githooks/pre-commit   # Blocks mssql connections in VS Code settings; saves + stages the extension list
-.github/workflows/lint.yml  # PS 5.1 parse of GitHooks, PSScriptAnalyzer, JSON parse, chezmoi render (both roles), ShellCheck, leaks + gitleaks
+.github/workflows/lint.yml  # PS 5.1 parse of GitHooks, PSScriptAnalyzer, JSON parse, chezmoi render (both roles, Windows + Linux), ShellCheck, leaks + gitleaks
+.github/dependabot.yml # Weekly updates of the GitHub Actions versions
 ```
 
 ## Important Conventions
@@ -44,7 +48,7 @@ Scripts/
 - **Scripts**: logic in `Scripts/Setup/*.ps1` (linted); the `home/.chezmoiscripts/*.tmpl` files only pass data (`-Role`, switches) and embed `sha256sum` hashes of the inputs that should re-trigger them. A script's non-zero exit makes chezmoi report it and retry on the next apply.
 - **Testing chezmoi changes without touching the machine**: `chezmoi status --exclude=scripts` / `chezmoi diff` (read-only; `status` and `verify` always report the `run_after_` scripts, so exclude scripts to check files and links), or isolated: `chezmoi init --source . --config=<tmp>\c.toml --destination=<tmp>\home --persistent-state=<tmp>\s.boltdb --promptBool "<prompt text>=true,..."` then `chezmoi apply --dry-run --exclude=encrypted` with the same flags (what the CI `chezmoi` job does). `--promptBool` keys are the prompt texts, not the data keys; always pass `--no-tty` when running non-interactively, or chezmoi waits for input.
 - **Pre-commit hook**: runs in Windows PowerShell 5.1 (via `powershell.exe`), NOT pwsh 7. Avoid PS7-only syntax (e.g. `?.`) and non-ASCII characters (5.1 reads BOM-less files in the system code page) in GitHooks scripts; CI checks both. `Scripts/Setup` and `Bootstrap.ps1` run under pwsh 7.
-- **Gitignored UniGetUI files**: `CurrentSessionToken`, `OperationHistory`, `WindowGeometry`, `TelemetryClientToken`, `IpcApiEndpoints/`, `ChangeBackupOutputDirectory` — runtime state; inside the linked folder, gitignored = machine-local. UniGetUI's package backups aren't used: the WinGet lists replace them.
+- **Gitignored UniGetUI files**: `CurrentSessionToken`, `OperationHistory`, `WindowGeometry`, `TelemetryClientToken`, `IpcApiEndpoints/`, `ChangeBackupOutputDirectory`, and UI state/per-machine lists `SidepanelWidths.json`, `WinGetAlreadyUpgradedPackages.json`, `LastKnownBuildNumber` — runtime state; inside the linked folder, gitignored = machine-local. UniGetUI's package backups aren't used: the WinGet lists replace them.
 - **mssql connections**: never in the shared VS Code settings (work server names/IPs, public repo). They belong in `~/work.code-workspace` (overlay; save with `chezmoi add --encrypt ~/work.code-workspace`). The pre-commit hook and the `leaks` CI job both catch the key; the CI check also catches private IP addresses anywhere — when mentioning the key in docs, don't write it as a quoted JSON key.
 - **Git config**: context-specific settings go in their own file in `home/dot_config/git/`, pulled in by a condition in `config` (work: `includeIf "hasconfig:remote.*.url:https://git.devnet.de/**"` → `work`). Relative include paths resolve next to `~/.config/git/config`, where chezmoi links each file.
 - **PowerToys settings** (`Config/PowerToys/settings.json`, keys = `PowerToys.DSC.exe modules --resource settings` names): the `App` entry is merged, so it may be partial; any other module's entry must be the full `settings` object from `PowerToys.DSC.exe get --module <Name> --resource settings` (compared and replaced as a whole). PowerToys' PowerShell DSC module is broken in 0.101 (compares DisplayVersion `0.101.2362` to the registry's `0.101.2362.0`), so it isn't used from the WinGet list.

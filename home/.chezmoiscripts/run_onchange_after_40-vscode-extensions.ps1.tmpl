@@ -1,3 +1,4 @@
+{{ if eq .chezmoi.os "windows" -}}
 # Runs again whenever an extension list this machine uses changes:
 # base: {{ include (joinPath .chezmoi.workingTree "Config/VisualStudioCode/extensions") | sha256sum }}
 {{- $workExtensions := joinPath .chezmoi.workingTree "Config/VisualStudioCode/extensions.work" }}
@@ -6,3 +7,4 @@
 {{- end }}
 & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-VsCodeExtensions.ps1" | squote }} -Role {{ .role }}
 exit $LASTEXITCODE
+{{ end -}}

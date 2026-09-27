@@ -53,7 +53,7 @@
   "telemetry.telemetryLevel": "off",
   "workbench.colorTheme": "SynthWave '84",
   "editor.minimap.autohide": "mouseover",
-  "files.autoSave": "afterDelay",
+  "files.autoSave": "onFocusChange",
   "files.insertFinalNewline": true,
   "update.mode": "start",
   "git.autofetch": true,
@@ -105,7 +105,7 @@
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
-  "security.workspace.trust.enabled": false,
+  "security.workspace.trust.enabled": true,
   "security.allowedUNCHosts": [
     "wsl.localhost"
   ],

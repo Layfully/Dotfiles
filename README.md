@@ -6,7 +6,8 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 
 - **One base, one overlay.** Everything in `home/` is the base setup, the private machine's. A machine with the **work** role also gets the work overlay: files encrypted with [age](https://age-encryption.org/), so this public repo shows nothing of them, plus its own package and extension lists.
 - **The role is set once per machine.** `chezmoi init` stores it in `~/.config/chezmoi/chezmoi.toml`, along with the answers about optional components. Machines named `DEV-WNW-*` start out as work, every other machine as private. `chezmoi edit-config` changes it.
-- **Configs are symlinks into the repo** (chezmoi's symlink mode). When an app changes its own settings, the change is already in the repo; commit it. Only the encrypted overlay files are copies.
+- **Configs are symlinks into the repo** (chezmoi's symlink mode). When an app changes its own settings, the change is already in the repo; commit it. Only templates (like git's per-OS `os` file) and the encrypted overlay files are copies.
+- **WSL uses the same repo.** chezmoi in WSL runs from the Windows clone and takes the parts that make sense there (see [WSL Setup](#wsl-setup)).
 - **Setup scripts run from `chezmoi apply`.** `home/.chezmoiscripts/` says when a script runs: every apply, or when a list it depends on changes. `Scripts/Setup/` holds what the script does, where CI can lint it.
 
 ## Repo Layout
@@ -15,13 +16,13 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 |------|-----------|
 | `home/` | chezmoi's source: each file lands at the same path under `%USERPROFILE%` (`dot_config` is `.config`) |
 | `home/.chezmoi.toml.tmpl` | The per-machine config: role, optional components, symlink mode, age encryption |
-| `home/.chezmoiignore` | Leaves the work overlay out unless the role is work |
+| `home/.chezmoiignore` | Leaves the work overlay out unless the role is work, and gives WSL only what applies there |
 | `home/.chezmoiscripts/` | When the setup scripts run |
 | `Config/` | Data the setup scripts read: WinGet package lists, VS Code extension lists, PowerToys settings, and the UniGetUI folder (linked as a whole) |
 | `Scripts/Setup/` | The setup scripts |
 | `Scripts/Bootstrap.ps1` | First-time setup of a new machine |
 | `.githooks/`, `Scripts/GitHooks/` | The pre-commit hook |
-| `Scripts/WSLSetup.sh` | WSL first-time setup |
+| `Scripts/WSLSetup.sh` | WSL first-time setup: installs chezmoi there and runs it from this clone |
 
 ## New Machine
 
@@ -57,7 +58,8 @@ The bootstrap installs chezmoi, runs `chezmoi init`, asks for the age key on a w
 | Location | Source in the repo |
 |----------|-------------------|
 | `$PROFILE` | → `~/.config/powershell/user_profile.ps1` → `home/dot_config/powershell/user_profile.ps1` |
-| `~/.config/git/config`, `work` | `home/dot_config/git/` (see [Git Config](#git-config)) |
+| `~/.config/git/config`, `work` (`os` is a per-OS copy) | `home/dot_config/git/` (see [Git Config](#git-config)) |
+| `~/.config/oh-my-posh/cloud-context.omp.json` | `home/dot_config/oh-my-posh/`: the prompt theme, used by pwsh and by bash in WSL |
 | `%APPDATA%\Code\User\settings.json` | `home/AppData/Roaming/Code/User/settings.json` |
 | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_...\LocalState\settings.json` | `home/AppData/Local/Packages/.../settings.json` |
 | `%LOCALAPPDATA%\lazygit\config.yml` | `home/AppData/Local/lazygit/config.yml` |
@@ -97,9 +99,18 @@ Git reads `~/.config/git/config`. Settings for one context live in their own fil
 | File | Applies to |
 |------|-----------|
 | `home/dot_config/git/config` | Everything: personal identity and shared settings |
+| `home/dot_config/git/os.tmpl` | This OS only, rendered by chezmoi: `fsmonitor` on Windows; in WSL, Windows' Git Credential Manager |
 | `home/dot_config/git/work` | Repositories with a remote on `git.devnet.de` (`includeIf "hasconfig:remote.*.url:..."`): work email and credential settings, on either machine, and already while cloning one |
 
 Remote-based conditions need git 2.36 or later.
+
+The shared settings are chosen with lazygit in mind:
+- pulling rebases instead of merging, and stashes uncommitted changes around the rebase;
+- branches stacked on a rebased one move along with it;
+- rerere remembers conflict resolutions;
+- conflict markers include the common ancestor (`zdiff3`);
+- lazygit's external merge tool (`M` on a conflicted file) and `git difftool` open VS Code;
+- a new branch's first push sets its upstream.
 
 ## PowerToys Settings
 
@@ -128,17 +139,17 @@ After running `wsl --install` and launching Ubuntu:
 bash "$(wslpath "$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')")/Dotfiles/Scripts/WSLSetup.sh"
 ```
 
-The WSL `~/.gitconfig` includes `home/dot_config/git/config` from the Windows clone, so the identity, shared settings and the work include are defined once.
+The script installs chezmoi in WSL and runs it from the Windows clone. WSL gets the git config (with its own `os` file), the prompt theme, Claude Code's settings and a bash setup: `~/.config/bash/dotfiles.sh` loads oh-my-posh, zoxide and fzf's key bindings, and sets the same short git aliases as the profile. Its one WSL-only script installs fzf, zoxide and oh-my-posh, and adds a line to `~/.bashrc` that loads `dotfiles.sh`; Ubuntu's own `.bashrc` stays otherwise untouched. It also removes the git settings earlier versions of the script wrote to `~/.gitconfig`. Afterwards, `chezmoi update` in WSL keeps it in sync, as on Windows.
 
 ## Linting
 
-`.github/workflows/lint.yml` runs on every push to `main` and on pull requests:
+`.github/workflows/lint.yml` runs on every push to `main` and on pull requests. Dependabot (`.github/dependabot.yml`) opens a weekly pull request when an action it uses has a new version.
 
 | Job | What it checks |
 |-----|---------------|
 | `powershell` | Parses the hook scripts with Windows PowerShell 5.1, runs PSScriptAnalyzer over every `.ps1` (rules in `PSScriptAnalyzerSettings.psd1`, which the VS Code PowerShell extension reads too), and parses every tracked `.json` (VS Code's and Windows Terminal's settings may have comments and trailing commas) |
-| `chezmoi` | Renders every template (config, ignore rules, links, scripts) for both roles, without running anything or needing the age key |
-| `shell` | ShellCheck on `Scripts/WSLSetup.sh` and `.githooks/pre-commit` |
+| `chezmoi` | Renders every template (config, ignore rules, links, scripts) for both roles, on Windows and on Linux (as in WSL), without running anything or needing the age key |
+| `shell` | ShellCheck on the bash scripts and `.githooks/pre-commit` |
 | `leaks` | Fails on work infrastructure in this public repo (a VS Code mssql connections key, private network addresses), reporting only file and line; gitleaks scans the pushed commits for secrets |
 
 ## Shell Shortcuts (PowerShell profile)

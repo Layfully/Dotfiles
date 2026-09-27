@@ -1,22 +1,52 @@
-# Linked as the ~/.config/git folder (see Scripts/Tools.ps1), so relative include paths below resolve
-# inside this folder. Settings for one context go in a file of their own, included by a condition.
+# ~/.config/git/config on Windows and in WSL. Relative include paths resolve next to it, in ~/.config/git.
+# Settings for one context go in a file of their own, included by a condition.
 [user]
 	email = git@adriangaborek.dev
 	name = Adrian Gaborek
 [core]
-	fsmonitor = true
 	untrackedCache = true
 	longpaths = true
+[init]
+	defaultBranch = main
 [checkout]
 	workers = 0
-[difftool]
-	prompt = false
-[mergetool]
-	prompt = false
-	keepBackup = false
 [fetch]
 	prune = true
 	pruneTags = false
+[pull]
+	# Pulling (lazygit's p, gl) rebases local commits onto the remote instead of adding merge commits
+	rebase = true
+[rebase]
+	# Uncommitted changes are stashed around the rebase instead of blocking it
+	autoStash = true
+	# Branches stacked on the rebased one move along with it
+	updateRefs = true
+[push]
+	# The first push of a new branch sets up its upstream
+	autoSetupRemote = true
+[rerere]
+	# Remembers how a conflict was resolved and reuses that when the same one comes back (rebases)
+	enabled = true
+[merge]
+	# Conflict markers include the common ancestor, which lazygit's conflict view shows too
+	conflictStyle = zdiff3
+	# What lazygit opens with M in a conflicted file (git mergetool)
+	tool = vscode
+[mergetool]
+	prompt = false
+	keepBackup = false
+[mergetool "vscode"]
+	cmd = code --wait --merge \"$REMOTE\" \"$LOCAL\" \"$BASE\" \"$MERGED\"
+[diff]
+	algorithm = histogram
+	tool = vscode
+[difftool]
+	prompt = false
+[difftool "vscode"]
+	cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
+# Windows or WSL: chezmoi renders this file per OS (home/dot_config/git/os.tmpl)
+[include]
+	path = os
 # Work repositories, recognised by their remote - on any machine, and already while cloning one
 [includeIf "hasconfig:remote.*.url:https://git.devnet.de/**"]
 	path = work

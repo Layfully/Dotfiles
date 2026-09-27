@@ -75,24 +75,32 @@ jobs:
 
   chezmoi:
     # Renders every template - config, ignore rules, symlinks, scripts - for both roles, as `chezmoi apply` would,
-    # without running anything. There is no age key here, so the encrypted work overlay is left out.
-    runs-on: windows-latest
+    # without running anything: on Windows, and on Linux as in WSL. There is no age key here, so the encrypted
+    # work overlay is left out.
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install chezmoi
+      - name: Install chezmoi (Windows)
+        if: runner.os == 'Windows'
         shell: pwsh
-        run: |
-          iex "&{$(irm 'https://get.chezmoi.io/ps1')} -b '$env:RUNNER_TEMP\bin'"
-          "$env:RUNNER_TEMP\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+        run: iex "&{$(irm 'https://get.chezmoi.io/ps1')} -b '$env:RUNNER_TEMP\bin'"
+
+      - name: Install chezmoi (Linux)
+        if: runner.os == 'Linux'
+        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$RUNNER_TEMP/bin"
 
       - name: Render the private and work setups
         shell: pwsh
         run: |
+          $env:PATH = (Join-Path $env:RUNNER_TEMP 'bin') + [IO.Path]::PathSeparator + $env:PATH
           $answers = 'Install the GitHub CLI=true,Install Node.js LTS through nvm=true,Install the Claude Code CLI=true,Install the Az PowerShell modules=true'
           foreach ($role in 'private', 'work') {
-              $config = "$env:RUNNER_TEMP\chezmoi-$role.toml"
-              $isolated = "--config=$config", "--destination=$env:RUNNER_TEMP\home-$role", "--persistent-state=$env:RUNNER_TEMP\state-$role.boltdb"
+              $config = Join-Path $env:RUNNER_TEMP "chezmoi-$role.toml"
+              $isolated = "--config=$config", "--destination=$(Join-Path $env:RUNNER_TEMP "home-$role")", "--persistent-state=$(Join-Path $env:RUNNER_TEMP "state-$role.boltdb")"
               chezmoi init --no-tty --source $PWD @isolated --promptBool $answers
               if ($LASTEXITCODE) { Write-Output "::error::chezmoi init failed for the $role role"; exit 1 }
               (Get-Content $config -Raw) -replace 'role = "\w+"', "role = `"$role`"" | Set-Content $config
@@ -106,7 +114,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: ShellCheck
-        run: shellcheck Scripts/WSLSetup.sh .githooks/pre-commit
+        run: shellcheck Scripts/WSLSetup.sh Scripts/Setup/install-wsl-packages.sh home/dot_config/bash/dotfiles.sh .githooks/pre-commit
 
   leaks:
     runs-on: ubuntu-latest

@@ -41,8 +41,9 @@
     #Prompt
     # Local copy of the built-in cloud-context theme minus the cloud segments (kubectl, aws, az, gcp...)
     # that never show here. Loading a theme by name makes oh-my-posh check GitHub for updates (~300ms),
-    # and the az segments make every prompt call Get-AzContext.
-    $ompTheme = [IO.Path]::Combine($global:DotfilesConfig, 'oh-my-posh', 'cloud-context.omp.json')
+    # and the az segments make every prompt call Get-AzContext. It sits next to this folder in the repo
+    # (home/dot_config/oh-my-posh) because bash in WSL uses it too.
+    $ompTheme = [IO.Path]::GetFullPath([IO.Path]::Combine($global:DotfilesConfig, '..', 'oh-my-posh', 'cloud-context.omp.json'))
     $ompInit = if ([IO.File]::Exists($ompTheme)) {
         Get-CachedInitScript 'oh-my-posh' $ompTheme { (Get-Command oh-my-posh -CommandType Application -TotalCount 1 -ErrorAction Ignore).Source } {
             param($exe)
