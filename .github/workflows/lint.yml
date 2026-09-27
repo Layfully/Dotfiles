@@ -5,12 +5,18 @@ on:
     branches: [main]
   pull_request:
 
+# Every job only reads the repo. The token is also what the third-party gitleaks action gets.
+permissions:
+  contents: read
+
 jobs:
   powershell:
     # windows-latest ships Windows PowerShell 5.1 next to pwsh 7, which the first step needs
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       # .githooks/pre-commit runs these through powershell.exe (5.1), so parse them with 5.1 itself:
       # PowerShell 7-only syntax such as ?., ?? or ternaries fails here instead of in the hook
@@ -82,7 +88,9 @@ jobs:
         os: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install chezmoi (Windows)
         if: runner.os == 'Windows'
@@ -112,15 +120,22 @@ jobs:
     # ubuntu-latest ships ShellCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: ShellCheck
         run: shellcheck Scripts/WSLSetup.sh Scripts/Setup/install-wsl-packages.sh home/dot_config/bash/dotfiles.sh .githooks/pre-commit
 
   leaks:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # gitleaks lists the commits of a pull request through the API
+      pull-requests: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0 # gitleaks scans the commits of the push or pull request
 
       # This repo is public, and the VS Code settings are shared with the work machine, where the mssql extension
@@ -136,7 +151,10 @@ jobs:
               exit 1
           fi
 
+      # Pinned to a commit, not a tag: a third-party action runs with the token. Dependabot updates the pin.
       - name: Scan for secrets
-        uses: gitleaks/gitleaks-action@v3
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Commenting on pull requests would need write access; the job summary shows the result
+          GITLEAKS_ENABLE_COMMENTS: false

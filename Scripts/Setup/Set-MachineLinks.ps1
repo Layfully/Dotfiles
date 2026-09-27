@@ -4,7 +4,8 @@ Creates the links chezmoi can't manage itself. chezmoi runs this on every `chezm
 
 .DESCRIPTION
 - $PROFILE lives in Documents\PowerShell, and OneDrive moves Documents on the work machine, so the path is only
-  known at run time. It links to ~/.config/powershell/user_profile.ps1, which chezmoi links into the repo.
+  known at run time. It gets a stub that loads ~/.config/powershell/user_profile.ps1, which chezmoi links into
+  the repo.
 - C:\Tools\pwsh.exe is outside the home folder.
 - Retires what the old Tools.ps1 set up: ~/.gitconfig (git reads it ahead of ~/.config/git/config) and UniGetUI's
   package backups pointed at the repo (the package lists in Config\WinGet replace them).
@@ -40,8 +41,29 @@ function Add-Link([string] $Path, [string] $Target) {
 }
 
 #--- PowerShell profile ---
-try { Add-Link -Path $PROFILE -Target (Join-Path -Path $HOME -ChildPath '.config\powershell\user_profile.ps1') }
-catch { Write-Warning "Linking the PowerShell profile failed: $($_.Exception.Message)"; $failures++ }
+# A one-line stub that dot-sources the real profile, not a symlink: OneDrive, which holds Documents on the work
+# machine, doesn't handle symlinks. The profile finds its own folder from $PSCommandPath, which is its path
+# when dot-sourced, so it works the same either way.
+$profileStub = "# Written by the dotfiles setup (Scripts/Setup/Set-MachineLinks.ps1). The profile itself is in the repo.`n" +
+               ". `"`$HOME\.config\powershell\user_profile.ps1`"`n"
+try {
+    $existingProfile = Get-Item -LiteralPath $PROFILE -Force -ErrorAction SilentlyContinue
+    if ($existingProfile.LinkType) {
+        # What earlier versions of this script made
+        $existingProfile.Delete()
+    }
+    elseif ($existingProfile -and [IO.File]::ReadAllText($PROFILE) -ne $profileStub) {
+        $backupPath = "$PROFILE.$(Get-Date -Format 'yyyyMMdd-HHmmss').bak"
+        Write-Warning "'$PROFILE' already exists. Moving it to '$backupPath'."
+        Move-Item -LiteralPath $PROFILE -Destination $backupPath -ErrorAction Stop
+    }
+    if (-not [IO.File]::Exists($PROFILE)) {
+        $null = New-Item -ItemType Directory -Path (Split-Path -Path $PROFILE) -Force
+        [IO.File]::WriteAllText($PROFILE, $profileStub)
+        Write-Host "Wrote the profile stub '$PROFILE'." -ForegroundColor Green
+    }
+}
+catch { Write-Warning "Writing the PowerShell profile stub failed: $($_.Exception.Message)"; $failures++ }
 
 #--- C:\Tools\pwsh.exe ---
 # A fixed path to the pwsh of this machine

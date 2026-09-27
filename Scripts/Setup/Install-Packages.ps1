@@ -27,6 +27,31 @@ function Sync-SessionPath {
                 [System.Environment]::GetEnvironmentVariable("PATH", "User")
 }
 
+# Runs a PowerShell command as this user without Administrator rights, even from an elevated session: a scheduled
+# task with the Limited run level gets the user's normal token. Waits for it and returns its exit code; its
+# output goes to $LogFile.
+function Invoke-Unelevated([string] $Command, [string] $LogFile) {
+    $taskName = "Dotfiles-Unelevated-$([guid]::NewGuid().ToString('N'))"
+    $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("& { $Command } *> '$LogFile'; exit `$LASTEXITCODE"))
+    $action = New-ScheduledTaskAction -Execute 'pwsh.exe' -Argument "-NoProfile -NonInteractive -EncodedCommand $encodedCommand"
+    $principal = New-ScheduledTaskPrincipal -UserId "$env:USERDOMAIN\$env:USERNAME" -LogonType Interactive -RunLevel Limited
+    $null = Register-ScheduledTask -TaskName $taskName -Action $action -Principal $principal
+    try {
+        Start-ScheduledTask -TaskName $taskName
+        # 267011 (0x41303): not started yet; 267009 (0x41301): still running
+        do {
+            Start-Sleep -Seconds 2
+            $lastResult = (Get-ScheduledTaskInfo -TaskName $taskName).LastTaskResult
+        } while ($lastResult -in 267011, 267009)
+        $lastResult
+    }
+    finally {
+        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
+    }
+}
+
+$isAdministrator = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')
+
 #--- Packages and Developer Mode (WinGet Configuration) ---
 # The base list every machine gets, then the work overlay's additions on work machines
 $configurationFiles = @(Join-Path -Path $repoRoot -ChildPath "Config\WinGet\configuration.dsc.yaml")
@@ -73,7 +98,17 @@ if ($Node) {
 if ($ClaudeCode) {
     if (-not (Test-Path -LiteralPath "$env:USERPROFILE\.local\bin\claude.exe")) {
         Write-Host "Installing Claude Code CLI (native build)..."
-        Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression
+        $installCommand = 'Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression'
+        if ($isAdministrator) {
+            # A downloaded per-user installer: run it with the user's normal rights, not the elevated ones this
+            # script has when Bootstrap.ps1 runs it
+            $installLog = Join-Path -Path $env:TEMP -ChildPath 'claude-code-install.log'
+            $installResult = Invoke-Unelevated -Command $installCommand -LogFile $installLog
+            if ($installResult -ne 0) { $failures.Add("Claude Code CLI (exit code $installResult, see $installLog)") }
+        }
+        else {
+            Invoke-Expression $installCommand
+        }
     }
 
     # HKCU:\Environment\Path is REG_EXPAND_SZ and holds %USERPROFILE%, %NVM_HOME% and %NVM_SYMLINK%

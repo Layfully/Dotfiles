@@ -95,6 +95,13 @@ properties:
         id: JesseDuffield.lazygit
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: delta
+      directives:
+        description: Install delta (syntax-highlighted diffs in lazygit)
+      settings:
+        id: dandavison.delta
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: nvm
       directives:
         description: Install nvm-windows
