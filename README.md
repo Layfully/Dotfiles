@@ -78,7 +78,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 
 | Script | Runs | What it does |
 |--------|------|-------------|
-| `Set-MachineLinks.ps1` | Every apply | Writes the `$PROFILE` stub, enables the git hooks, and moves aside a `~/.gitconfig` (git reads it ahead of `~/.config/git`) |
+| `Set-MachineLinks.ps1` | Every apply | Writes the `$PROFILE` stub and enables the git hooks |
 | `Install-Packages.ps1` | When a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
 | `Install-PowerShellModules.ps1` | When it or `-Az` changes, and once a week | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons, optionally Az) through PSResourceGet, and removes the older versions UniGetUI's updates leave behind |
 | `Install-VsCodeExtensions.ps1` | When an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
@@ -107,8 +107,11 @@ Git reads `~/.config/git/config`. Settings for one context live in their own fil
 | `home/dot_config/git/config` | Everything: personal identity and shared settings |
 | `home/dot_config/git/os.tmpl` | This OS only, rendered by chezmoi: `fsmonitor` on Windows; in WSL, Windows' Git Credential Manager |
 | `home/dot_config/git/work` | Repositories with a remote on `git.devnet.de` (`includeIf "hasconfig:remote.*.url:..."`): work email and credential settings, on either machine, and already while cloning one |
+| `~/.gitconfig` (`home/create_dot_gitconfig`) | This machine only: chezmoi creates it once, empty, and never changes it |
 
 Remote-based conditions need git 2.36 or later.
+
+`git config --global` writes to `~/.gitconfig`, so what tools save for one machine (`gh auth setup-git`'s credential helper, Git LFS, an IDE's merge tool) stays there instead of going into the shared, public config. Git reads it last, so it overrides the shared settings on that machine. A setting every machine should have goes in `home/dot_config/git/config` by hand.
 
 The shared settings are chosen with lazygit in mind:
 - pulling rebases instead of merging, and stashes uncommitted changes around the rebase;

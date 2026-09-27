@@ -6,7 +6,6 @@ Creates the links chezmoi can't manage itself. chezmoi runs this on every `chezm
 - $PROFILE lives in Documents\PowerShell, and OneDrive moves Documents on the work machine, so the path is only
   known at run time. It gets a stub that loads ~/.config/powershell/user_profile.ps1, which chezmoi links into
   the repo.
-- Retires ~/.gitconfig, which the old Tools.ps1 set up: git reads it ahead of ~/.config/git/config.
 - Enables the repo's git hooks.
 #>
 
@@ -37,20 +36,6 @@ try {
     }
 }
 catch { Write-Warning "Writing the PowerShell profile stub failed: $($_.Exception.Message)"; $failures++ }
-
-#--- Old ~/.gitconfig ---
-# The git config is ~/.config/git/config now. Git would still read a ~/.gitconfig, ahead of it, and
-# `git config --global` would write there.
-$oldGitConfig = Get-Item -LiteralPath (Join-Path -Path $HOME -ChildPath '.gitconfig') -Force -ErrorAction SilentlyContinue
-if ($oldGitConfig.LinkType) {
-    $oldGitConfig.Delete()
-    Write-Host "Removed the old link '$($oldGitConfig.FullName)'." -ForegroundColor Green
-}
-elseif ($oldGitConfig) {
-    $backupPath = "$($oldGitConfig.FullName).$(Get-Date -Format 'yyyyMMdd-HHmmss').bak"
-    Write-Warning "'$($oldGitConfig.FullName)' would override ~/.config/git/config. Moving it to '$backupPath' - merge what you need into the repo."
-    Move-Item -LiteralPath $oldGitConfig.FullName -Destination $backupPath
-}
 
 #--- Git hooks ---
 # The pre-commit hook keeps the VS Code extension lists up to date
