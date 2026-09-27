@@ -10,7 +10,7 @@ jobs:
     # windows-latest ships Windows PowerShell 5.1 next to pwsh 7, which the first step needs
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       # .githooks/pre-commit runs these through powershell.exe (5.1), so parse them with 5.1 itself:
       # PowerShell 7-only syntax such as ?., ?? or ternaries fails here instead of in the hook
@@ -82,7 +82,7 @@ jobs:
         os: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Install chezmoi (Windows)
         if: runner.os == 'Windows'
@@ -112,14 +112,14 @@ jobs:
     # ubuntu-latest ships ShellCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: ShellCheck
         run: shellcheck Scripts/WSLSetup.sh Scripts/Setup/install-wsl-packages.sh home/dot_config/bash/dotfiles.sh .githooks/pre-commit
 
   leaks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # gitleaks scans the commits of the push or pull request
 
