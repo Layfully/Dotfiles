@@ -1,0 +1,15 @@
+# Rendered by chezmoi for this OS from home/dot_config/git/os.tmpl - edit that, not this copy
+{{ if eq .chezmoi.os "windows" -}}
+[core]
+	# Git's built-in file system monitor: faster status in big repos (Windows and macOS only)
+	fsmonitor = true
+{{- else -}}
+[core]
+	fsmonitor = false
+[credential]
+	# WSL uses Windows' Git Credential Manager, so both share the same credentials
+	helper = /mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe
+[credential "https://dev.azure.com"]
+	# Azure DevOps keys credentials by the full path, not just the host
+	useHttpPath = true
+{{- end }}

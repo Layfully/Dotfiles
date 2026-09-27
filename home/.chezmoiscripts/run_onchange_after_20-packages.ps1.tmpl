@@ -1,3 +1,4 @@
+{{ if eq .chezmoi.os "windows" -}}
 # Runs again whenever a package list or an optional component (chezmoi edit-config) changes:
 # base packages: {{ include (joinPath .chezmoi.workingTree "Config/WinGet/configuration.dsc.yaml") | sha256sum }}
 {{- $workPackages := joinPath .chezmoi.workingTree "Config/WinGet/configuration.work.dsc.yaml" }}
@@ -6,3 +7,4 @@
 {{- end }}
 & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-Packages.ps1" | squote }} -Role {{ .role }} -GitHubCli:${{ .gitHubCli }} -Node:${{ .node }} -ClaudeCode:${{ .claudeCode }}
 exit $LASTEXITCODE
+{{ end -}}

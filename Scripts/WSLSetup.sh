@@ -1,31 +1,39 @@
 #!/bin/bash
-# WSL initial setup script.
-# Run this once after installing WSL (wsl --install) and launching Ubuntu for the first time.
+# WSL setup: run it once after installing WSL (wsl --install) and launching Ubuntu for the first time, from
+# the Windows clone. chezmoi then manages WSL from that same clone - git config, the prompt theme and the
+# bash setup (see home/.chezmoiignore for what WSL gets). Afterwards, `chezmoi update` keeps it in sync.
 
 set -e
+
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Update packages
 sudo apt update && sudo apt upgrade -y
 
-# Git configuration: include the repo's git config (identity and shared settings) from the Windows clone
-# this script runs from, instead of repeating it. Its conditional includes (work) resolve next
-# to it; they need git 2.36+ (Ubuntu 24.04 and later).
-repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-shared_gitconfig="$repo/home/dot_config/git/config"
-# It used to be Config/Git/gitconfig; drop an include of that path left by an earlier run
-git config --global --fixed-value --unset-all include.path "$repo/Config/Git/gitconfig" || true
-if ! git config --global --get-all include.path | grep -qxF "$shared_gitconfig"; then
-    git config --global --add include.path "$shared_gitconfig"
+# chezmoi, into ~/.local/bin (Ubuntu doesn't package it)
+if ! command -v chezmoi >/dev/null && [[ ! -x "$HOME/.local/bin/chezmoi" ]]; then
+    sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
 fi
-# Settings below come after the include in ~/.gitconfig, so they override it.
-# Git's built-in fsmonitor is Windows/macOS only.
-git config --global core.fsmonitor false
+export PATH="$HOME/.local/bin:$PATH"
 
-# Use Windows Git Credential Manager so WSL shares credentials with the host
-git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe"
+# Earlier versions of this script wrote the git settings into ~/.gitconfig. They come from ~/.config/git now
+# (home/dot_config/git: config, os, work), and git would read ~/.gitconfig ahead of it, so drop them there.
+if [[ -f "$HOME/.gitconfig" ]]; then
+    for old_include in "$repo/Config/Git/gitconfig" "$repo/home/dot_config/git/config"; do
+        git config --file "$HOME/.gitconfig" --fixed-value --unset-all include.path "$old_include" || true
+    done
+    git config --file "$HOME/.gitconfig" --unset core.fsmonitor || true
+    git config --file "$HOME/.gitconfig" --unset credential.helper || true
+    git config --file "$HOME/.gitconfig" --unset credential.https://dev.azure.com.useHttpPath || true
+    # Nothing left but empty section headers: remove the file
+    if ! grep -qE '^\s*[^[#;[:space:]]' "$HOME/.gitconfig"; then
+        rm "$HOME/.gitconfig"
+        echo "Removed the old ~/.gitconfig."
+    fi
+fi
 
-# Required for Azure DevOps repos (uses full path as key, not just hostname)
-git config --global credential.https://dev.azure.com.useHttpPath true
+# Links the configs and runs the WSL setup script (fzf, zoxide, oh-my-posh, the ~/.bashrc hook)
+chezmoi init --apply --source "$repo"
 
 # Install JetBrains Rider via snap (optional)
 read -rp "Do you want to install JetBrains Rider? (Y/N) " rider_confirmation

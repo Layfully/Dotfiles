@@ -1,8 +1,15 @@
 {{- /*
   Everything in home/ is the shared base setup. The work overlay - encrypted, so the public repo shows
-  nothing of it - only goes to machines with the work role.
+  nothing of it - only goes to machines with the work role, and only on Windows. WSL gets git, the
+  prompt theme, the bash setup and Claude Code's settings.
 */ -}}
-{{ if ne .role "work" -}}
+{{ if or (ne .role "work") (ne .chezmoi.os "windows") -}}
 .config/powershell/profile.work.ps1
 work.code-workspace
+{{ end -}}
+{{ if eq .chezmoi.os "windows" -}}
+.config/bash
+{{ else -}}
+AppData
+.config/powershell
 {{ end -}}

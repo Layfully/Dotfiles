@@ -4,6 +4,10 @@ Config/UniGetUI/CurrentSessionToken
 Config/UniGetUI/WindowGeometry
 Config/UniGetUI/TelemetryClientToken
 Config/UniGetUI/IpcApiEndpoints/
+# UI state and what UniGetUI already upgraded on this machine
+Config/UniGetUI/SidepanelWidths.json
+Config/UniGetUI/WinGetAlreadyUpgradedPackages.json
+Config/UniGetUI/LastKnownBuildNumber
 
 # UniGetUI package backups an older setup wrote to the repo root (the WinGet lists in Config/WinGet replace them)
 /*.ubundle
