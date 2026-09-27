@@ -18,7 +18,9 @@ param(
     [switch]$GitHubCli,  # GitHub CLI
     [switch]$Node,       # latest Node.js LTS via nvm
     [switch]$ClaudeCode, # Claude Code CLI (native build)
-    [switch]$Az          # Az PowerShell modules
+    [switch]$Az,         # Az PowerShell modules
+    # Set when the script relaunches itself elevated: that new window then stays open at the end
+    [switch]$Relaunched
 )
 
 $isAdministrator = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')
@@ -27,8 +29,14 @@ if (-not $isAdministrator) {
     # Forward the switches as -Name:True / -Name:False, which pwsh -File binds back to the switch.
     # Start-Process joins -ArgumentList with spaces and does not quote, so the script path is quoted by hand.
     $forwardedArguments = $PSBoundParameters.GetEnumerator() | ForEach-Object { "-$($_.Key):$([bool]$_.Value)" }
-    Start-Process -Verb RunAs pwsh -ArgumentList (@("-NoProfile", "-File", "`"$PSCommandPath`"") + $forwardedArguments)
+    Start-Process -Verb RunAs pwsh -ArgumentList (@("-NoProfile", "-File", "`"$PSCommandPath`"", "-Relaunched") + $forwardedArguments)
     exit
+}
+
+# Ends the script. A window the script opened for itself stays open until Enter, so its output can be read.
+function Exit-Bootstrap([int] $ExitCode) {
+    if ($Relaunched) { Read-Host -Prompt "Press Enter to exit..." }
+    exit $ExitCode
 }
 
 $repoRoot = Split-Path -Path $PSScriptRoot -Parent
@@ -41,8 +49,7 @@ if (-not (Get-Command chezmoi -ErrorAction SilentlyContinue)) {
                 [System.Environment]::GetEnvironmentVariable("PATH", "User")
     if (-not (Get-Command chezmoi -ErrorAction SilentlyContinue)) {
         Write-Error "chezmoi was not found after installing it. Open a new terminal and run this script again."
-        Read-Host -Prompt "Press Enter to exit..."
-        exit 1
+        Exit-Bootstrap 1
     }
 }
 
@@ -64,8 +71,7 @@ if ($answers) { $initArguments += '--promptBool', ($answers -join ',') }
 chezmoi @initArguments
 if ($LASTEXITCODE -ne 0) {
     Write-Error "chezmoi init failed (exit code $LASTEXITCODE)."
-    Read-Host -Prompt "Press Enter to exit..."
-    exit 1
+    Exit-Bootstrap 1
 }
 
 #--- age key (work machines) ---
@@ -77,8 +83,7 @@ if ($role -eq 'work' -and -not (Test-Path -LiteralPath $keyFile)) {
     $secretKey = (Read-Host -Prompt "Paste the key's AGE-SECRET-KEY-... line").Trim()
     if ($secretKey -notmatch '^AGE-SECRET-KEY-1[0-9A-Z]+$') {
         Write-Error "That is not an age secret key. Put the key file at '$keyFile' and run this script again."
-        Read-Host -Prompt "Press Enter to exit..."
-        exit 1
+        Exit-Bootstrap 1
     }
     $null = New-Item -ItemType Directory -Path (Split-Path -Path $keyFile) -Force
     [IO.File]::WriteAllText($keyFile, "$secretKey`n")
@@ -90,4 +95,4 @@ chezmoi apply
 if ($LASTEXITCODE -ne 0) { Write-Warning "chezmoi apply reported failures (above). Fix them and run 'chezmoi apply' again." }
 else { Write-Host "Setup complete. From now on, 'chezmoi update' pulls the repo and applies it." -ForegroundColor Green }
 Write-Host "Open a new terminal to load the profile and the updated PATH."
-Read-Host -Prompt "Press Enter to exit..."
+Exit-Bootstrap $LASTEXITCODE

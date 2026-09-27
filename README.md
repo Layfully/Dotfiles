@@ -21,6 +21,7 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 | `Config/` | Data the setup scripts read: WinGet package lists, VS Code extension lists, PowerToys settings, and the UniGetUI folder (linked as a whole) |
 | `Scripts/Setup/` | The setup scripts |
 | `Scripts/Bootstrap.ps1` | First-time setup of a new machine |
+| `Scripts/Test-Bootstrap.ps1` | Tries the bootstrap on a clean, throwaway Windows in Windows Sandbox |
 | `.githooks/`, `Scripts/GitHooks/` | The pre-commit hook |
 | `Scripts/WSLSetup.sh` | WSL first-time setup: installs chezmoi there and runs it from this clone |
 
@@ -37,7 +38,9 @@ cd "$env:USERPROFILE\Dotfiles"
 pwsh -NoProfile -File Scripts/Bootstrap.ps1
 ```
 
-The bootstrap installs chezmoi, runs `chezmoi init`, asks for the age key on a work machine, and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once about the optional components (GitHub CLI, Node.js LTS through nvm, Claude Code CLI, Az modules). To answer ahead of time, pass switches: `-GitHubCli -Node:$false -ClaudeCode -Az:$false`.
+The bootstrap installs chezmoi, runs `chezmoi init`, asks for the age key on a work machine, and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once about the optional components (GitHub CLI, Node.js LTS through nvm, Claude Code CLI, Az modules). To answer ahead of time, pass switches: `-GitHubCli -Node:$false -ClaudeCode -Az:$false`. The one per-user tool downloaded and run as a script, the Claude Code installer, runs with your normal rights even then.
+
+To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Test-Bootstrap.ps1 -Wait` runs it in Windows Sandbox: a clean, throwaway Windows that gets winget, PowerShell 7 and Git first, then clones the repo's last commit and bootstraps it as a private machine. It needs the Windows Sandbox feature (the script says how to turn it on).
 
 ## Day to Day
 
@@ -57,7 +60,7 @@ The bootstrap installs chezmoi, runs `chezmoi init`, asks for the age key on a w
 
 | Location | Source in the repo |
 |----------|-------------------|
-| `$PROFILE` | → `~/.config/powershell/user_profile.ps1` → `home/dot_config/powershell/user_profile.ps1` |
+| `$PROFILE` | A one-line stub that loads `~/.config/powershell/user_profile.ps1`, which links to `home/dot_config/powershell/user_profile.ps1` |
 | `~/.config/git/config`, `work` (`os` is a per-OS copy) | `home/dot_config/git/` (see [Git Config](#git-config)) |
 | `~/.config/oh-my-posh/cloud-context.omp.json` | `home/dot_config/oh-my-posh/`: the prompt theme, used by pwsh and by bash in WSL |
 | `%APPDATA%\Code\User\settings.json` | `home/AppData/Roaming/Code/User/settings.json` |
@@ -67,13 +70,15 @@ The bootstrap installs chezmoi, runs `chezmoi init`, asks for the age key on a w
 | `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI/`: the whole folder, because UniGetUI turns some settings off by deleting a file. Its runtime state is gitignored, so it stays on each machine |
 | `C:\Tools\pwsh.exe` | `pwsh.exe` of the PowerShell 7 install (`$PSHOME`) |
 
-`$PROFILE` and `C:\Tools\pwsh.exe` are linked by `Scripts/Setup/Set-MachineLinks.ps1`, not by chezmoi. OneDrive moves `Documents` on the work machine, so the profile's path is only known at run time, and `C:\Tools` is outside the home folder.
+`Scripts/Setup/Set-MachineLinks.ps1` handles these two, not chezmoi:
+- **`$PROFILE`** gets a stub, not a link. OneDrive moves `Documents` on the work machine, so the profile's path is only known at run time, and OneDrive handles symlinks badly.
+- **`C:\Tools\pwsh.exe`** is outside the home folder.
 
 ## Setup Scripts
 
 | Script | Runs | What it does |
 |--------|------|-------------|
-| `Set-MachineLinks.ps1` | Every apply | Links `$PROFILE` and `C:\Tools\pwsh.exe`, enables the git hooks, and retires what the old setup left: `~/.gitconfig` (git reads it ahead of `~/.config/git`), and UniGetUI package backups pointed at the repo |
+| `Set-MachineLinks.ps1` | Every apply | Writes the `$PROFILE` stub, links `C:\Tools\pwsh.exe`, enables the git hooks, and retires what the old setup left: `~/.gitconfig` (git reads it ahead of `~/.config/git`), and UniGetUI package backups pointed at the repo |
 | `Install-Packages.ps1` | When a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
 | `Install-PowerShellModules.ps1` | Every apply | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons, optionally Az) through PSResourceGet, and removes versions a newer one replaced |
 | `Install-VsCodeExtensions.ps1` | When an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
@@ -112,6 +117,8 @@ The shared settings are chosen with lazygit in mind:
 - lazygit's external merge tool (`M` on a conflicted file) and `git difftool` open VS Code;
 - a new branch's first push sets its upstream.
 
+lazygit shows diffs through [delta](https://github.com/dandavison/delta), with syntax highlighting; `|` cycles to delta side by side and to git's own diff.
+
 ## PowerToys Settings
 
 `Config/PowerToys/settings.json` maps a module name (as `PowerToys.DSC.exe modules --resource settings` lists them) to the settings it should have. `Set-PowerToysSettings.ps1` applies each one with `PowerToys.DSC.exe set`:
@@ -143,7 +150,7 @@ The script installs chezmoi in WSL and runs it from the Windows clone. WSL gets 
 
 ## Linting
 
-`.github/workflows/lint.yml` runs on every push to `main` and on pull requests. Dependabot (`.github/dependabot.yml`) opens a weekly pull request when an action it uses has a new version.
+`.github/workflows/lint.yml` runs on every push to `main` and on pull requests. Its token is read-only, the actions are pinned to commit SHAs, and checkouts don't keep the token. Dependabot (`.github/dependabot.yml`) opens a weekly pull request when an action has a new version, and updates the pin.
 
 | Job | What it checks |
 |-----|---------------|
