@@ -1,0 +1,8 @@
+# This machine's own git settings, not in the dotfiles repo. chezmoi creates this file once and never changes it.
+#
+# `git config --global` writes here (git's rule: to ~/.gitconfig whenever it exists), so settings that tools
+# save for this machine - `gh auth setup-git`'s credential helper, Git LFS, an IDE's merge tool - stay here
+# instead of landing in the shared, public ~/.config/git/config. Git reads this file after that one, so a
+# setting here overrides the shared one on this machine only.
+#
+# A setting every machine should have: put it in the repo (home/dot_config/git/config) and delete it here.

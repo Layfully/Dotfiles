@@ -18,7 +18,8 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Earlier versions of this script wrote the git settings into ~/.gitconfig. They come from ~/.config/git now
 # (home/dot_config/git: config, os, work), and git would read ~/.gitconfig ahead of it, so drop them there.
-if [[ -f "$HOME/.gitconfig" ]]; then
+# The ~/.gitconfig chezmoi creates (home/create_dot_gitconfig, this machine's own settings) stays.
+if [[ -f "$HOME/.gitconfig" ]] && ! grep -q 'chezmoi creates this file once' "$HOME/.gitconfig"; then
     for old_include in "$repo/Config/Git/gitconfig" "$repo/home/dot_config/git/config"; do
         git config --file "$HOME/.gitconfig" --fixed-value --unset-all include.path "$old_include" || true
     done
