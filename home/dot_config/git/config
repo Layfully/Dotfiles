@@ -6,6 +6,15 @@
 [core]
 	untrackedCache = true
 	longpaths = true
+	# Diffs, logs and blame through delta (base packages on Windows, git-delta in WSL), as in lazygit
+	pager = delta
+[interactive]
+	# git add -p: delta colours the hunks and leaves the layout git parses alone
+	diffFilter = delta --color-only
+[delta]
+	dark = true
+	# n / N jump between files in a long diff
+	navigate = true
 [init]
 	defaultBranch = main
 [checkout]

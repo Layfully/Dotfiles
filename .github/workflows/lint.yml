@@ -34,9 +34,10 @@ jobs:
           }
           if ($failed) { exit 1 }
 
+      # Pinned, so a new release's rules can't fail a build on their own; bump by hand
       - name: Install PSScriptAnalyzer
         shell: pwsh
-        run: Install-PSResource -Name PSScriptAnalyzer -TrustRepository
+        run: Install-PSResource -Name PSScriptAnalyzer -Version 1.25.0 -TrustRepository
 
       - name: Run PSScriptAnalyzer
         shell: pwsh
@@ -79,6 +80,21 @@ jobs:
           }
           if ($failed) { exit 1 }
 
+      # Checks the schema and that every resource exists (downloading their DSC modules), without applying anything
+      - name: Validate the WinGet configurations
+        shell: pwsh
+        run: |
+          if (-not (Get-Command winget -ErrorAction Ignore)) {
+              Install-PSResource -Name Microsoft.WinGet.Client -TrustRepository
+              Repair-WinGetPackageManager -AllUsers -Latest
+          }
+          $failed = $false
+          foreach ($file in Get-ChildItem Config/WinGet -Filter *.dsc.yaml) {
+              winget configure validate --file $file.FullName --disable-interactivity
+              if ($LASTEXITCODE) { Write-Output "::error file=Config/WinGet/$($file.Name)::winget configure validate failed (exit code $LASTEXITCODE)"; $failed = $true }
+          }
+          if ($failed) { exit 1 }
+
   chezmoi:
     # Renders every template - config, ignore rules, symlinks, scripts - for both roles, as `chezmoi apply` would,
     # without running anything: on Windows, and on Linux as in WSL. There is no age key here, so the encrypted
@@ -87,6 +103,12 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      # A pinned release, checked against the hashes from its chezmoi_<version>_checksums.txt, instead of running
+      # the latest install script. Dependabot doesn't see these: bump them by hand.
+      CHEZMOI_VERSION: 2.72.2
+      CHEZMOI_SHA256_WINDOWS: 5c2038736c485d4e3eaad4ac06ea1fe3c4b63d4d51e470547bf12737c02f37f6
+      CHEZMOI_SHA256_LINUX: a2be1b8bcdf06c6f173e070bb3ddbcc52c50478fe9b57f6e6c63d15c7cff4f03
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -95,17 +117,25 @@ jobs:
       - name: Install chezmoi (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: iex "&{$(irm 'https://get.chezmoi.io/ps1')} -b '$env:RUNNER_TEMP\bin'"
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP 'chezmoi.zip'
+          Invoke-WebRequest "https://github.com/twpayne/chezmoi/releases/download/v$env:CHEZMOI_VERSION/chezmoi_${env:CHEZMOI_VERSION}_windows_amd64.zip" -OutFile $archive
+          if ((Get-FileHash $archive -Algorithm SHA256).Hash -ne $env:CHEZMOI_SHA256_WINDOWS) { Write-Output "::error::chezmoi download doesn't match its checksum"; exit 1 }
+          Expand-Archive $archive -DestinationPath (Join-Path $env:RUNNER_TEMP 'bin')
 
       - name: Install chezmoi (Linux)
         if: runner.os == 'Linux'
-        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$RUNNER_TEMP/bin"
+        run: |
+          curl -fsSLo "$RUNNER_TEMP/chezmoi.tar.gz" "https://github.com/twpayne/chezmoi/releases/download/v${CHEZMOI_VERSION}/chezmoi_${CHEZMOI_VERSION}_linux_amd64.tar.gz"
+          echo "${CHEZMOI_SHA256_LINUX}  $RUNNER_TEMP/chezmoi.tar.gz" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/bin"
+          tar -xzf "$RUNNER_TEMP/chezmoi.tar.gz" -C "$RUNNER_TEMP/bin" chezmoi
 
       - name: Render the private and work setups
         shell: pwsh
         run: |
           $env:PATH = (Join-Path $env:RUNNER_TEMP 'bin') + [IO.Path]::PathSeparator + $env:PATH
-          $answers = 'Install the GitHub CLI=true,Install Node.js LTS through nvm=true,Install the Claude Code CLI=true,Install the Az PowerShell modules=true'
+          $answers = 'Install the GitHub CLI=true,Install Node.js LTS through nvm=true,Install the Claude Code CLI=true,Install the Az PowerShell modules=true,Install JetBrains Rider=true'
           foreach ($role in 'private', 'work') {
               $config = Join-Path $env:RUNNER_TEMP "chezmoi-$role.toml"
               $isolated = "--config=$config", "--destination=$(Join-Path $env:RUNNER_TEMP "home-$role")", "--persistent-state=$(Join-Path $env:RUNNER_TEMP "state-$role.boltdb")"

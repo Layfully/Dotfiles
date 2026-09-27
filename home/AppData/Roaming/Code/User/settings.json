@@ -61,7 +61,7 @@
   "git.blame.statusBarItem.enabled": true,
   "sqldeveloper.sqlHistory.historyLimit": 500,
   "sqldeveloper.telemetry.enabled": false,
-  // mssql.connections: work-only, in the encrypted work overlay (~/work.code-workspace) - see the pre-commit hook.
+  // mssql.connections and their connection groups: work-only, in the encrypted work overlay (~/work.code-workspace) - see the pre-commit hook.
   "mssql.applyLocalization": true,
   "mssql.copyIncludeHeaders": true,
   "mssql.enableExperimentalFeatures": true,
@@ -132,24 +132,6 @@
   "claudeCode.preferredLocation": "sidebar",
   "claudeCode.selectedModel": "default",
   "claudeCode.useCtrlEnterToSend": true,
-  "mssql.connectionGroups": [
-    {
-      "name": "ROOT",
-      "id": "ROOT"
-    },
-    {
-      "name": "Test",
-      "color": "#00CC6A",
-      "id": "8f852423-0ab7-4681-b4c2-3a71d2a860b2",
-      "parentId": "ROOT"
-    },
-    {
-      "name": "Prod",
-      "color": "#00CC6A",
-      "id": "41dc4f40-55ac-4f60-ae9f-2bf5a8b70a35",
-      "parentId": "ROOT"
-    }
-  ],
   "mssql.enableQueryHistoryCapture": true,
   "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
   "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
