@@ -3,18 +3,22 @@
 Sets up a new machine from this clone. Run it once, as Administrator, in PowerShell 7.
 
 .DESCRIPTION
-Installs chezmoi, runs `chezmoi init` (which records the machine's role and asks about the optional components),
+Installs chezmoi, runs `chezmoi init` (which asks for the machine's role and about the optional components),
 puts the age key in place on a work machine, and runs `chezmoi apply`: that links the configs and runs the setup
 scripts in home/.chezmoiscripts (packages and Developer Mode, PowerShell modules, VS Code extensions, PowerToys).
 Elevated, those run without UAC prompts. After this, `chezmoi update` keeps the machine in sync.
 
-Optional components are asked once. Pass a switch to answer ahead: -Node to install, -Node:$false to skip.
+The role and the optional components are asked once. Pass them to answer ahead: -Role work or -Role private,
+and a switch per component: -Node to install, -Node:$false to skip.
 
 .EXAMPLE
-pwsh -NoProfile -File Scripts/Bootstrap.ps1 -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false
+pwsh -NoProfile -File Scripts/Bootstrap.ps1 -Role work -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false
 #>
 #Requires -Version 7
 param(
+    # private: the base setup; work: adds the encrypted work overlay (needs the age key's passphrase)
+    [ValidateSet('private', 'work')]
+    [string]$Role,
     [switch]$GitHubCli,  # GitHub CLI
     [switch]$Node,       # latest Node.js LTS via nvm
     [switch]$ClaudeCode, # Claude Code CLI (native build)
@@ -27,9 +31,11 @@ param(
 $isAdministrator = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')
 if (-not $isAdministrator) {
     Write-Warning "Administrator rights are required. Relaunching elevated..."
-    # Forward the switches as -Name:True / -Name:False, which pwsh -File binds back to the switch.
+    # Forward the switches as -Name:True / -Name:False, which pwsh -File binds back to the switch, and -Role as is.
     # Start-Process joins -ArgumentList with spaces and does not quote, so the script path is quoted by hand.
-    $forwardedArguments = $PSBoundParameters.GetEnumerator() | ForEach-Object { "-$($_.Key):$([bool]$_.Value)" }
+    $forwardedArguments = $PSBoundParameters.GetEnumerator() | ForEach-Object {
+        if ($_.Value -is [switch]) { "-$($_.Key):$([bool]$_.Value)" } else { "-$($_.Key)", $_.Value }
+    }
     Start-Process -Verb RunAs pwsh -ArgumentList (@("-NoProfile", "-File", "`"$PSCommandPath`"", "-Relaunched") + $forwardedArguments)
     exit
 }
@@ -70,6 +76,7 @@ $answers = foreach ($componentName in $promptTexts.Keys) {
 }
 $initArguments = @('init', '--source', $repoRoot)
 if ($answers) { $initArguments += '--promptBool', ($answers -join ',') }
+if ($Role) { $initArguments += '--promptChoice', "Machine role (work adds the encrypted work overlay)=$Role" }
 chezmoi @initArguments
 if ($LASTEXITCODE -ne 0) {
     Write-Error "chezmoi init failed (exit code $LASTEXITCODE)."
