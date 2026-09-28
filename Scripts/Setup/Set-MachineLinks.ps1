@@ -19,12 +19,7 @@ $failures = 0
 $profileStub = "# Written by the dotfiles setup (Scripts/Setup/Set-MachineLinks.ps1). The profile itself is in the repo.`n" +
                ". `"`$HOME\.config\powershell\user_profile.ps1`"`n"
 try {
-    $existingProfile = Get-Item -LiteralPath $PROFILE -Force -ErrorAction SilentlyContinue
-    if ($existingProfile.LinkType) {
-        # What earlier versions of this script made
-        $existingProfile.Delete()
-    }
-    elseif ($existingProfile -and [IO.File]::ReadAllText($PROFILE) -ne $profileStub) {
+    if ([IO.File]::Exists($PROFILE) -and [IO.File]::ReadAllText($PROFILE) -ne $profileStub) {
         $backupPath = "$PROFILE.$(Get-Date -Format 'yyyyMMdd-HHmmss').bak"
         Write-Warning "'$PROFILE' already exists. Moving it to '$backupPath'."
         Move-Item -LiteralPath $PROFILE -Destination $backupPath -ErrorAction Stop

@@ -291,7 +291,3 @@ $null = $ExecutionContext.InvokeProvider.Item.Set('Alias:\gp', 'Invoke-GitPush',
 # Work-only functions, aliases and paths: chezmoi decrypts ~/.config/powershell/profile.work.ps1 on machines
 # with the work role only (home/.chezmoiignore). Loaded last, so it can override anything above.
 if ([IO.File]::Exists("$HOME\.config\powershell\profile.work.ps1")) { . "$HOME\.config\powershell\profile.work.ps1" }
-# The untracked file the overlay replaces is no longer loaded
-if ([IO.File]::Exists("$HOME\.user_profile_local.ps1")) {
-    $Host.UI.WriteWarningLine('~/.user_profile_local.ps1 is no longer loaded. Move it into the work overlay (chezmoi edit ~/.config/powershell/profile.work.ps1), then delete it.')
-}
