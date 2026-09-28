@@ -16,10 +16,3 @@ Config/UniGetUI/HideToggleFilters.json
 Config/UniGetUI/WinGetAlreadyUpgradedPackages.json
 Config/UniGetUI/WinGetUpgradeAttempts.json
 Config/UniGetUI/LastKnownBuildNumber
-
-# UniGetUI package backups an older setup wrote to the repo root (the WinGet lists in Config/WinGet replace them)
-/*.ubundle
-/UniGetUI/
-
-# UniGetUI's package backup folder, a local path
-Config/UniGetUI/ChangeBackupOutputDirectory
