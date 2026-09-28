@@ -5,7 +5,7 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 ## How It Works
 
 - **One base, one overlay.** Everything in `home/` is the base setup, the private machine's. A machine with the **work** role also gets the work overlay: files encrypted with [age](https://age-encryption.org/), so this public repo shows nothing of them, plus its own package and extension lists.
-- **The role is set once per machine.** `chezmoi init` stores it in `~/.config/chezmoi/chezmoi.toml`, along with the answers about optional components. Machines named `DEV-WNW-*` start out as work, every other machine as private. `chezmoi edit-config` changes it.
+- **The role is chosen once per machine.** The first `chezmoi init` asks for it (`private` or `work`, `private` by default) and stores it in `~/.config/chezmoi/chezmoi.toml`, along with the answers about optional components. `chezmoi edit-config` changes it.
 - **On Windows, configs are symlinks into the repo** (chezmoi's symlink mode). When an app changes its own settings, the change is already in the repo; commit it. Only templates (like git's per-OS `os` file) and the encrypted overlay files are copies.
 - **WSL uses the same repo.** chezmoi in WSL runs from the Windows clone and takes the parts that make sense there, as copies (see [WSL Setup](#wsl-setup)).
 - **Setup scripts run from `chezmoi apply`.** `home/.chezmoiscripts/` says when a script runs: every apply, or when something it depends on changes. `Scripts/Setup/` holds what the script does, where CI can lint it.
@@ -39,7 +39,7 @@ cd "$env:USERPROFILE\Dotfiles"
 pwsh -NoProfile -File Scripts/Bootstrap.ps1
 ```
 
-The bootstrap installs chezmoi, runs `chezmoi init`, decrypts the age key on a work machine (it asks for the passphrase), and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once about the optional components (GitHub CLI, Node.js LTS through nvm, Claude Code CLI, Az modules, JetBrains Rider). To answer ahead of time, pass switches: `-GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false`. The one per-user tool downloaded and run as a script, the Claude Code installer, runs with your normal rights even then.
+The bootstrap installs chezmoi, runs `chezmoi init`, decrypts the age key on a work machine (it asks for the passphrase), and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once for the machine's role and about the optional components (GitHub CLI, Node.js LTS through nvm, Claude Code CLI, Az modules, JetBrains Rider). To answer ahead of time, pass them: `-Role work -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false`. The one per-user tool downloaded and run as a script, the Claude Code installer, runs with your normal rights even then.
 
 To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Test-Bootstrap.ps1 -Wait` runs it in Windows Sandbox: a clean, throwaway Windows that gets winget, PowerShell 7 and Git first, then clones the repo's last commit and bootstraps it as a private machine. It needs the Windows Sandbox feature (the script says how to turn it on).
 
