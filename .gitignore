@@ -1,16 +1,25 @@
 # UniGetUI machine-specific runtime state (not meaningful to track across machines)
 Config/UniGetUI/OperationHistory
+Config/UniGetUI/OperationHistory.json
 Config/UniGetUI/CurrentSessionToken
 Config/UniGetUI/WindowGeometry
 Config/UniGetUI/TelemetryClientToken
 Config/UniGetUI/IpcApiEndpoints/
-# UI state and what UniGetUI already upgraded on this machine
+Config/UniGetUI/MaintenanceTaskLastRun.json
+Config/UniGetUI/KnownLocalBackupNames.json
+# One-time notices and imports, done once per machine
+Config/UniGetUI/AlreadyWarnedAboutAdmin
+Config/UniGetUI/AutoUpdatedPackagesImported
+# UI state and what UniGetUI already upgraded (or tried to) on this machine
 Config/UniGetUI/SidepanelWidths.json
+Config/UniGetUI/HideToggleFilters.json
 Config/UniGetUI/WinGetAlreadyUpgradedPackages.json
+Config/UniGetUI/WinGetUpgradeAttempts.json
 Config/UniGetUI/LastKnownBuildNumber
 
 # UniGetUI package backups an older setup wrote to the repo root (the WinGet lists in Config/WinGet replace them)
 /*.ubundle
+/UniGetUI/
 
 # UniGetUI's package backup folder, a local path
 Config/UniGetUI/ChangeBackupOutputDirectory
