@@ -19,3 +19,12 @@ if ! grep -qxF "$hook" "$HOME/.bashrc" 2>/dev/null; then
     printf '\n# Dotfiles (chezmoi)\n%s\n' "$hook" >> "$HOME/.bashrc"
     echo "Added the dotfiles hook to ~/.bashrc - open a new shell to load it."
 fi
+
+# `wsl` starts a login shell. Bash then reads ~/.bash_profile if there is one (the .NET SDK creates one) and skips
+# ~/.profile - which is what loads ~/.bashrc on Ubuntu - so the hook above would never run. Have it load ~/.profile.
+if [[ -f "$HOME/.bash_profile" ]] && ! grep -qE '(\.|source) +("?\$HOME|~)/\.(profile|bashrc)' "$HOME/.bash_profile"; then
+    bash_profile="$(cat "$HOME/.bash_profile")"
+    printf '# Dotfiles (chezmoi): login shells load ~/.profile, and through it ~/.bashrc\n[ -f ~/.profile ] && . ~/.profile\n\n%s\n' \
+        "$bash_profile" > "$HOME/.bash_profile"
+    echo "~/.bash_profile now loads ~/.profile (and so ~/.bashrc) - open a new shell to load it."
+fi
