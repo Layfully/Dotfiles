@@ -15,8 +15,8 @@ git:
   # Diffs through delta (installed with the base packages), with syntax highlighting. | cycles to delta
   # side by side, handy on a wide screen, and to git's own diff.
   diffRenderers:
-    - command: delta --dark --paging=never
-    - command: delta --dark --paging=never --side-by-side
+    - command: delta --paging=never
+    - command: delta --paging=never --side-by-side
       name: delta side-by-side
     - type: rawGit
       name: git

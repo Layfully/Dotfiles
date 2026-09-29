@@ -101,7 +101,7 @@
     }
     if ($ompInit) { & ([scriptblock]::Create($ompInit)) }
     elseif (Get-Command oh-my-posh -CommandType Application -ErrorAction Ignore) {
-        oh-my-posh init pwsh --config 'cloud-context' | Invoke-Expression
+        & ([scriptblock]::Create((oh-my-posh init pwsh --config 'cloud-context') -join "`n"))
     }
 
     #zoxide (z / zi for fast directory jumping)

@@ -18,12 +18,11 @@ case "$(uname -s)" in
     *) exit 0 ;;
 esac
 
+# Saves the installed extensions into the working tree only, like an app writing its settings: the commit stays
+# what was staged, and a changed list shows up as a change to commit (the private machine writes extensions,
+# work machines extensions.work - see SaveVsCodeExtensions.ps1)
 powershell.exe -NoProfile -ExecutionPolicy RemoteSigned -File "$repo/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
-
-# The private machine writes extensions, work machines extensions.work (see SaveVsCodeExtensions.ps1).
-# git add fails, aborting the commit, on a file that doesn't exist yet.
-for list in extensions extensions.work; do
-    if [ -f "$repo/Config/VisualStudioCode/$list" ]; then
-        git add "$repo/Config/VisualStudioCode/$list"
-    fi
-done
+lists="$repo/Config/VisualStudioCode"
+if ! git diff --quiet -- "$lists" || [ -n "$(git ls-files --others --exclude-standard -- "$lists")" ]; then
+    echo "pre-commit: the VS Code extension list changed (Config/VisualStudioCode) - it isn't in this commit; commit it when you want it." >&2
+fi

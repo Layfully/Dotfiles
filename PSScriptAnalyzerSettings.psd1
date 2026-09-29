@@ -9,8 +9,6 @@
         'PSAvoidGlobalVars'
         # Key handler and completer script blocks must declare the parameters PSReadLine passes in
         'PSReviewUnusedParameter'
-        # The Claude Code installer is only published as a script to download and run
-        'PSAvoidUsingInvokeExpression'
         # pwsh 7 reads BOM-less files as UTF-8, so this only matters for the GitHooks scripts, which
         # Windows PowerShell 5.1 runs; the lint workflow checks those with this rule separately
         'PSUseBOMForUnicodeEncodedFile'
