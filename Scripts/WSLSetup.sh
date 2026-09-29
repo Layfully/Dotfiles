@@ -16,28 +16,5 @@ if ! command -v chezmoi >/dev/null && [[ ! -x "$HOME/.local/bin/chezmoi" ]]; the
 fi
 export PATH="$HOME/.local/bin:$PATH"
 
-# Earlier versions of this script wrote the git settings into ~/.gitconfig. They come from ~/.config/git now
-# (home/dot_config/git: config, os, work), and git would read ~/.gitconfig ahead of it, so drop them there.
-# The ~/.gitconfig chezmoi creates (home/create_dot_gitconfig, this machine's own settings) stays.
-if [[ -f "$HOME/.gitconfig" ]] && ! grep -q 'chezmoi creates this file once' "$HOME/.gitconfig"; then
-    for old_include in "$repo/Config/Git/gitconfig" "$repo/home/dot_config/git/config"; do
-        git config --file "$HOME/.gitconfig" --fixed-value --unset-all include.path "$old_include" || true
-    done
-    git config --file "$HOME/.gitconfig" --unset core.fsmonitor || true
-    git config --file "$HOME/.gitconfig" --unset credential.helper || true
-    git config --file "$HOME/.gitconfig" --unset credential.https://dev.azure.com.useHttpPath || true
-    git config --file "$HOME/.gitconfig" --unset core.autocrlf || true
-    if ! grep -qE '^\s*[^[#;[:space:]]' "$HOME/.gitconfig"; then
-        # Nothing left but empty section headers
-        rm "$HOME/.gitconfig"
-        echo "Removed the old ~/.gitconfig."
-    else
-        # Anything else (an old [user], say) would override the repo's config, as on Windows: keep it aside
-        backup="$HOME/.gitconfig.$(date +%Y%m%d-%H%M%S).bak"
-        mv "$HOME/.gitconfig" "$backup"
-        echo "Moved the old ~/.gitconfig to $backup - merge what you need into the repo."
-    fi
-fi
-
 # Copies the configs and runs the WSL setup script (fzf, zoxide, oh-my-posh, delta, the ~/.bashrc hook)
 chezmoi init --apply --source "$repo"
