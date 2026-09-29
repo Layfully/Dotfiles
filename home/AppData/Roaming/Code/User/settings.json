@@ -1,14 +1,11 @@
 {
   "editor.unicodeHighlight.nonBasicASCII": false,
-  "terminal.integrated.commandsToSkipShell": [
-    "matlab.interrupt"
-  ],
   "editor.tabSize": 2,
   "workbench.iconTheme": "material-icon-theme",
   "editor.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
   "files.watcherExclude": {
     "**/.git/**": true,
-    "**/.node_modules/**": true,
+    "**/node_modules/**": true,
     "**/dist/**": true,
     "**/out-tsc/**": true,
   },
@@ -75,7 +72,6 @@
   "debug.openDebug": "openOnDebugBreak",
   "editor.tabCompletion": "off",
   "powershell.integratedConsole.focusConsoleOnExecute": true,
-  "files.defaultLanguage": "",
   "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
   "powershell.codeFolding.showLastLine": true,
   "powershell.sideBar.CommandExplorerVisibility": true,

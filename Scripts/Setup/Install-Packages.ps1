@@ -8,6 +8,8 @@ Everything here only installs what is missing; UniGetUI keeps things updated. Th
 never upgraded by the pwsh running this script. Installers that need Administrator rights ask for them
 themselves (UAC), unless this runs elevated already, as it does from Scripts\Bootstrap.ps1.
 #>
+# The Claude Code installer is only published as a script to download and run
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '')]
 param(
     [ValidateSet('private', 'work')]
     [string] $Role = 'private',

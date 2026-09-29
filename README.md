@@ -137,7 +137,7 @@ Diffs go through [delta](https://github.com/dandavison/delta), with syntax highl
 The pre-commit hook:
 
 - refuses a commit whose staged VS Code settings contain work database connections (the mssql extension saves new ones there), and says how to move them into the work overlay;
-- on Windows (not for commits made from WSL), runs `SaveVsCodeExtensions.ps1`, which saves the installed VS Code extensions: the full list to `extensions` on the private machine, or just what's on top of that list to `extensions.work` on a work machine. The role comes from chezmoi's config.
+- on Windows (not for commits made from WSL), runs `SaveVsCodeExtensions.ps1`, which saves the installed VS Code extensions: the full list to `extensions` on the private machine, or just what's on top of that list to `extensions.work` on a work machine. The role comes from chezmoi's config. It only writes the file, it doesn't stage it: the commit stays what you staged, and a changed list shows up as a change to commit, like a setting an app saved (the hook says so).
 
 `Set-MachineLinks.ps1` enables the hook. It runs under Windows PowerShell 5.1, so `Scripts/GitHooks/*.ps1` must avoid PowerShell 7-only syntax and non-ASCII characters.
 
@@ -156,7 +156,7 @@ In WSL the files are copies, not links: reading a file under `/mnt/c` is slow, a
 
 ## Linting
 
-`.github/workflows/lint.yml` runs on every push to `main` and on pull requests. Its token is read-only, the actions are pinned to commit SHAs, and checkouts don't keep the token. Dependabot (`.github/dependabot.yml`) opens a weekly pull request when an action has a new version, and updates the pin. chezmoi and PSScriptAnalyzer are pinned in the workflow too (chezmoi with its release checksums); those are bumped by hand.
+`.github/workflows/lint.yml` runs on every push to `main` and on pull requests. Its token is read-only, the actions are pinned to commit SHAs, and checkouts don't keep the token. Dependabot (`.github/dependabot.yml`) opens a weekly pull request when an action has a new version, and updates the pin. chezmoi and PSScriptAnalyzer are pinned in the workflow too (chezmoi with its release checksums, the same pin `Scripts/WSLSetup.sh` installs); those are bumped by hand.
 
 | Job | What it checks |
 |-----|---------------|

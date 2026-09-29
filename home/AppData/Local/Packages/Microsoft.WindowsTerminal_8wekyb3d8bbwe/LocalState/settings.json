@@ -39,10 +39,8 @@
     "disabledProfileSources": 
     [
         "Git",
-        "Microsoft.WSL",
         "Windows.Terminal.Azure",
-        "Windows.Terminal.VisualStudio",
-        "Windows.Terminal.Wsl"
+        "Windows.Terminal.VisualStudio"
     ],
     "focusFollowMouse": true,
     "keybindings": 
