@@ -1,0 +1,7 @@
+{
+  "winget\\7zip.7zip": "*",
+  "winget\\Bitwarden.Bitwarden": "*",
+  "winget\\Bitwarden.CLI": "*",
+  "winget\\Anthropic.Claude": "*",
+  "winget\\twpayne.chezmoi": "*"
+}
