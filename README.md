@@ -54,6 +54,8 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | Change the role or an optional component | `chezmoi edit-config`, then `chezmoi apply` |
 | Add a package every machine gets | A `Microsoft.WinGet.DSC/WinGetPackage` entry in `Config/WinGet/configuration.dsc.yaml` |
 | Add a package only work machines get | The same, in `Config/WinGet/configuration.work.dsc.yaml` (create it the first time) |
+| Keep a package updated on every machine | Mark it for automatic updates in UniGetUI, then commit `Config/UniGetUI` (see [Package Updates](#package-updates)) |
+| Hold a package back | Ignore its updates (or one version) in UniGetUI, then commit `Config/UniGetUI` |
 | Edit the work profile overlay | `chezmoi edit ~/.config/powershell/profile.work.ps1` (on a machine with the age key) |
 | See the shell shortcuts | `cheat` in PowerShell (defined in `home/dot_config/powershell/user_profile.ps1`) |
 
@@ -86,6 +88,15 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `install-wsl-packages.sh` | In WSL, when it changes | See [WSL Setup](#wsl-setup) |
 
 A script that fails makes `chezmoi apply` report it, and it runs again on the next apply.
+
+## Package Updates
+
+The WinGet lists only say which packages a machine has. Each machine's UniGetUI updates them, following settings that live in the linked `Config/UniGetUI/` folder, so a change made on one machine reaches the other with the next `chezmoi update`:
+
+- `AutomaticallyUpdatePackages` turns automatic updates on, and `MaintenanceSchedules` says when they are installed. Set to `MarkedPackagesOnly`, they cover only the packages listed in `AutoUpdatedPackages.json` (marked per package in UniGetUI).
+- `IgnoredPackageUpdates.json` holds the packages kept back: `*` ignores every update, a version number skips that one.
+
+No version is copied from one machine to the other: each machine installs the same updates on its own schedule. A package that has to stay at one exact version gets a `version` setting on its WinGet list entry, and a matching hold in UniGetUI so the two don't fight.
 
 ## The Work Overlay
 
