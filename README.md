@@ -117,7 +117,7 @@ Git reads `~/.config/git/config`. Settings for one context live in their own fil
 |------|-----------|
 | `home/dot_config/git/config` | Everything: personal identity and shared settings |
 | `home/dot_config/git/os.tmpl` | This OS only, rendered by chezmoi: `fsmonitor` on Windows; in WSL, Windows' Git Credential Manager |
-| `home/dot_config/git/work` | Repositories with a remote on `git.devnet.de` (`includeIf "hasconfig:remote.*.url:..."`): work email and credential settings, on either machine, and already while cloning one |
+| `home/dot_config/git/work` | Work repositories, recognised by their remote: `git.devnet.de` or Azure DevOps (`includeIf "hasconfig:remote.*.url:..."`): work email and credential settings, on either machine, and already while cloning one |
 | `~/.gitconfig` (`home/create_dot_gitconfig`) | This machine only: chezmoi creates it once, empty, and never changes it |
 
 Remote-based conditions need git 2.36 or later.

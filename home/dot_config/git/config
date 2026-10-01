@@ -56,6 +56,13 @@
 # Windows or WSL: chezmoi renders this file per OS (home/dot_config/git/os.tmpl)
 [include]
 	path = os
-# Work repositories, recognised by their remote - on any machine, and already while cloning one
+# Work repositories, recognised by their remote - on any machine, and already while cloning one: git.devnet.de
+# and Azure DevOps (whose HTTPS clone URLs may start with a user name, https://<user>@dev.azure.com/...)
 [includeIf "hasconfig:remote.*.url:https://git.devnet.de/**"]
+	path = work
+[includeIf "hasconfig:remote.*.url:https://dev.azure.com/**"]
+	path = work
+[includeIf "hasconfig:remote.*.url:https://*@dev.azure.com/**"]
+	path = work
+[includeIf "hasconfig:remote.*.url:git@ssh.dev.azure.com:v3/**"]
 	path = work
