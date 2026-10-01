@@ -58,7 +58,7 @@ try {
     Step 'Running Scripts\Bootstrap.ps1'
     # From here on, redirected stderr of the tools is output to keep; with Stop, 5.1 would throw on the first line
     $ErrorActionPreference = 'Continue'
-    & pwsh -NoProfile -File C:\Dotfiles\Scripts\Bootstrap.ps1 -Role private -GitHubCli:$false -Node:$false -ClaudeCode:$false -Az:$false -Rider:$false *>&1 |
+    & pwsh -NoProfile -File C:\Dotfiles\Scripts\Bootstrap.ps1 -Role private -GitHubCli:$false -Node:$false -ClaudeCode:$false -Az:$false -Rider:$false -DevDrive none *>&1 |
         Out-File -FilePath 'C:\Run\bootstrap.log' -Encoding utf8
     $bootstrapExit = $LASTEXITCODE
     Sync-SessionPath

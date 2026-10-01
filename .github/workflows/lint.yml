@@ -139,7 +139,7 @@ jobs:
           foreach ($role in 'private', 'work') {
               $config = Join-Path $env:RUNNER_TEMP "chezmoi-$role.toml"
               $isolated = "--config=$config", "--destination=$(Join-Path $env:RUNNER_TEMP "home-$role")", "--persistent-state=$(Join-Path $env:RUNNER_TEMP "state-$role.boltdb")"
-              chezmoi init --no-tty --source $PWD @isolated --promptBool $answers --promptChoice "Machine role (work adds the encrypted work overlay)=$role"
+              chezmoi init --no-tty --source $PWD @isolated --promptBool $answers --promptChoice "Machine role (work adds the encrypted work overlay)=$role" --promptString "Dev Drive for the package caches (a drive like D: or none)=D:"
               if ($LASTEXITCODE) { Write-Output "::error::chezmoi init failed for the $role role"; exit 1 }
               chezmoi apply --no-tty --dry-run --exclude=encrypted @isolated
               if ($LASTEXITCODE) { Write-Output "::error::chezmoi could not render the $role setup"; exit 1 }
