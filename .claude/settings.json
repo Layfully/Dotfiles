@@ -2,7 +2,29 @@
   "permissions": {
     "allow": [
       "Bash(git ls-tree *)",
-      "Bash(git count-objects *)"
+      "Bash(git count-objects *)",
+      "PowerShell(Select-String *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(Get-Date)",
+      "PowerShell(Get-Date *)",
+      "PowerShell(Format-Table *)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Test-Path *)",
+      "PowerShell(Get-CimInstance *)",
+      "PowerShell(Measure-Object *)",
+      "PowerShell(Get-Item *)",
+      "PowerShell(Get-FileHash *)",
+      "Bash(cygpath *)",
+      "Bash(tasklist)",
+      "Bash(tasklist *)",
+      "PowerShell(Format-List *)",
+      "PowerShell(Get-PSDrive *)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(Get-Volume *)",
+      "Bash(dotnet --list-runtimes)",
+      "PowerShell(dotnet --list-runtimes)",
+      "PowerShell(chezmoi status *)"
     ]
   }
 }
