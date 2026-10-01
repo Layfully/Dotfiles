@@ -9,10 +9,11 @@ scripts in home/.chezmoiscripts (packages and Developer Mode, PowerShell modules
 Elevated, those run without UAC prompts. After this, `chezmoi update` keeps the machine in sync.
 
 The role and the optional components are asked once. Pass them to answer ahead: -Role work or -Role private,
-and a switch per component: -Node to install, -Node:$false to skip.
+and a switch per component: -Node to install, -Node:$false to skip. -DevDrive D: puts the package caches on that
+Dev Drive, -DevDrive none leaves them where they are.
 
 .EXAMPLE
-pwsh -NoProfile -File Scripts/Bootstrap.ps1 -Role work -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false
+pwsh -NoProfile -File Scripts/Bootstrap.ps1 -Role work -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false -DevDrive D:
 #>
 #Requires -Version 7
 param(
@@ -24,6 +25,8 @@ param(
     [switch]$ClaudeCode, # Claude Code CLI (native build)
     [switch]$Az,         # Az PowerShell modules
     [switch]$Rider,      # JetBrains Rider
+    # The Dev Drive for the package caches, like D:, or none
+    [string]$DevDrive,
     # Set when the script relaunches itself elevated: that new window then stays open at the end
     [switch]$Relaunched
 )
@@ -77,6 +80,7 @@ $answers = foreach ($componentName in $promptTexts.Keys) {
 $initArguments = @('init', '--source', $repoRoot)
 if ($answers) { $initArguments += '--promptBool', ($answers -join ',') }
 if ($Role) { $initArguments += '--promptChoice', "Machine role (work adds the encrypted work overlay)=$Role" }
+if ($DevDrive) { $initArguments += '--promptString', "Dev Drive for the package caches (a drive like D: or none)=$DevDrive" }
 chezmoi @initArguments
 if ($LASTEXITCODE -ne 0) {
     Write-Error "chezmoi init failed (exit code $LASTEXITCODE)."

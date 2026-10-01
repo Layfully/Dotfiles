@@ -39,7 +39,7 @@ cd "$env:USERPROFILE\Dotfiles"
 pwsh -NoProfile -File Scripts/Bootstrap.ps1
 ```
 
-The bootstrap installs chezmoi, runs `chezmoi init`, decrypts the age key on a work machine (it asks for the passphrase), and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once for the machine's role and about the optional components (GitHub CLI, Node.js LTS through nvm, Claude Code CLI, Az modules, JetBrains Rider). To answer ahead of time, pass them: `-Role work -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false`. The one per-user tool downloaded and run as a script, the Claude Code installer, runs with your normal rights even then.
+The bootstrap installs chezmoi, runs `chezmoi init`, decrypts the age key on a work machine (it asks for the passphrase), and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once for the machine's role and about the optional components (GitHub CLI, Node.js LTS through nvm, Claude Code CLI, Az modules, JetBrains Rider, and a Dev Drive for the package caches). To answer ahead of time, pass them: `-Role work -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false -DevDrive D:` (`-DevDrive none` for no Dev Drive). The one per-user tool downloaded and run as a script, the Claude Code installer, runs with your normal rights even then.
 
 To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Test-Bootstrap.ps1 -Wait` runs it in Windows Sandbox: a clean, throwaway Windows that gets winget, PowerShell 7 and Git first, then clones the repo's last commit and bootstraps it as a private machine. It needs the Windows Sandbox feature (the script says how to turn it on).
 
@@ -83,6 +83,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 |--------|------|-------------|
 | `Set-MachineLinks.ps1` | Every apply | Writes the `$PROFILE` stub and enables the git hooks |
 | `Install-Packages.ps1` | When a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines, with Visual Studio and the workloads in `Config/VisualStudio/work.vsconfig`; those ask for UAC unless the apply runs elevated): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
+| `Set-DevDriveCaches.ps1` | When it or the Dev Drive changes, on machines with one | Points the NuGet and npm caches (`NUGET_PACKAGES`, `npm_config_cache`) at `<drive>\packages` on the Dev Drive. User environment variables, so they hold for every Node version nvm switches to |
 | `Install-PowerShellModules.ps1` | When it or `-Az` changes, and once a week | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons, optionally Az) through PSResourceGet, and removes the older versions UniGetUI's updates leave behind |
 | `Install-VsCodeExtensions.ps1` | When an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
 | `Set-PowerToysSettings.ps1` | When `Config/PowerToys/settings.json` changes | See [PowerToys Settings](#powertoys-settings) |
