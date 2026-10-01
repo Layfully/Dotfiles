@@ -1,0 +1,155 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+# What work machines get on top of configuration.dsc.yaml, applied after it by Scripts/Setup/Install-Packages.ps1.
+# Plain text like the base list: package names only, nothing about the work itself.
+properties:
+  configurationVersion: 0.2.0
+  resources:
+    # Visual Studio, then its workloads and components from the .vsconfig. To change them: modify the installation
+    # in the Visual Studio Installer, then More > Export configuration over Config/VisualStudio/work.vsconfig.
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: VisualStudio
+      directives:
+        description: Install Visual Studio Professional
+      settings:
+        id: Microsoft.VisualStudio.Professional
+        source: winget
+    - resource: Microsoft.VisualStudio.DSC/VSComponents
+      id: VisualStudioComponents
+      dependsOn:
+        - VisualStudio
+      directives:
+        description: Install the Visual Studio workloads and components (including the .NET SDK)
+        allowPrerelease: true
+        # Its module only loads elevated: winget asks for UAC for this unit when chezmoi apply isn't elevated
+        securityContext: elevated
+      settings:
+        productId: Microsoft.VisualStudio.Product.Professional
+        channelId: VisualStudio.18.Release
+        vsConfigFile: '${WinGetConfigRoot}\..\VisualStudio\work.vsconfig'
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: DockerDesktop
+      directives:
+        description: Install Docker Desktop
+      settings:
+        id: Docker.DockerDesktop
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: SqlOdbcDriver
+      directives:
+        description: Install the Microsoft ODBC Driver 17 for SQL Server
+      settings:
+        id: Microsoft.msodbcsql.17
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: WebDeploy
+      directives:
+        description: Install Web Deploy
+      settings:
+        id: Microsoft.WebDeploy
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Postman
+      directives:
+        description: Install Postman
+      settings:
+        id: Postman.Postman
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: TortoiseSVN
+      directives:
+        description: Install TortoiseSVN
+      settings:
+        id: TortoiseSVN.TortoiseSVN
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: WinMerge
+      directives:
+        description: Install WinMerge
+      settings:
+        id: WinMerge.WinMerge
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: MongoDBCompass
+      directives:
+        description: Install MongoDB Compass
+      settings:
+        id: MongoDB.Compass.Full
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Robo3T
+      directives:
+        description: Install Robo 3T
+      settings:
+        id: 3TSoftwareLabs.Robo3T
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: FirefoxDeveloperEdition
+      directives:
+        description: Install Firefox Developer Edition
+      settings:
+        id: Mozilla.Firefox.DeveloperEdition
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: RemoteDesktopManager
+      directives:
+        description: Install Remote Desktop Manager
+      settings:
+        id: Devolutions.RemoteDesktopManager
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: mRemoteNG
+      directives:
+        description: Install mRemoteNG
+      settings:
+        id: mRemoteNG.mRemoteNG
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: WireGuard
+      directives:
+        description: Install WireGuard
+      settings:
+        id: WireGuard.WireGuard
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Teams
+      directives:
+        description: Install Microsoft Teams
+      settings:
+        id: Microsoft.Teams
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Outlook
+      directives:
+        description: Install Outlook
+      settings:
+        id: Microsoft.Outlook
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: OneDrive
+      directives:
+        description: Install OneDrive
+      settings:
+        id: Microsoft.OneDrive
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Zoom
+      directives:
+        description: Install Zoom
+      settings:
+        id: Zoom.Zoom
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Parsec
+      directives:
+        description: Install Parsec
+      settings:
+        id: Parsec.Parsec
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Spotify
+      directives:
+        description: Install Spotify
+      settings:
+        id: Spotify.Spotify
+        source: winget
