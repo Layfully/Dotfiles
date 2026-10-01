@@ -4,6 +4,7 @@
 {{- $workPackages := joinPath .chezmoi.workingTree "Config/WinGet/configuration.work.dsc.yaml" }}
 {{- if and (eq .role "work") (stat $workPackages) }}
 # work packages: {{ include $workPackages | sha256sum }}
+# Visual Studio components: {{ include (joinPath .chezmoi.workingTree "Config/VisualStudio/work.vsconfig") | sha256sum }}
 {{- end }}
 & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-Packages.ps1" | squote }} -Role {{ .role }} -GitHubCli:${{ .gitHubCli }} -Node:${{ .node }} -ClaudeCode:${{ .claudeCode }} -Rider:${{ and (hasKey . "rider") .rider }}
 exit $LASTEXITCODE

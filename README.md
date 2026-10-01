@@ -19,7 +19,7 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 | `home/.chezmoi.toml.tmpl` | The per-machine config: role, optional components, symlink mode, age encryption, `pwsh -NoProfile` for scripts |
 | `home/.chezmoiignore` | Leaves the work overlay out unless the role is work, and gives WSL only what applies there |
 | `home/.chezmoiscripts/` | When the setup scripts run: thin triggers that pass data and hash the files that should re-run them |
-| `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, VS Code extension lists, PowerToys settings, the passphrase-encrypted age key, and the folders linked as a whole (UniGetUI's configuration, Claude Code's settings) |
+| `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, the work machine's Visual Studio workloads, VS Code extension lists, PowerToys settings, the passphrase-encrypted age key, and the folders linked as a whole (UniGetUI's configuration, Claude Code's settings) |
 | `Scripts/Setup/` | The setup scripts |
 | `Scripts/Bootstrap.ps1` | First-time setup of a new machine |
 | `Scripts/Test-Bootstrap.ps1` | Tries the bootstrap on a clean, throwaway Windows in Windows Sandbox |
@@ -53,7 +53,8 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | Add a config file | Put it in `home/` at its target path with chezmoi names (or `chezmoi add <target>`), then `chezmoi apply` |
 | Change the role or an optional component | `chezmoi edit-config`, then `chezmoi apply` |
 | Add a package every machine gets | A `Microsoft.WinGet.DSC/WinGetPackage` entry in `Config/WinGet/configuration.dsc.yaml` |
-| Add a package only work machines get | The same, in `Config/WinGet/configuration.work.dsc.yaml` (create it the first time) |
+| Add a package only work machines get | The same, in `Config/WinGet/configuration.work.dsc.yaml` |
+| Change the work machine's Visual Studio workloads | Modify the installation in the Visual Studio Installer, then More > Export configuration over `Config/VisualStudio/work.vsconfig` |
 | Keep a package updated on every machine | Mark it for automatic updates in UniGetUI, then commit `Config/UniGetUI` (see [Package Updates](#package-updates)) |
 | Hold a package back | Ignore its updates (or one version) in UniGetUI, then commit `Config/UniGetUI` |
 | Edit the work profile overlay | `chezmoi edit ~/.config/powershell/profile.work.ps1` (on a machine with the age key) |
@@ -81,7 +82,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | Script | Runs | What it does |
 |--------|------|-------------|
 | `Set-MachineLinks.ps1` | Every apply | Writes the `$PROFILE` stub and enables the git hooks |
-| `Install-Packages.ps1` | When a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
+| `Install-Packages.ps1` | When a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines, with Visual Studio and the workloads in `Config/VisualStudio/work.vsconfig`; those ask for UAC unless the apply runs elevated): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
 | `Install-PowerShellModules.ps1` | When it or `-Az` changes, and once a week | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons, optionally Az) through PSResourceGet, and removes the older versions UniGetUI's updates leave behind |
 | `Install-VsCodeExtensions.ps1` | When an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
 | `Set-PowerToysSettings.ps1` | When `Config/PowerToys/settings.json` changes | See [PowerToys Settings](#powertoys-settings) |
@@ -106,6 +107,7 @@ No version is copied from one machine to the other: each machine installs the sa
 | `home/encrypted_work.code-workspace.age` | `~/work.code-workspace` | The work database connections and their connection groups. The mssql extension reads them from the open workspace |
 | `Config/WinGet/configuration.work.dsc.yaml` | — | Packages only work machines get (plain text) |
 | `Config/VisualStudioCode/extensions.work` | — | Extensions the work machine has on top of the base list (plain text) |
+| `Config/VisualStudio/work.vsconfig` | — | The Visual Studio workloads and components the work list installs (plain text) |
 
 The age key is at `~/.config/chezmoi/key.txt`. The repo holds it encrypted with a passphrase, kept in Bitwarden, as `Config/age/key.txt.age`; the bootstrap decrypts it on a work machine. The private machine applies nothing encrypted, so it only needs the key to edit the overlay. After changing `~/work.code-workspace`, save it back with `chezmoi add --encrypt ~/work.code-workspace`.
 
