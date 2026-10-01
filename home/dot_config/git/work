@@ -1,5 +1,5 @@
-# Included by config for repositories with a remote on git.devnet.de
+# Included by config for work repositories: a remote on git.devnet.de or Azure DevOps
 [user]
-	email = A.Gaborek@devnet.de
+	email = a.gaborek@devnet.de
 [credential "https://git.devnet.de"]
 	provider = generic
