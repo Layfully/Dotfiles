@@ -19,7 +19,7 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 | `home/.chezmoi.toml.tmpl` | The per-machine config: role, optional components, symlink mode, age encryption, `pwsh -NoProfile` for scripts |
 | `home/.chezmoiignore` | Leaves the work overlay out unless the role is work, and gives WSL only what applies there |
 | `home/.chezmoiscripts/` | When the setup scripts run: thin triggers that pass data and hash the files that should re-run them |
-| `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, the work machine's Visual Studio workloads, VS Code extension lists, PowerToys settings, the passphrase-encrypted age key, and the folders linked as a whole (UniGetUI's configuration, Claude Code's settings) |
+| `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, the work machine's Visual Studio workloads, VS Code extension lists, PowerToys settings, the passphrase-encrypted age key, UniGetUI's configuration (a folder linked as a whole), and Claude Code's settings and user instructions |
 | `Scripts/Setup/` | The setup scripts |
 | `Scripts/Bootstrap.ps1` | First-time setup of a new machine |
 | `Scripts/Test-Bootstrap.ps1` | Tries the bootstrap on a clean, throwaway Windows in Windows Sandbox |
@@ -73,6 +73,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_...\LocalState\settings.json` | `home/AppData/Local/Packages/.../settings.json` |
 | `%LOCALAPPDATA%\lazygit\config.yml` | `home/AppData/Local/lazygit/config.yml` |
 | `~/.claude/settings.json` | `Config/Claude/settings.json`, through a symlink entry (`home/dot_claude/symlink_settings.json.tmpl`), so it stays a link in WSL too |
+| `~/.claude/CLAUDE.md` | `Config/Claude/CLAUDE.md`: what Claude Code should know about me and these machines in every project, linked the same way. On a work machine it imports `~/.claude/CLAUDE.work.md` from the work overlay |
 | `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI/`: the whole folder, because UniGetUI turns some settings off by deleting a file. Its runtime state is gitignored, so it stays on each machine |
 
 `$PROFILE` gets a stub from `Scripts/Setup/Set-MachineLinks.ps1`, not a link from chezmoi: OneDrive moves `Documents` on the work machine, so the profile's path is only known at run time, and OneDrive handles symlinks badly.
@@ -106,6 +107,7 @@ No version is copied from one machine to the other: each machine installs the sa
 |------|----------|---------------|
 | `home/dot_config/powershell/encrypted_profile.work.ps1.age` | `~/.config/powershell/profile.work.ps1` | Work-only profile code; the profile dot-sources it last |
 | `home/encrypted_work.code-workspace.age` | `~/work.code-workspace` | The work database connections and their connection groups. The mssql extension reads them from the open workspace |
+| `home/dot_claude/encrypted_CLAUDE.work.md.age` | `~/.claude/CLAUDE.work.md` | The work part of Claude Code's user instructions. After changing it: `chezmoi add --encrypt ~/.claude/CLAUDE.work.md` |
 | `Config/WinGet/configuration.work.dsc.yaml` | — | Packages only work machines get (plain text) |
 | `Config/VisualStudioCode/extensions.work` | — | Extensions the work machine has on top of the base list (plain text) |
 | `Config/VisualStudio/work.vsconfig` | — | The Visual Studio workloads and components the work list installs (plain text) |
@@ -164,9 +166,9 @@ After running `wsl --install` and launching Ubuntu:
 bash "$(wslpath "$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')")/Dotfiles/Scripts/WSLSetup.sh"
 ```
 
-The script installs chezmoi in WSL and runs it from the Windows clone. WSL gets the git config (with its own `os` file), the prompt theme, Claude Code's settings and a bash setup: `~/.config/bash/dotfiles.sh` loads oh-my-posh, zoxide and fzf's key bindings, and sets the same short git aliases as the profile. Its one WSL-only script installs fzf, zoxide, delta and oh-my-posh, and adds a line to `~/.bashrc` that loads `dotfiles.sh`; Ubuntu's own `.bashrc` stays otherwise untouched.
+The script installs chezmoi in WSL and runs it from the Windows clone. WSL gets the git config (with its own `os` file), the prompt theme, Claude Code's settings and CLAUDE.md, and a bash setup: `~/.config/bash/dotfiles.sh` loads oh-my-posh, zoxide and fzf's key bindings, and sets the same short git aliases as the profile. Its one WSL-only script installs fzf, zoxide, delta and oh-my-posh, and adds a line to `~/.bashrc` that loads `dotfiles.sh`; Ubuntu's own `.bashrc` stays otherwise untouched.
 
-In WSL the files are copies, not links: reading a file under `/mnt/c` is slow, and git read its config there on every command (about 45 ms each, against 4 ms for a local copy). Only Claude Code's settings stay a link. Afterwards, `chezmoi update` in WSL keeps it in sync, as on Windows.
+In WSL the files are copies, not links: reading a file under `/mnt/c` is slow, and git read its config there on every command (about 45 ms each, against 4 ms for a local copy). Only Claude Code's settings and CLAUDE.md stay links. Afterwards, `chezmoi update` in WSL keeps it in sync, as on Windows.
 
 ## Linting
 
