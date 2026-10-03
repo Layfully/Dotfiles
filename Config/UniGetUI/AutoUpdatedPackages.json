@@ -5,7 +5,13 @@
   "winget\\Anthropic.Claude": "*",
   "winget\\twpayne.chezmoi": "*",
   "winget\\Microsoft.WindowsTerminal": "*",
-  "chocolatey\\obs-studio.install": "*",
-  "chocolatey\\nerd-fonts-JetBrainsMono": "*",
-  "chocolatey\\chocolatey": "*"
+  "winget\\OBSProject.OBSStudio": "*",
+  "winget\\JanDeDobbeleer.OhMyPosh": "*",
+  "winget\\junegunn.fzf": "*",
+  "winget\\ajeetdsouza.zoxide": "*",
+  "winget\\JesseDuffield.lazygit": "*",
+  "winget\\dandavison.delta": "*",
+  "winget\\Git.Git": "*",
+  "winget\\Microsoft.PowerShell": "*",
+  "winget\\GitHub.cli": "*"
 }

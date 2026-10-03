@@ -116,6 +116,27 @@ properties:
         id: ajeetdsouza.zoxide
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: OBSStudio
+      directives:
+        description: Install OBS Studio
+      settings:
+        id: OBSProject.OBSStudio
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: 7zip
+      directives:
+        description: Install 7-Zip
+      settings:
+        id: 7zip.7zip
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: ClaudeDesktop
+      directives:
+        description: Install the Claude desktop app
+      settings:
+        id: Anthropic.Claude
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: chezmoi
       directives:
         description: Install chezmoi (manages these dotfiles)
