@@ -135,14 +135,21 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH = (Join-Path $env:RUNNER_TEMP 'bin') + [IO.Path]::PathSeparator + $env:PATH
-          $answers = 'Install the GitHub CLI=true,Install Node.js LTS through nvm=true,Install the Claude Code CLI=true,Install the Az PowerShell modules=true,Install JetBrains Rider=true'
-          foreach ($role in 'private', 'work') {
-              $config = Join-Path $env:RUNNER_TEMP "chezmoi-$role.toml"
-              $isolated = "--config=$config", "--destination=$(Join-Path $env:RUNNER_TEMP "home-$role")", "--persistent-state=$(Join-Path $env:RUNNER_TEMP "state-$role.boltdb")"
-              chezmoi init --no-tty --source $PWD @isolated --promptBool $answers --promptChoice "Machine role (work adds the encrypted work overlay)=$role" --promptString "Dev Drive for the package caches (a drive like D: or none)=D:"
-              if ($LASTEXITCODE) { Write-Output "::error::chezmoi init failed for the $role role"; exit 1 }
+          $allOn = 'Install the GitHub CLI=true,Install Node.js LTS through nvm=true,Install the Claude Code CLI=true,Install the Az PowerShell modules=true,Install JetBrains Rider=true'
+          # Both roles with everything on, and the other branches: every component off, no Dev Drive
+          $setups = @(
+              @{ Name = 'private'; Role = 'private'; Answers = $allOn; DevDrive = 'D:' }
+              @{ Name = 'work'; Role = 'work'; Answers = $allOn; DevDrive = 'D:' }
+              @{ Name = 'minimal'; Role = 'private'; Answers = $allOn -replace '=true', '=false'; DevDrive = 'none' }
+          )
+          foreach ($setup in $setups) {
+              $name = $setup.Name
+              $config = Join-Path $env:RUNNER_TEMP "chezmoi-$name.toml"
+              $isolated = "--config=$config", "--destination=$(Join-Path $env:RUNNER_TEMP "home-$name")", "--persistent-state=$(Join-Path $env:RUNNER_TEMP "state-$name.boltdb")"
+              chezmoi init --no-tty --source $PWD @isolated --promptBool $setup.Answers --promptChoice "Machine role (work adds the encrypted work overlay)=$($setup.Role)" --promptString "Dev Drive for the package caches (a drive like D: or none)=$($setup.DevDrive)"
+              if ($LASTEXITCODE) { Write-Output "::error::chezmoi init failed for the $name setup"; exit 1 }
               chezmoi apply --no-tty --dry-run --exclude=encrypted @isolated
-              if ($LASTEXITCODE) { Write-Output "::error::chezmoi could not render the $role setup"; exit 1 }
+              if ($LASTEXITCODE) { Write-Output "::error::chezmoi could not render the $name setup"; exit 1 }
           }
 
   shell:
@@ -171,8 +178,18 @@ jobs:
       # saves its connections. Reports file and line only, so the log doesn't repeat what it found.
       - name: Check for work infrastructure
         run: |
-          pattern='"mssql\.connections"|(?<![\d.])(10\.\d{1,3}|172\.(1[6-9]|2\d|3[01])|192\.168)\.\d{1,3}\.\d{1,3}(?![\d.])'
-          matches="$(git grep -nIP "$pattern" || true)"
+          # mssql connections and their groups; private IPv4 ranges (and CGNAT 100.64/10, used by VPNs) and IPv6
+          # unique local addresses (starting with fc or fd)
+          pattern='"mssql\.connection(s|Groups)"|(?<![\d.])(10\.\d{1,3}|172\.(1[6-9]|2\d|3[01])|192\.168|100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7]))\.\d{1,3}\.\d{1,3}(?!\.?\d)|(?<![\w:])f[cd][0-9a-f]{2}(:[0-9a-f]{0,4}){2,7}(?![\w:])'
+          # git grep exits 1 when nothing matches; anything above that is a broken check, not a clean tree
+          status=0
+          matches="$(git grep -nIP "$pattern")" || status=$?
+          if [ "$status" -gt 1 ]; then
+              echo "::error::git grep failed (exit code $status)"
+              exit 1
+          fi
+          # A four-part version number (10.1.0.0) looks like an address: skip lines about versions
+          matches="$(printf '%s\n' "$matches" | grep -viE '^[^:]+:[0-9]+:.*version' || true)"
           if [ -n "$matches" ]; then
               printf '%s\n' "$matches" | while IFS=: read -r file line _; do
                   echo "::error file=$file,line=$line::Work database connection or private network address in a public repo"

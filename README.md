@@ -49,7 +49,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 |-------|----|
 | Keep a setting you changed in an app | Nothing to copy, it's already in the repo: commit it |
 | Get what the other machine committed | `chezmoi update` (git pull, then apply) |
-| See whether this machine matches the repo | `chezmoi status --exclude=scripts` (empty = in sync), `chezmoi verify --exclude=scripts`. Without `--exclude=scripts` both always list the every-apply script (`10-machine-links`) |
+| See whether this machine matches the repo | `chezmoi status --exclude=scripts` (empty = in sync), `chezmoi verify --exclude=scripts`. Without `--exclude=scripts` both always list the every-apply scripts (`10-machine-links`, `25-dev-drive`) |
 | Add a config file | Put it in `home/` at its target path with chezmoi names (or `chezmoi add <target>`), then `chezmoi apply` |
 | Change the role or an optional component | `chezmoi edit-config`, then `chezmoi apply` |
 | Add a package every machine gets | A `Microsoft.WinGet.DSC/WinGetPackage` entry in `Config/WinGet/configuration.dsc.yaml` |
@@ -72,6 +72,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `%APPDATA%\Code\User\settings.json` | `home/AppData/Roaming/Code/User/settings.json` |
 | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_...\LocalState\settings.json` | `home/AppData/Local/Packages/.../settings.json` |
 | `%LOCALAPPDATA%\lazygit\config.yml` | `home/AppData/Local/lazygit/config.yml` |
+| `%LOCALAPPDATA%\Microsoft\PowerToys\FancyZones\custom-layouts.json` | `home/AppData/Local/Microsoft/PowerToys/FancyZones/custom-layouts.json`: the FancyZones layouts (the other PowerToys settings are applied, see [PowerToys Settings](#powertoys-settings)) |
 | `~/.claude/settings.json` | `Config/Claude/settings.json`, through a symlink entry (`home/dot_claude/symlink_settings.json.tmpl`), so it stays a link in WSL too |
 | `~/.claude/CLAUDE.md` | `Config/Claude/CLAUDE.md`: what Claude Code should know about me and these machines in every project, linked the same way. On a work machine it imports `~/.claude/CLAUDE.work.md` from the work overlay |
 | `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI/`: the whole folder, because UniGetUI turns some settings off by deleting a file. Its runtime state is gitignored, so it stays on each machine |
@@ -83,11 +84,11 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | Script | Runs | What it does |
 |--------|------|-------------|
 | `Set-MachineLinks.ps1` | Every apply | Writes the `$PROFILE` stub and enables the git hooks |
-| `Install-Packages.ps1` | When a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines, with Visual Studio and the workloads in `Config/VisualStudio/work.vsconfig`; those ask for UAC unless the apply runs elevated): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
-| `Set-DevDriveCaches.ps1` | When it or the Dev Drive changes, on machines with one | Points the NuGet and npm caches (`NUGET_PACKAGES`, `npm_config_cache`) at `<drive>\packages` on the Dev Drive. User environment variables, so they hold for every Node version nvm switches to |
+| `Install-Packages.ps1` | When it, a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines, with Visual Studio and the workloads in `Config/VisualStudio/work.vsconfig`; those ask for UAC unless the apply runs elevated): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
+| `Set-DevDriveCaches.ps1` | Every apply (it only changes something when the variables don't match the answer) | Points the NuGet and npm caches (`NUGET_PACKAGES`, `npm_config_cache`) at `<drive>\packages` on the Dev Drive. User environment variables, so they hold for every Node version nvm switches to. With no Dev Drive (`none`), it removes them again |
 | `Install-PowerShellModules.ps1` | When it or `-Az` changes, and once a week | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons, optionally Az) through PSResourceGet, and removes the older versions UniGetUI's updates leave behind |
-| `Install-VsCodeExtensions.ps1` | When an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
-| `Set-PowerToysSettings.ps1` | When `Config/PowerToys/settings.json` changes | See [PowerToys Settings](#powertoys-settings) |
+| `Install-VsCodeExtensions.ps1` | When it or an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
+| `Set-PowerToysSettings.ps1` | When it or `Config/PowerToys/settings.json` changes | See [PowerToys Settings](#powertoys-settings) |
 | `install-wsl-packages.sh` | In WSL, when it changes | See [WSL Setup](#wsl-setup) |
 
 A script that fails makes `chezmoi apply` report it, and it runs again on the next apply.
@@ -166,7 +167,7 @@ After running `wsl --install` and launching Ubuntu:
 bash "$(wslpath "$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')")/Dotfiles/Scripts/WSLSetup.sh"
 ```
 
-The script installs chezmoi in WSL and runs it from the Windows clone. WSL gets the git config (with its own `os` file), the prompt theme, Claude Code's settings and CLAUDE.md, and a bash setup: `~/.config/bash/dotfiles.sh` loads oh-my-posh, zoxide and fzf's key bindings, and sets the same short git aliases as the profile. Its one WSL-only script installs fzf, zoxide, delta and oh-my-posh, and adds a line to `~/.bashrc` that loads `dotfiles.sh`; Ubuntu's own `.bashrc` stays otherwise untouched.
+The script installs chezmoi in WSL and runs it from the Windows clone. WSL gets the git config (with its own `os` file), the prompt theme, Claude Code's settings and CLAUDE.md, and a bash setup: `~/.config/bash/dotfiles.sh` loads oh-my-posh, zoxide and fzf's key bindings, and sets the same short git aliases as the profile. Its one WSL-only script installs fzf, zoxide, delta and oh-my-posh, and adds a line to `~/.bashrc` that loads `dotfiles.sh`; Ubuntu's own `.bashrc` stays otherwise untouched. `wsl` starts a login shell, which reads `~/.bash_profile` instead of `~/.profile` (what loads `~/.bashrc` on Ubuntu): chezmoi creates a `~/.bash_profile` that loads `~/.profile`, and the script adds that line to one that already existed (the .NET SDK creates one).
 
 In WSL the files are copies, not links: reading a file under `/mnt/c` is slow, and git read its config there on every command (about 45 ms each, against 4 ms for a local copy). Only Claude Code's settings and CLAUDE.md stay links. Afterwards, `chezmoi update` in WSL keeps it in sync, as on Windows.
 
@@ -177,6 +178,6 @@ In WSL the files are copies, not links: reading a file under `/mnt/c` is slow, a
 | Job | What it checks |
 |-----|---------------|
 | `powershell` | Parses the hook scripts with Windows PowerShell 5.1, runs PSScriptAnalyzer over every `.ps1` (rules in `PSScriptAnalyzerSettings.psd1`, which the VS Code PowerShell extension reads too), parses every tracked `.json` (VS Code's and Windows Terminal's settings may have comments and trailing commas), and runs `winget configure validate` on the WinGet lists |
-| `chezmoi` | Renders every template (config, ignore rules, links, scripts) for both roles, on Windows and on Linux (as in WSL), without running anything or needing the age key |
+| `chezmoi` | Renders every template (config, ignore rules, links, scripts) for both roles with every component on, and once with every component off and no Dev Drive, on Windows and on Linux (as in WSL), without running anything or needing the age key |
 | `shell` | ShellCheck on the bash scripts and `.githooks/pre-commit` |
-| `leaks` | Fails on work infrastructure in this public repo (a VS Code mssql connections key, private network addresses), reporting only file and line; gitleaks scans the pushed commits for secrets |
+| `leaks` | Fails on work infrastructure in this public repo (VS Code mssql connections or connection groups, private network addresses: IPv4, the 100.64/10 range VPNs use, and IPv6 unique local ones), reporting only file and line; a failing search fails the job instead of passing it; gitleaks scans the pushed commits for secrets |

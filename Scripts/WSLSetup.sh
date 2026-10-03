@@ -7,8 +7,9 @@ set -e
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Update packages
-sudo apt update && sudo apt upgrade -y
+# Update packages (two commands: set -e doesn't stop at a failure on the left of &&)
+sudo apt update
+sudo apt upgrade -y
 
 # chezmoi, into ~/.local/bin (Ubuntu doesn't package it): a pinned release checked against its release checksum,
 # the same one CI uses (.github/workflows/lint.yml). Later updates: `chezmoi upgrade`.

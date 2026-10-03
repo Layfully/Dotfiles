@@ -5,6 +5,10 @@ using namespace System.Management.Automation.Language
 # tick rather than at startup: parsing this file costs ~17ms (resolving its type names), and the
 # handlers are only missing if you type before the shell has been idle once.
 
+# PSScriptAnalyzer: the key handler script blocks declare the parameters PSReadLine passes in, used or not
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '')]
+param()
+
 # The next four key handlers are designed to make entering matched quotes
 # parens, and braces a nicer experience.  I'd like to include functions
 # in the module that do this, but this implementation still isn't as smart

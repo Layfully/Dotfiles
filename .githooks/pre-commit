@@ -2,12 +2,12 @@
 # Resolve the repo from git rather than assuming a clone location
 repo="$(git rev-parse --show-toplevel)"
 
-# Work database connections belong in the encrypted work overlay, never in the shared VS Code settings. The
-# mssql extension saves new ones into those settings, so catch them before they reach the public repo.
+# Work database connections and their groups belong in the encrypted work overlay, never in the shared VS Code
+# settings. The mssql extension saves new ones into those settings, so catch them before they reach the public repo.
 vscode_settings="home/AppData/Roaming/Code/User/settings.json"
 if git diff --cached --name-only | grep -qxF "$vscode_settings" &&
-    git show ":$vscode_settings" | grep -q '"mssql\.connections"'; then
-    echo "pre-commit: $vscode_settings contains mssql.connections." >&2
+    git show ":$vscode_settings" | grep -qE '"mssql\.connection(s|Groups)"'; then
+    echo "pre-commit: $vscode_settings contains mssql connections or connection groups." >&2
     echo "Move them into ~/work.code-workspace (the work overlay), then: chezmoi add --encrypt ~/work.code-workspace" >&2
     exit 1
 fi

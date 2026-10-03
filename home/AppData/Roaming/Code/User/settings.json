@@ -59,10 +59,8 @@
   "sqldeveloper.sqlHistory.historyLimit": 500,
   "sqldeveloper.telemetry.enabled": false,
   // mssql.connections and their connection groups: work-only, in the encrypted work overlay (~/work.code-workspace) - see the pre-commit hook.
-  "mssql.applyLocalization": true,
   "mssql.copyIncludeHeaders": true,
   "mssql.enableExperimentalFeatures": true,
-  "mssql.enableRichExperiences": true,
   "mssql.format.alignColumnDefinitionsInColumns": true,
   "mssql.format.keywordCasing": "uppercase",
   "mssql.ignorePlatformWarning": true,
@@ -94,7 +92,6 @@
   "terminal.integrated.fontSize": 16,
   "terminal.integrated.smoothScrolling": true,
   "mdb.useSampleDocsInCopilot": true,
-  "mdb.shell": "mongo",
   "editor.multiCursorModifier": "ctrlCmd",
   "application.shellEnvironmentResolutionTimeout": 60,
   "[html]": {

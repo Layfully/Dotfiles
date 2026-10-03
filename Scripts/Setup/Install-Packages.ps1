@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
 Installs the packages and tools a machine should have. chezmoi runs this when a package list or an optional
-component changes (home/.chezmoiscripts/run_onchange_after_20-packages.ps1.tmpl).
+component changes, or this script does (home/.chezmoiscripts/run_onchange_after_20-packages.ps1.tmpl).
 
 .DESCRIPTION
 Everything here only installs what is missing; UniGetUI keeps things updated. That also means PowerShell 7 is
@@ -24,16 +24,27 @@ $repoRoot = Split-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -Parent  #
 # Failed steps don't stop the run; they are listed at the end
 $failures = [System.Collections.Generic.List[string]]::new()
 
-# Reloads PATH from the registry, so tools installed during this run can be found without a new session
+# Reloads PATH from the registry, so tools installed during this run can be found without a new session.
+# GetEnvironmentVariable expands PATH's %TOKENS% with this process's variables, so variables an installer added
+# during this run (nvm's NVM_HOME and NVM_SYMLINK) are loaded first; without them nvm's entries stay unexpanded.
 function Sync-SessionPath {
+    # User first: like Windows, a user variable wins over a machine one of the same name
+    foreach ($scope in 'User', 'Machine') {
+        $variables = [System.Environment]::GetEnvironmentVariables($scope)
+        foreach ($name in $variables.Keys) {
+            if ($name -ne 'Path' -and $null -eq [System.Environment]::GetEnvironmentVariable($name)) {
+                [System.Environment]::SetEnvironmentVariable($name, $variables[$name])
+            }
+        }
+    }
     $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" +
                 [System.Environment]::GetEnvironmentVariable("PATH", "User")
 }
 
 # Runs a PowerShell command as this user without Administrator rights, even from an elevated session: a scheduled
 # task with the Limited run level gets the user's normal token. Waits for it and returns its exit code; its
-# output goes to $LogFile.
-function Invoke-Unelevated([string] $Command, [string] $LogFile) {
+# output goes to $LogFile. A task that hasn't finished after $TimeoutMinutes is stopped.
+function Invoke-Unelevated([string] $Command, [string] $LogFile, [int] $TimeoutMinutes = 15) {
     $taskName = "Dotfiles-Unelevated-$([guid]::NewGuid().ToString('N'))"
     $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("& { $Command } *> '$LogFile'; exit `$LASTEXITCODE"))
     $action = New-ScheduledTaskAction -Execute 'pwsh.exe' -Argument "-NoProfile -NonInteractive -EncodedCommand $encodedCommand"
@@ -41,11 +52,16 @@ function Invoke-Unelevated([string] $Command, [string] $LogFile) {
     $null = Register-ScheduledTask -TaskName $taskName -Action $action -Principal $principal
     try {
         Start-ScheduledTask -TaskName $taskName
+        $deadline = [datetime]::Now.AddMinutes($TimeoutMinutes)
         # 267011 (0x41303): not started yet; 267009 (0x41301): still running
         do {
             Start-Sleep -Seconds 2
             $lastResult = (Get-ScheduledTaskInfo -TaskName $taskName).LastTaskResult
-        } while ($lastResult -in 267011, 267009)
+        } while (($lastResult -in 267011, 267009) -and [datetime]::Now -lt $deadline)
+        if ($lastResult -in 267011, 267009) {
+            Stop-ScheduledTask -TaskName $taskName
+            Write-Warning "Gave up waiting after $TimeoutMinutes minutes and stopped the task."
+        }
         $lastResult
     }
     finally {
@@ -74,8 +90,9 @@ foreach ($packageId in $optionalPackages.Keys) {
     if (-not $optionalPackages[$packageId]) { continue }
     Write-Host "Installing $packageId using winget..."
     # --source winget: without it the msstore source is searched too, and on a new machine winget stops
-    # to ask for that source's agreement. --exact: match the ID exactly, not as a substring.
-    winget install --id $packageId --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
+    # to ask for that source's agreement. --exact: match the ID exactly, not as a substring. --no-upgrade: an installed
+    # package stays as it is (without it, install upgrades it, past any hold set in UniGetUI).
+    winget install --id $packageId --exact --no-upgrade --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
     # Exit codes that mean there was nothing to do: APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE (installed,
     # no newer version available) and APPINSTALLER_CLI_ERROR_PACKAGE_ALREADY_INSTALLED
     if ($LASTEXITCODE -notin 0, -1978335189, -1978335135) { $failures.Add("winget: $packageId (exit code $LASTEXITCODE)") }
@@ -86,10 +103,15 @@ if ($Node) {
     if (Get-Command nvm -ErrorAction SilentlyContinue) {
         Write-Host "Installing Node.js LTS via nvm..."
         nvm install lts
-        nvm use lts
-        if ($LASTEXITCODE -ne 0) { $failures.Add("Node.js LTS via nvm (exit code $LASTEXITCODE)") }
+        $nvmExitCode = $LASTEXITCODE
+        if ($nvmExitCode -eq 0) {
+            nvm use lts
+            $nvmExitCode = $LASTEXITCODE
+        }
         # nvm switches the active version by repointing the symlink - refresh PATH again
         Sync-SessionPath
+        if ($nvmExitCode -ne 0) { $failures.Add("Node.js LTS via nvm (exit code $nvmExitCode)") }
+        elseif (-not (Get-Command node -ErrorAction SilentlyContinue)) { $failures.Add("Node.js LTS: node not found on PATH after nvm use") }
     }
     else {
         $failures.Add("Node.js LTS: nvm not found on PATH (open a new terminal and run chezmoi apply)")
@@ -101,7 +123,8 @@ if ($Node) {
 # does not disappear when nvm switches the active Node version. Installs to %USERPROFILE%\.local\bin,
 # which the installer does NOT put on PATH itself - without that, the VS Code extension cannot launch it.
 if ($ClaudeCode) {
-    if (-not (Test-Path -LiteralPath "$env:USERPROFILE\.local\bin\claude.exe")) {
+    $claudeExe = "$env:USERPROFILE\.local\bin\claude.exe"
+    if (-not (Test-Path -LiteralPath $claudeExe)) {
         Write-Host "Installing Claude Code CLI (native build)..."
         $installCommand = 'Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression'
         if ($isAdministrator) {
@@ -109,11 +132,16 @@ if ($ClaudeCode) {
             # script has when Bootstrap.ps1 runs it
             $installLog = Join-Path -Path $env:TEMP -ChildPath 'claude-code-install.log'
             $installResult = Invoke-Unelevated -Command $installCommand -LogFile $installLog
-            if ($installResult -ne 0) { $failures.Add("Claude Code CLI (exit code $installResult, see $installLog)") }
+            $installDetails = " (exit code $installResult, see $installLog)"
         }
         else {
-            Invoke-Expression $installCommand
+            # In its own process: the installer sets StrictMode and $ErrorActionPreference, and calls exit on failure,
+            # which would otherwise apply to (and end) this script
+            pwsh -NoProfile -NonInteractive -Command $installCommand
+            $installDetails = " (exit code $LASTEXITCODE)"
         }
+        # Checked by the result rather than the exit code: a failed download still exits 0
+        if (-not (Test-Path -LiteralPath $claudeExe)) { $failures.Add("Claude Code CLI: not installed$installDetails") }
     }
 
     # HKCU:\Environment\Path is REG_EXPAND_SZ and holds %USERPROFILE%, %NVM_HOME% and %NVM_SYMLINK%

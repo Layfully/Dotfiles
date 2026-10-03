@@ -25,6 +25,11 @@ if (-not $roleLine) { Write-Host "No role in '$chezmoiConfig' (run chezmoi init)
 $role = $roleLine.Matches[0].Groups[1].Value
 
 $extensions = & $codePath --list-extensions
+# A failing CLI (VS Code updating, say) would otherwise empty the list, and the next "stage all" would commit that
+if ($LASTEXITCODE -ne 0 -or -not $extensions) {
+    Write-Host "code --list-extensions returned nothing (exit code $LASTEXITCODE). Skipping the VS Code extension list."
+    exit 0
+}
 if ($role -eq 'work') {
     # The work list is an overlay: only what the work machine has on top of the base (private) list.
     # Extension IDs are case-insensitive, and -notin compares case-insensitively.

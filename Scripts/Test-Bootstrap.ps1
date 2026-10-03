@@ -17,7 +17,8 @@ Windows Sandbox is an optional Windows feature (Pro and up). To turn it on, as A
 pwsh -NoProfile -File Scripts/Test-Bootstrap.ps1 -Wait
 #>
 param(
-    [switch] $Wait  # wait for the sandbox run to finish and print its result
+    [switch] $Wait,              # wait for the sandbox run to finish and print its result
+    [int] $TimeoutMinutes = 60   # with -Wait: give up after this long
 )
 
 $sandboxExe = Join-Path -Path $env:SystemRoot -ChildPath 'System32\WindowsSandbox.exe'
@@ -109,6 +110,14 @@ Start-Process -FilePath $sandboxExe -ArgumentList "`"$configurationFile`""
 if ($Wait) {
     $resultFile = Join-Path -Path $runFolder -ChildPath 'result.txt'
     Write-Host "Waiting for the sandbox run (usually 15-30 minutes)..."
-    while (-not (Test-Path -LiteralPath $resultFile)) { Start-Sleep -Seconds 30 }
-    Get-Content -LiteralPath $resultFile
+    $deadline = [datetime]::Now.AddMinutes($TimeoutMinutes)
+    while (-not (Test-Path -LiteralPath $resultFile) -and [datetime]::Now -lt $deadline) { Start-Sleep -Seconds 30 }
+    if (-not (Test-Path -LiteralPath $resultFile)) {
+        Write-Error "No result after $TimeoutMinutes minutes (was the sandbox window closed?). Logs: $runFolder"
+        exit 1
+    }
+    $result = Get-Content -LiteralPath $resultFile -Raw
+    $result
+    # Success only if the bootstrap exited 0 and chezmoi found the machine matching the repo
+    if ($result -notmatch '(?m)^bootstrap exit: 0\s*$' -or $result -notmatch '(?m)^chezmoi verify: matches\s*$') { exit 1 }
 }

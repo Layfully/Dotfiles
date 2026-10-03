@@ -1,0 +1,6 @@
+{{ if and (eq .chezmoi.os "windows") (hasKey . "devDrive") -}}
+# Every apply: cheap, and a run_onchange_ script would skip a Dev Drive set back to a value it already ran with.
+# Without one, it removes the variables it set.
+try { & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Set-DevDriveCaches.ps1" | squote }} -DevDrive {{ .devDrive | default "none" | squote }} } catch { Write-Error $_; exit 1 }
+exit $LASTEXITCODE
+{{ end -}}

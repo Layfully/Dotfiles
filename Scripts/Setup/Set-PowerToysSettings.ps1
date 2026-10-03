@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Applies Config\PowerToys\settings.json with PowerToys.DSC.exe. chezmoi runs this when that file changes.
+Applies Config\PowerToys\settings.json with PowerToys.DSC.exe. chezmoi runs this when that file or this script changes.
 
 .DESCRIPTION
 The file maps each PowerToys.DSC.exe module name (`PowerToys.DSC.exe modules --resource settings`) to the
@@ -24,7 +24,15 @@ if (-not $powerToysDsc) {
 }
 
 $failures = 0
-$powerToysSettings = Get-Content -Path (Join-Path -Path $repoRoot -ChildPath "Config\PowerToys\settings.json") -Raw | ConvertFrom-Json -AsHashtable
+# A missing or broken file must fail the run: otherwise chezmoi records it as applied and doesn't try again
+try {
+    $powerToysSettings = Get-Content -Path (Join-Path -Path $repoRoot -ChildPath "Config\PowerToys\settings.json") -Raw -ErrorAction Stop |
+        ConvertFrom-Json -AsHashtable -ErrorAction Stop
+}
+catch {
+    Write-Warning "Can't read Config\PowerToys\settings.json: $_"
+    exit 1
+}
 foreach ($moduleName in $powerToysSettings.Keys) {
     Write-Host "Applying PowerToys settings: $moduleName..."
     $desiredState = @{ settings = $powerToysSettings[$moduleName] } | ConvertTo-Json -Depth 20 -Compress

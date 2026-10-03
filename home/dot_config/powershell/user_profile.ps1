@@ -1,3 +1,9 @@
+# PSScriptAnalyzer: the profile shares state with lazily loaded code through $global: variables, and its key handler
+# and completer script blocks declare the parameters PSReadLine passes in, used or not (no measurable startup cost)
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '')]
+param()
+
 #Startup
 # Nothing before the first prompt uses cmdlets from the Microsoft.PowerShell.Management or Utility
 # modules (Get-Item, Test-Path, Set-Alias, Register-EngineEvent...) - nor does the patched oh-my-posh
@@ -253,8 +259,12 @@ function cheat {
 
 #Utilities
 function which ($command) {
-    Get-Command -Name $command -ErrorAction SilentlyContinue |
-        Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
+    # A path for programs and scripts; aliases show their target, functions and cmdlets their module
+    foreach ($info in Get-Command -Name $command -ErrorAction SilentlyContinue) {
+        if ($info.CommandType -eq 'Alias') { "$($info.Name) -> $($info.Definition)" }
+        elseif ($info.Path) { $info.Path }
+        else { "$($info.CommandType) $($info.Name)$(if ($info.Source) { " ($($info.Source))" })" }
+    }
 }
 
 # Invoke-* rather than Get-* so the deferred posh-git import can't overwrite these (it exports Get-GitStatus)
@@ -269,7 +279,6 @@ function Invoke-GitFetch { & git fetch origin $args}
 #Alias
 # ${alias:name} = ... rather than Set-Alias, which would load the Utility module at startup (~10ms).
 # The read-only built-ins gl and gp have to be forced through the provider API.
-${alias:vim} = 'nvim'
 ${alias:ll} = 'ls'
 ${alias:g} = 'git'
 ${alias:grep} = 'findstr'

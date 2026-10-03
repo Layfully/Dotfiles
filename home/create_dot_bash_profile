@@ -1,0 +1,3 @@
+# Login shells (wsl starts one) read this file instead of ~/.profile, which is what loads ~/.bashrc on Ubuntu.
+# chezmoi creates it once (WSL only); tools may append to it, such as the .NET SDK.
+[ -f ~/.profile ] && . ~/.profile

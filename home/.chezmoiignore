@@ -10,6 +10,7 @@ work.code-workspace
 {{ end -}}
 {{ if eq .chezmoi.os "windows" -}}
 .config/bash
+.bash_profile
 {{ else -}}
 AppData
 .config/powershell

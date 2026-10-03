@@ -1,10 +1,11 @@
 {{ if eq .chezmoi.os "windows" -}}
-# Runs again whenever an extension list this machine uses changes:
+# Runs again whenever an extension list this machine uses or the script changes:
+# script: {{ include (joinPath .chezmoi.workingTree "Scripts/Setup/Install-VsCodeExtensions.ps1") | sha256sum }}
 # base: {{ include (joinPath .chezmoi.workingTree "Config/VisualStudioCode/extensions") | sha256sum }}
 {{- $workExtensions := joinPath .chezmoi.workingTree "Config/VisualStudioCode/extensions.work" }}
 {{- if and (eq .role "work") (stat $workExtensions) }}
 # work: {{ include $workExtensions | sha256sum }}
 {{- end }}
-& {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-VsCodeExtensions.ps1" | squote }} -Role {{ .role }}
+try { & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-VsCodeExtensions.ps1" | squote }} -Role {{ .role }} } catch { Write-Error $_; exit 1 }
 exit $LASTEXITCODE
 {{ end -}}

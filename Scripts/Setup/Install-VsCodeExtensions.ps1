@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
 Installs the VS Code extensions from the lists the pre-commit hook saves (Scripts\GitHooks\SaveVsCodeExtensions.ps1).
-chezmoi runs this when one of those lists changes.
+chezmoi runs this when one of those lists or this script changes.
 
 .DESCRIPTION
 Config\VisualStudioCode\extensions is the base list (the private machine's). Work machines also install
@@ -20,7 +20,7 @@ $codePath = (Get-Command code.cmd -ErrorAction SilentlyContinue).Source
 if (-not $codePath) {
     $codePath = @(
         "$env:LOCALAPPDATA\Programs\Microsoft VS Code\bin\code.cmd",  # per-user install (default)
-        "C:\Program Files\Microsoft VS Code\bin\code.cmd"             # system-wide install
+        "$env:ProgramFiles\Microsoft VS Code\bin\code.cmd"            # system-wide install
     ) | Where-Object { Test-Path $_ } | Select-Object -First 1
 }
 if (-not $codePath) {

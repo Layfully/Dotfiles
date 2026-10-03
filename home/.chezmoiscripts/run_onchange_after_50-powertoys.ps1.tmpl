@@ -1,6 +1,7 @@
 {{ if eq .chezmoi.os "windows" -}}
-# Runs again whenever the PowerToys settings change:
-# {{ include (joinPath .chezmoi.workingTree "Config/PowerToys/settings.json") | sha256sum }}
-& {{ joinPath .chezmoi.workingTree "Scripts/Setup/Set-PowerToysSettings.ps1" | squote }}
+# Runs again whenever the PowerToys settings or the script change:
+# settings: {{ include (joinPath .chezmoi.workingTree "Config/PowerToys/settings.json") | sha256sum }}
+# script: {{ include (joinPath .chezmoi.workingTree "Scripts/Setup/Set-PowerToysSettings.ps1") | sha256sum }}
+try { & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Set-PowerToysSettings.ps1" | squote }} } catch { Write-Error $_; exit 1 }
 exit $LASTEXITCODE
 {{ end -}}
