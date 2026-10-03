@@ -3,5 +3,9 @@
   "winget\\Bitwarden.Bitwarden": "*",
   "winget\\Bitwarden.CLI": "*",
   "winget\\Anthropic.Claude": "*",
-  "winget\\twpayne.chezmoi": "*"
+  "winget\\twpayne.chezmoi": "*",
+  "winget\\Microsoft.WindowsTerminal": "*",
+  "chocolatey\\obs-studio.install": "*",
+  "chocolatey\\nerd-fonts-JetBrainsMono": "*",
+  "chocolatey\\chocolatey": "*"
 }
