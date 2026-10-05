@@ -76,10 +76,6 @@
   "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
   "powershell.codeFormatting.whitespaceBetweenParameters": true,
   "powershell.integratedConsole.showOnStartup": false,
-  "github.copilot.chat.scopeSelection": true,
-  "github.copilot.chat.generateTests.codeLens": true,
-  "github.copilot.chat.search.semanticTextResults": true,
-  "github.copilot.chat.editor.temporalContext.enabled": true,
   "git.openRepositoryInParentFolders": "always",
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
@@ -91,7 +87,6 @@
   "terminal.integrated.mouseWheelZoom": true,
   "terminal.integrated.fontSize": 16,
   "terminal.integrated.smoothScrolling": true,
-  "mdb.useSampleDocsInCopilot": true,
   "editor.multiCursorModifier": "ctrlCmd",
   "application.shellEnvironmentResolutionTimeout": 60,
   "[html]": {
@@ -101,12 +96,6 @@
   "security.allowedUNCHosts": [
     "wsl.localhost"
   ],
-  "github.copilot.enable": {
-    "*": false,
-    "plaintext": false,
-    "markdown": false,
-    "scminput": false
-  },
   "editor.mouseWheelZoom": true,
   "editor.autoIndentOnPaste": true,
   "editor.codeLensFontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
@@ -131,4 +120,7 @@
   "claudeCode.focusView": false,
   "chat.mcp.gallery.enabled": true,
   "window.density.layout": "compact",
+  // Hides chat, inline suggestions and the other built-in AI features, and turns the Copilot extensions off.
+  // Claude Code is its own extension and keeps working.
+  "chat.disableAIFeatures": true,
 }
