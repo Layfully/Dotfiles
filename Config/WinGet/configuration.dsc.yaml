@@ -106,18 +106,25 @@ properties:
         id: ajeetdsouza.zoxide
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: OBSStudio
-      directives:
-        description: Install OBS Studio
-      settings:
-        id: OBSProject.OBSStudio
-        source: winget
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: 7zip
       directives:
         description: Install 7-Zip
       settings:
         id: 7zip.7zip
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Parsec
+      directives:
+        description: Install Parsec
+      settings:
+        id: Parsec.Parsec
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Spotify
+      directives:
+        description: Install Spotify
+      settings:
+        id: Spotify.Spotify
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: ClaudeDesktop
