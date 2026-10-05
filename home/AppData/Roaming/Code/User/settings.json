@@ -130,4 +130,5 @@
   "workbench.experimental.modernUI": true,
   "claudeCode.focusView": false,
   "chat.mcp.gallery.enabled": true,
+  "window.density.layout": "compact",
 }

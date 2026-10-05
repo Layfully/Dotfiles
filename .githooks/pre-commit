@@ -1,7 +1,4 @@
 #!/bin/sh
-# Resolve the repo from git rather than assuming a clone location
-repo="$(git rev-parse --show-toplevel)"
-
 # Work database connections and their groups belong in the encrypted work overlay, never in the shared VS Code
 # settings. The mssql extension saves new ones into those settings, so catch them before they reach the public repo.
 vscode_settings="home/AppData/Roaming/Code/User/settings.json"
@@ -10,19 +7,4 @@ if git diff --cached --name-only | grep -qxF "$vscode_settings" &&
     echo "pre-commit: $vscode_settings contains mssql connections or connection groups." >&2
     echo "Move them into ~/work.code-workspace (the work overlay), then: chezmoi add --encrypt ~/work.code-workspace" >&2
     exit 1
-fi
-
-# The extension lists are Windows' VS Code; a commit from WSL (same clone) leaves them alone
-case "$(uname -s)" in
-    MINGW* | MSYS*) ;;
-    *) exit 0 ;;
-esac
-
-# Saves the installed extensions into the working tree only, like an app writing its settings: the commit stays
-# what was staged, and a changed list shows up as a change to commit (the private machine writes extensions,
-# work machines extensions.work - see SaveVsCodeExtensions.ps1)
-pwsh -NoProfile -File "$repo/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
-lists="$repo/Config/VisualStudioCode"
-if ! git diff --quiet -- "$lists" || [ -n "$(git ls-files --others --exclude-standard -- "$lists")" ]; then
-    echo "pre-commit: the VS Code extension list changed (Config/VisualStudioCode) - it isn't in this commit; commit it when you want it." >&2
 fi

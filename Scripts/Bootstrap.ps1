@@ -5,7 +5,7 @@ Sets up a new machine from this clone. Run it once, as Administrator, in PowerSh
 .DESCRIPTION
 Installs chezmoi, runs `chezmoi init` (which asks for the machine's role and its Dev Drive), puts the age key in
 place on a work machine, and runs `chezmoi apply`: that links the configs and runs the setup scripts in
-home/.chezmoiscripts (packages and Developer Mode, PowerShell modules, VS Code extensions, PowerToys).
+home/.chezmoiscripts (packages and Developer Mode, PowerShell modules, PowerToys).
 Elevated, those run without UAC prompts. After this, `chezmoi update` keeps the machine in sync.
 
 Both questions are asked once. Pass them to answer ahead: -Role work or -Role private; -DevDrive D: puts the

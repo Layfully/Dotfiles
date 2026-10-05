@@ -29,7 +29,7 @@ try {
 catch { Write-Warning "Writing the PowerShell profile stub failed: $($_.Exception.Message)"; $failures++ }
 
 #--- Git hooks ---
-# The pre-commit hook keeps the VS Code extension lists up to date
+# The pre-commit hook keeps work database connections out of the shared VS Code settings
 if ((git -C $repoRoot config --local core.hooksPath) -ne '.githooks') {
     git -C $repoRoot config --local core.hooksPath .githooks
     if ($LASTEXITCODE -eq 0) { Write-Host "Git hooks enabled (core.hooksPath = .githooks)." -ForegroundColor Green }

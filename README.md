@@ -1,10 +1,10 @@
 # Dotfiles
 
-Windows dotfiles and machine setup for two machines, managed with [chezmoi](https://www.chezmoi.io/): PowerShell profile, Windows Terminal, VS Code, Git, lazygit, Claude Code, UniGetUI and PowerToys, plus the packages, modules and extensions that go with them.
+Windows dotfiles and machine setup for two machines, managed with [chezmoi](https://www.chezmoi.io/): PowerShell profile, Windows Terminal, VS Code, Git, lazygit, Claude Code, UniGetUI and PowerToys, plus the packages and modules that go with them.
 
 ## How It Works
 
-- **One base, one overlay.** Everything in `home/` is the base setup, the private machine's. A machine with the **work** role also gets the work overlay: files encrypted with [age](https://age-encryption.org/), so this public repo shows nothing of them, plus its own package and extension lists.
+- **One base, one overlay.** Everything in `home/` is the base setup, the private machine's. A machine with the **work** role also gets the work overlay: files encrypted with [age](https://age-encryption.org/), so this public repo shows nothing of them, plus its own package list.
 - **The role is chosen once per machine.** The first `chezmoi init` asks for it (`private` or `work`, `private` by default) and stores it in `~/.config/chezmoi/chezmoi.toml`, along with the Dev Drive for the package caches. `chezmoi edit-config` changes them. What a machine installs follows from its role: the base package list, plus the role's own.
 - **On Windows, configs are symlinks into the repo** (chezmoi's symlink mode). When an app changes its own settings, the change is already in the repo; commit it. Only templates (like git's per-OS `os` file) and the encrypted overlay files are copies.
 - **WSL uses the same repo.** chezmoi in WSL runs from the Windows clone and takes the parts that make sense there, as copies (see [WSL Setup](#wsl-setup)).
@@ -19,11 +19,11 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 | `home/.chezmoi.toml.tmpl` | The per-machine config: role, Dev Drive, symlink mode, age encryption, `pwsh -NoProfile` for scripts |
 | `home/.chezmoiignore` | Leaves the work overlay out unless the role is work, and gives WSL only what applies there |
 | `home/.chezmoiscripts/` | When the setup scripts run: thin triggers that pass data and hash the files that should re-run them |
-| `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, the work machine's Visual Studio workloads, VS Code extension lists, PowerToys settings, the passphrase-encrypted age key, UniGetUI's configuration (a folder linked as a whole), and Claude Code's settings and user instructions |
+| `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, the work machine's Visual Studio workloads, PowerToys settings, the passphrase-encrypted age key, UniGetUI's configuration (a folder linked as a whole), and Claude Code's settings and user instructions |
 | `Scripts/Setup/` | The setup scripts |
 | `Scripts/Bootstrap.ps1` | First-time setup of a new machine |
 | `Scripts/Test-Bootstrap.ps1` | Tries the bootstrap on a clean, throwaway Windows in Windows Sandbox |
-| `.githooks/`, `Scripts/GitHooks/` | The pre-commit hook |
+| `.githooks/` | The pre-commit hook |
 | `Scripts/WSLSetup.sh` | WSL first-time setup: installs chezmoi there and runs it from this clone |
 
 ## New Machine
@@ -54,7 +54,8 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | Change the role or the Dev Drive | `chezmoi edit-config`, then `chezmoi apply` |
 | Add a package every machine gets | A `Microsoft.WinGet.DSC/WinGetPackage` entry in `Config/WinGet/configuration.dsc.yaml`, and an update source in UniGetUI (see [Package Updates](#package-updates)) |
 | Add a package only one role gets | The same, in `Config/WinGet/configuration.private.dsc.yaml` or `configuration.work.dsc.yaml` |
-| Remove a VS Code extension | Uninstall it in VS Code, not from the list (see [Git Hooks](#git-hooks)). The other machine keeps it until you uninstall it there too |
+| Add a VS Code extension both machines get | Install it, then right-click it > Apply Extension to all Profiles (see [VS Code Extensions](#vs-code-extensions)) |
+| Add a VS Code extension only work machines get | Install it in the Work profile |
 | Change the work machine's Visual Studio workloads | Modify the installation in the Visual Studio Installer, then More > Export configuration over `Config/VisualStudio/work.vsconfig` |
 | Keep a package updated on every machine | Mark it for automatic updates in UniGetUI, then commit `Config/UniGetUI` (see [Package Updates](#package-updates)) |
 | Hold a package back | Ignore its updates (or one version) in UniGetUI, then commit `Config/UniGetUI` |
@@ -88,7 +89,6 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `Install-Packages.ps1` | When it or one of its package lists changes | `winget configure` with the base list and the role's list (on work machines with Visual Studio and the workloads in `Config/VisualStudio/work.vsconfig`; those ask for UAC unless the apply runs elevated): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the latest Node.js LTS through nvm where a list has nvm, and the JetBrainsMono Nerd Font |
 | `Set-DevDriveCaches.ps1` | Every apply (it only changes something when the variables don't match the answer) | Points the NuGet and npm caches (`NUGET_PACKAGES`, `npm_config_cache`) at `<drive>\packages` on the Dev Drive. User environment variables, so they hold for every Node version nvm switches to. With no Dev Drive (`none`), it removes them again |
 | `Install-PowerShellModules.ps1` | When it changes, and once a week | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons) through PSResourceGet, and removes the older versions UniGetUI's updates leave behind |
-| `Install-VsCodeExtensions.ps1` | When it or an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
 | `Set-PowerToysSettings.ps1` | When it or `Config/PowerToys/settings.json` changes | See [PowerToys Settings](#powertoys-settings) |
 | `install-wsl-packages.sh` | In WSL, when it changes | See [WSL Setup](#wsl-setup) |
 
@@ -113,7 +113,6 @@ No version is copied from one machine to the other: each machine installs the sa
 | `home/encrypted_work.code-workspace.age` | `~/work.code-workspace` | The work database connections and their connection groups. The mssql extension reads them from the open workspace |
 | `home/dot_claude/encrypted_CLAUDE.work.md.age` | `~/.claude/CLAUDE.work.md` | The work part of Claude Code's user instructions. After changing it: `chezmoi add --encrypt ~/.claude/CLAUDE.work.md` |
 | `Config/WinGet/configuration.work.dsc.yaml` | — | Packages only work machines get (plain text) |
-| `Config/VisualStudioCode/extensions.work` | — | Extensions the work machine has on top of the base list (plain text) |
 | `Config/VisualStudio/work.vsconfig` | — | The Visual Studio workloads and components the work list installs (plain text) |
 
 The age key is at `~/.config/chezmoi/key.txt`. The repo holds it encrypted with a passphrase, kept in Bitwarden, as `Config/age/key.txt.age`; the bootstrap decrypts it on a work machine. The private machine applies nothing encrypted, so it only needs the key to edit the overlay. After changing `~/work.code-workspace`, save it back with `chezmoi add --encrypt ~/work.code-workspace`.
@@ -152,14 +151,17 @@ Diffs go through [delta](https://github.com/dandavison/delta), with syntax highl
 
 `PowerToys.DSC.exe` sits in the PowerToys install folder (`%LOCALAPPDATA%\PowerToys` for a per-user install). PowerToys' PowerShell DSC module, the one `winget configure` could use, fails to find the installation in PowerToys 0.101 (it compares the DisplayVersion `0.101.2362` with the registry's `0.101.2362.0`), which is why these settings aren't in the WinGet package list.
 
+## VS Code Extensions
+
+The extensions aren't in the repo: VS Code's Settings Sync carries them (**Settings Sync: Configure…**: everything but **Settings**, which is the repo's `settings.json`). It installs and removes them on both machines, and a new machine gets them after signing in to Sync.
+
+- The **Default** profile is the private machine's.
+- The **Work** profile is the work machine's (**Use for New Windows** there). It was created copying the Default profile with only **Extensions** in its contents, so its settings, keyboard shortcuts, snippets and tasks come from the Default profile, and only its extensions differ: the work-only ones are installed in it.
+- An extension both machines should get is marked **Apply Extension to all Profiles** (Extensions view, one at a time); one installed without that lands only in the profile that is open.
+
 ## Git Hooks
 
-The pre-commit hook:
-
-- refuses a commit whose staged VS Code settings contain work database connections (the mssql extension saves new ones there), and says how to move them into the work overlay;
-- on Windows (not for commits made from WSL), runs `SaveVsCodeExtensions.ps1`, which saves the installed VS Code extensions: the full list to `extensions` on the private machine, or just what's on top of that list to `extensions.work` on a work machine. The role comes from chezmoi's config. It only writes the file, it doesn't stage it: the commit stays what you staged, and a changed list shows up as a change to commit, like a setting an app saved (the hook says so). The list mirrors what is installed, so an extension is removed by uninstalling it: a line deleted by hand comes back.
-
-`Set-MachineLinks.ps1` enables the hook.
+The pre-commit hook refuses a commit whose staged VS Code settings contain work database connections (the mssql extension saves new ones there), and says how to move them into the work overlay. `Set-MachineLinks.ps1` enables it.
 
 ## WSL Setup
 
