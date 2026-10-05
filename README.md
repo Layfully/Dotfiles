@@ -5,7 +5,7 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 ## How It Works
 
 - **One base, one overlay.** Everything in `home/` is the base setup, the private machine's. A machine with the **work** role also gets the work overlay: files encrypted with [age](https://age-encryption.org/), so this public repo shows nothing of them, plus its own package and extension lists.
-- **The role is chosen once per machine.** The first `chezmoi init` asks for it (`private` or `work`, `private` by default) and stores it in `~/.config/chezmoi/chezmoi.toml`, along with the answers about optional components. `chezmoi edit-config` changes it.
+- **The role is chosen once per machine.** The first `chezmoi init` asks for it (`private` or `work`, `private` by default) and stores it in `~/.config/chezmoi/chezmoi.toml`, along with the Dev Drive for the package caches. `chezmoi edit-config` changes them. What a machine installs follows from its role: the base package list, plus the role's own.
 - **On Windows, configs are symlinks into the repo** (chezmoi's symlink mode). When an app changes its own settings, the change is already in the repo; commit it. Only templates (like git's per-OS `os` file) and the encrypted overlay files are copies.
 - **WSL uses the same repo.** chezmoi in WSL runs from the Windows clone and takes the parts that make sense there, as copies (see [WSL Setup](#wsl-setup)).
 - **Setup scripts run from `chezmoi apply`.** `home/.chezmoiscripts/` says when a script runs: every apply, or when something it depends on changes. `Scripts/Setup/` holds what the script does, where CI can lint it.
@@ -16,7 +16,7 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 |------|-----------|
 | `.chezmoiroot` | Makes `home/` chezmoi's source; the repo root is the git working tree |
 | `home/` | chezmoi's source: each file lands at the same path under `%USERPROFILE%` (`dot_config` is `.config`, `encrypted_*.age` is the decrypted copy) |
-| `home/.chezmoi.toml.tmpl` | The per-machine config: role, optional components, symlink mode, age encryption, `pwsh -NoProfile` for scripts |
+| `home/.chezmoi.toml.tmpl` | The per-machine config: role, Dev Drive, symlink mode, age encryption, `pwsh -NoProfile` for scripts |
 | `home/.chezmoiignore` | Leaves the work overlay out unless the role is work, and gives WSL only what applies there |
 | `home/.chezmoiscripts/` | When the setup scripts run: thin triggers that pass data and hash the files that should re-run them |
 | `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, the work machine's Visual Studio workloads, VS Code extension lists, PowerToys settings, the passphrase-encrypted age key, UniGetUI's configuration (a folder linked as a whole), and Claude Code's settings and user instructions |
@@ -39,7 +39,7 @@ cd "$env:USERPROFILE\Dotfiles"
 pwsh -NoProfile -File Scripts/Bootstrap.ps1
 ```
 
-The bootstrap installs chezmoi, runs `chezmoi init`, decrypts the age key on a work machine (it asks for the passphrase), and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once for the machine's role and about the optional components (GitHub CLI, Node.js LTS through nvm, Claude Code CLI, Az modules, JetBrains Rider, and a Dev Drive for the package caches). To answer ahead of time, pass them: `-Role work -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false -DevDrive D:` (`-DevDrive none` for no Dev Drive). The one per-user tool downloaded and run as a script, the Claude Code installer, runs with your normal rights even then.
+The bootstrap installs chezmoi, runs `chezmoi init`, decrypts the age key on a work machine (it asks for the passphrase), and runs `chezmoi apply`. Elevated, the setup scripts run without UAC prompts. chezmoi asks once for the machine's role and for a Dev Drive for the package caches. To answer ahead of time, pass them: `-Role work -DevDrive D:` (`-DevDrive none` for no Dev Drive).
 
 To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Test-Bootstrap.ps1 -Wait` runs it in Windows Sandbox: a clean, throwaway Windows that gets winget, PowerShell 7 and Git first, then clones the repo's last commit and bootstraps it as a private machine. It needs the Windows Sandbox feature (the script says how to turn it on).
 
@@ -51,9 +51,10 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | Get what the other machine committed | `chezmoi update` (git pull, then apply) |
 | See whether this machine matches the repo | `chezmoi status --exclude=scripts` (empty = in sync), `chezmoi verify --exclude=scripts`. Without `--exclude=scripts` both always list the every-apply scripts (`10-machine-links`, `25-dev-drive`) |
 | Add a config file | Put it in `home/` at its target path with chezmoi names (or `chezmoi add <target>`), then `chezmoi apply` |
-| Change the role or an optional component | `chezmoi edit-config`, then `chezmoi apply` |
-| Add a package every machine gets | A `Microsoft.WinGet.DSC/WinGetPackage` entry in `Config/WinGet/configuration.dsc.yaml` |
-| Add a package only work machines get | The same, in `Config/WinGet/configuration.work.dsc.yaml` |
+| Change the role or the Dev Drive | `chezmoi edit-config`, then `chezmoi apply` |
+| Add a package every machine gets | A `Microsoft.WinGet.DSC/WinGetPackage` entry in `Config/WinGet/configuration.dsc.yaml`, and an update source in UniGetUI (see [Package Updates](#package-updates)) |
+| Add a package only one role gets | The same, in `Config/WinGet/configuration.private.dsc.yaml` or `configuration.work.dsc.yaml` |
+| Remove a VS Code extension | Uninstall it in VS Code, not from the list (see [Git Hooks](#git-hooks)). The other machine keeps it until you uninstall it there too |
 | Change the work machine's Visual Studio workloads | Modify the installation in the Visual Studio Installer, then More > Export configuration over `Config/VisualStudio/work.vsconfig` |
 | Keep a package updated on every machine | Mark it for automatic updates in UniGetUI, then commit `Config/UniGetUI` (see [Package Updates](#package-updates)) |
 | Hold a package back | Ignore its updates (or one version) in UniGetUI, then commit `Config/UniGetUI` |
@@ -75,7 +76,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `%LOCALAPPDATA%\Microsoft\PowerToys\FancyZones\custom-layouts.json` | `home/AppData/Local/Microsoft/PowerToys/FancyZones/custom-layouts.json`: the FancyZones layouts (the other PowerToys settings are applied, see [PowerToys Settings](#powertoys-settings)) |
 | `~/.claude/settings.json` | `Config/Claude/settings.json`, through a symlink entry (`home/dot_claude/symlink_settings.json.tmpl`), so it stays a link in WSL too |
 | `~/.claude/CLAUDE.md` | `Config/Claude/CLAUDE.md`: what Claude Code should know about me and these machines in every project, linked the same way. On a work machine it imports `~/.claude/CLAUDE.work.md` from the work overlay |
-| `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI/`: the whole folder, because UniGetUI turns some settings off by deleting a file. Its runtime state is gitignored, so it stays on each machine |
+| `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI/`: the whole folder, because UniGetUI turns some settings off by deleting a file. `.gitignore` lists the settings that are shared; the runtime state UniGetUI keeps there stays on each machine |
 
 `$PROFILE` gets a stub from `Scripts/Setup/Set-MachineLinks.ps1`, not a link from chezmoi: OneDrive moves `Documents` on the work machine, so the profile's path is only known at run time, and OneDrive handles symlinks badly.
 
@@ -84,9 +85,9 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | Script | Runs | What it does |
 |--------|------|-------------|
 | `Set-MachineLinks.ps1` | Every apply | Writes the `$PROFILE` stub and enables the git hooks |
-| `Install-Packages.ps1` | When it, a package list or an optional component changes | `winget configure` with the base list (and the work list on work machines, with Visual Studio and the workloads in `Config/VisualStudio/work.vsconfig`; those ask for UAC unless the apply runs elevated): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the optional components and the JetBrainsMono Nerd Font |
+| `Install-Packages.ps1` | When it or one of its package lists changes | `winget configure` with the base list and the role's list (on work machines with Visual Studio and the workloads in `Config/VisualStudio/work.vsconfig`; those ask for UAC unless the apply runs elevated): installs what is missing and turns on Developer Mode. Nothing is upgraded, UniGetUI does that. Also the latest Node.js LTS through nvm where a list has nvm, and the JetBrainsMono Nerd Font |
 | `Set-DevDriveCaches.ps1` | Every apply (it only changes something when the variables don't match the answer) | Points the NuGet and npm caches (`NUGET_PACKAGES`, `npm_config_cache`) at `<drive>\packages` on the Dev Drive. User environment variables, so they hold for every Node version nvm switches to. With no Dev Drive (`none`), it removes them again |
-| `Install-PowerShellModules.ps1` | When it or `-Az` changes, and once a week | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons, optionally Az) through PSResourceGet, and removes the older versions UniGetUI's updates leave behind |
+| `Install-PowerShellModules.ps1` | When it changes, and once a week | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons) through PSResourceGet, and removes the older versions UniGetUI's updates leave behind |
 | `Install-VsCodeExtensions.ps1` | When it or an extension list changes | Installs what is missing from `Config/VisualStudioCode/extensions`, plus `extensions.work` on work machines |
 | `Set-PowerToysSettings.ps1` | When it or `Config/PowerToys/settings.json` changes | See [PowerToys Settings](#powertoys-settings) |
 | `install-wsl-packages.sh` | In WSL, when it changes | See [WSL Setup](#wsl-setup) |
@@ -99,6 +100,8 @@ The WinGet lists only say which packages a machine has. Each machine's UniGetUI 
 
 - `AutomaticallyUpdatePackages` turns automatic updates on, and `MaintenanceSchedules` says when they are installed. Set to `MarkedPackagesOnly`, they cover only the packages listed in `AutoUpdatedPackages.json` (marked per package in UniGetUI).
 - `IgnoredPackageUpdates.json` holds the packages kept back: `*` ignores every update, a version number skips that one.
+
+Every package in a WinGet list needs one of the two, decided when it is added: marked for automatic updates, or, for an app that updates itself (VS Code, PowerToys, Teams, ...), its updates ignored with `*`, so the two updaters don't fight. CI fails on a listed package that is in neither file.
 
 No version is copied from one machine to the other: each machine installs the same updates on its own schedule. A package that has to stay at one exact version gets a `version` setting on its WinGet list entry, and a matching hold in UniGetUI so the two don't fight.
 
@@ -147,16 +150,16 @@ Diffs go through [delta](https://github.com/dandavison/delta), with syntax highl
 - `App` holds the general settings and which modules are on (`enabled`). PowerToys merges it into what is there, so it can list just the settings that matter.
 - Any other module is compared and replaced as a whole, so add it as the complete `settings` object printed by `PowerToys.DSC.exe get --module <Name> --resource settings`.
 
-`PowerToys.DSC.exe` sits in the PowerToys install folder (`%LOCALAPPDATA%\PowerToys` for a per-user install). PowerToys' PowerShell DSC module, the one `winget configure` could use, fails to find the installation in PowerToys 0.101, which is why these settings aren't in the WinGet package list.
+`PowerToys.DSC.exe` sits in the PowerToys install folder (`%LOCALAPPDATA%\PowerToys` for a per-user install). PowerToys' PowerShell DSC module, the one `winget configure` could use, fails to find the installation in PowerToys 0.101 (it compares the DisplayVersion `0.101.2362` with the registry's `0.101.2362.0`), which is why these settings aren't in the WinGet package list.
 
 ## Git Hooks
 
 The pre-commit hook:
 
 - refuses a commit whose staged VS Code settings contain work database connections (the mssql extension saves new ones there), and says how to move them into the work overlay;
-- on Windows (not for commits made from WSL), runs `SaveVsCodeExtensions.ps1`, which saves the installed VS Code extensions: the full list to `extensions` on the private machine, or just what's on top of that list to `extensions.work` on a work machine. The role comes from chezmoi's config. It only writes the file, it doesn't stage it: the commit stays what you staged, and a changed list shows up as a change to commit, like a setting an app saved (the hook says so).
+- on Windows (not for commits made from WSL), runs `SaveVsCodeExtensions.ps1`, which saves the installed VS Code extensions: the full list to `extensions` on the private machine, or just what's on top of that list to `extensions.work` on a work machine. The role comes from chezmoi's config. It only writes the file, it doesn't stage it: the commit stays what you staged, and a changed list shows up as a change to commit, like a setting an app saved (the hook says so). The list mirrors what is installed, so an extension is removed by uninstalling it: a line deleted by hand comes back.
 
-`Set-MachineLinks.ps1` enables the hook. It runs under Windows PowerShell 5.1, so `Scripts/GitHooks/*.ps1` must avoid PowerShell 7-only syntax and non-ASCII characters.
+`Set-MachineLinks.ps1` enables the hook.
 
 ## WSL Setup
 
@@ -177,7 +180,7 @@ In WSL the files are copies, not links: reading a file under `/mnt/c` is slow, a
 
 | Job | What it checks |
 |-----|---------------|
-| `powershell` | Parses the hook scripts with Windows PowerShell 5.1, runs PSScriptAnalyzer over every `.ps1` (rules in `PSScriptAnalyzerSettings.psd1`, which the VS Code PowerShell extension reads too), parses every tracked `.json` (VS Code's and Windows Terminal's settings may have comments and trailing commas), and runs `winget configure validate` on the WinGet lists |
-| `chezmoi` | Renders every template (config, ignore rules, links, scripts) for both roles with every component on, and once with every component off and no Dev Drive, on Windows and on Linux (as in WSL), without running anything or needing the age key |
+| `powershell` | Runs PSScriptAnalyzer over every `.ps1` (rules in `PSScriptAnalyzerSettings.psd1`, which the VS Code PowerShell extension reads too), parses every tracked `.json` (VS Code's and Windows Terminal's settings may have comments and trailing commas), checks that every listed package has an update source in UniGetUI (see [Package Updates](#package-updates)), and runs `winget configure validate` on the WinGet lists |
+| `chezmoi` | Renders every template (config, ignore rules, links, scripts) for both roles, one with a Dev Drive and one without, on Windows and on Linux (as in WSL), without running anything or needing the age key |
 | `shell` | ShellCheck on the bash scripts and `.githooks/pre-commit` |
 | `leaks` | Fails on work infrastructure in this public repo (VS Code mssql connections or connection groups, private network addresses: IPv4, the 100.64/10 range VPNs use, and IPv6 unique local ones), reporting only file and line; a failing search fails the job instead of passing it; gitleaks scans the pushed commits for secrets |

@@ -3,28 +3,22 @@
 Sets up a new machine from this clone. Run it once, as Administrator, in PowerShell 7.
 
 .DESCRIPTION
-Installs chezmoi, runs `chezmoi init` (which asks for the machine's role and about the optional components),
-puts the age key in place on a work machine, and runs `chezmoi apply`: that links the configs and runs the setup
-scripts in home/.chezmoiscripts (packages and Developer Mode, PowerShell modules, VS Code extensions, PowerToys).
+Installs chezmoi, runs `chezmoi init` (which asks for the machine's role and its Dev Drive), puts the age key in
+place on a work machine, and runs `chezmoi apply`: that links the configs and runs the setup scripts in
+home/.chezmoiscripts (packages and Developer Mode, PowerShell modules, VS Code extensions, PowerToys).
 Elevated, those run without UAC prompts. After this, `chezmoi update` keeps the machine in sync.
 
-The role and the optional components are asked once. Pass them to answer ahead: -Role work or -Role private,
-and a switch per component: -Node to install, -Node:$false to skip. -DevDrive D: puts the package caches on that
-Dev Drive, -DevDrive none leaves them where they are.
+Both questions are asked once. Pass them to answer ahead: -Role work or -Role private; -DevDrive D: puts the
+package caches on that Dev Drive, -DevDrive none leaves them where they are.
 
 .EXAMPLE
-pwsh -NoProfile -File Scripts/Bootstrap.ps1 -Role work -GitHubCli -Node:$false -ClaudeCode -Az:$false -Rider:$false -DevDrive D:
+pwsh -NoProfile -File Scripts/Bootstrap.ps1 -Role work -DevDrive D:
 #>
 #Requires -Version 7
 param(
     # private: the base setup; work: adds the encrypted work overlay (needs the age key's passphrase)
     [ValidateSet('private', 'work')]
     [string]$Role,
-    [switch]$GitHubCli,  # GitHub CLI
-    [switch]$Node,       # latest Node.js LTS via nvm
-    [switch]$ClaudeCode, # Claude Code CLI (native build)
-    [switch]$Az,         # Az PowerShell modules
-    [switch]$Rider,      # JetBrains Rider
     # The Dev Drive for the package caches, like D:, or none
     [string]$DevDrive,
     # Set when the script relaunches itself elevated: that new window then stays open at the end
@@ -34,11 +28,8 @@ param(
 $isAdministrator = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')
 if (-not $isAdministrator) {
     Write-Warning "Administrator rights are required. Relaunching elevated..."
-    # Forward the switches as -Name:True / -Name:False, which pwsh -File binds back to the switch, and -Role as is.
-    # Start-Process joins -ArgumentList with spaces and does not quote, so the script path is quoted by hand.
-    $forwardedArguments = $PSBoundParameters.GetEnumerator() | ForEach-Object {
-        if ($_.Value -is [switch]) { "-$($_.Key):$([bool]$_.Value)" } else { "-$($_.Key)", $_.Value }
-    }
+    # Start-Process joins -ArgumentList with spaces and does not quote, so the script path is quoted by hand
+    $forwardedArguments = $PSBoundParameters.GetEnumerator() | ForEach-Object { "-$($_.Key)", $_.Value }
     Start-Process -Verb RunAs pwsh -ArgumentList (@("-NoProfile", "-File", "`"$PSCommandPath`"", "-Relaunched") + $forwardedArguments)
     exit
 }
@@ -65,20 +56,7 @@ if (-not (Get-Command chezmoi -ErrorAction SilentlyContinue)) {
 
 #--- chezmoi init ---
 # Writes ~/.config/chezmoi/chezmoi.toml from home/.chezmoi.toml.tmpl. The prompt texts must match the ones there.
-$promptTexts = [ordered]@{
-    GitHubCli  = "Install the GitHub CLI"
-    Node       = "Install Node.js LTS through nvm"
-    ClaudeCode = "Install the Claude Code CLI"
-    Az         = "Install the Az PowerShell modules"
-    Rider      = "Install JetBrains Rider"
-}
-$answers = foreach ($componentName in $promptTexts.Keys) {
-    if ($PSBoundParameters.ContainsKey($componentName)) {
-        "$($promptTexts[$componentName])=$(([bool]$PSBoundParameters[$componentName]).ToString().ToLower())"
-    }
-}
 $initArguments = @('init', '--source', $repoRoot)
-if ($answers) { $initArguments += '--promptBool', ($answers -join ',') }
 if ($Role) { $initArguments += '--promptChoice', "Machine role (work adds the encrypted work overlay)=$Role" }
 if ($DevDrive) { $initArguments += '--promptString', "Dev Drive for the package caches (a drive like D: or none)=$DevDrive" }
 chezmoi @initArguments

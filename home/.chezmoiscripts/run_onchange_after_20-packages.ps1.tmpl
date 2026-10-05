@@ -1,12 +1,14 @@
 {{ if eq .chezmoi.os "windows" -}}
-# Runs again whenever a package list, an optional component (chezmoi edit-config) or the script changes:
+# Runs again whenever a package list this machine uses or the script changes:
 # script: {{ include (joinPath .chezmoi.workingTree "Scripts/Setup/Install-Packages.ps1") | sha256sum }}
 # base packages: {{ include (joinPath .chezmoi.workingTree "Config/WinGet/configuration.dsc.yaml") | sha256sum }}
-{{- $workPackages := joinPath .chezmoi.workingTree "Config/WinGet/configuration.work.dsc.yaml" }}
-{{- if and (eq .role "work") (stat $workPackages) }}
-# work packages: {{ include $workPackages | sha256sum }}
+{{- $rolePackages := joinPath .chezmoi.workingTree (printf "Config/WinGet/configuration.%s.dsc.yaml" .role) }}
+{{- if stat $rolePackages }}
+# {{ .role }} packages: {{ include $rolePackages | sha256sum }}
+{{- end }}
+{{- if eq .role "work" }}
 # Visual Studio components: {{ include (joinPath .chezmoi.workingTree "Config/VisualStudio/work.vsconfig") | sha256sum }}
 {{- end }}
-try { & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-Packages.ps1" | squote }} -Role {{ .role }} -GitHubCli:${{ .gitHubCli }} -Node:${{ .node }} -ClaudeCode:${{ .claudeCode }} -Rider:${{ and (hasKey . "rider") .rider }} } catch { Write-Error $_; exit 1 }
+try { & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-Packages.ps1" | squote }} -Role {{ .role }} } catch { Write-Error $_; exit 1 }
 exit $LASTEXITCODE
 {{ end -}}

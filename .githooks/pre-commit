@@ -21,7 +21,7 @@ esac
 # Saves the installed extensions into the working tree only, like an app writing its settings: the commit stays
 # what was staged, and a changed list shows up as a change to commit (the private machine writes extensions,
 # work machines extensions.work - see SaveVsCodeExtensions.ps1)
-powershell.exe -NoProfile -ExecutionPolicy RemoteSigned -File "$repo/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
+pwsh -NoProfile -File "$repo/Scripts/GitHooks/SaveVsCodeExtensions.ps1"
 lists="$repo/Config/VisualStudioCode"
 if ! git diff --quiet -- "$lists" || [ -n "$(git ls-files --others --exclude-standard -- "$lists")" ]; then
     echo "pre-commit: the VS Code extension list changed (Config/VisualStudioCode) - it isn't in this commit; commit it when you want it." >&2

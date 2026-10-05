@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "model": "opus[1m]",
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
@@ -9,8 +10,36 @@
   "effortLevel": "xhigh",
   "modelSettings": {
     "claude-opus-5-5": {
-      "effortLevel": "medium"
+      "effortLevel": "xhigh"
     }
+  },
+  "permissions": {
+    "allow": [
+      "Bash(cygpath *)",
+      "Bash(dotnet --list-runtimes)",
+      "Bash(git count-objects *)",
+      "Bash(git ls-tree *)",
+      "Bash(tasklist)",
+      "Bash(tasklist *)",
+      "PowerShell(chezmoi status *)",
+      "PowerShell(dotnet --list-runtimes)",
+      "PowerShell(Format-List *)",
+      "PowerShell(Format-Table *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Get-CimInstance *)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(Get-Date)",
+      "PowerShell(Get-Date *)",
+      "PowerShell(Get-FileHash *)",
+      "PowerShell(Get-Item *)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Get-PSDrive *)",
+      "PowerShell(Get-Volume *)",
+      "PowerShell(Measure-Object *)",
+      "PowerShell(Select-String *)",
+      "PowerShell(Test-Path *)"
+    ]
   },
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",

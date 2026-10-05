@@ -40,6 +40,6 @@ if ($role -eq 'work') {
 else {
     $listName = 'extensions'
 }
-# WriteAllText instead of Out-File: in Windows PowerShell 5.1, Out-File writes CRLF and a UTF-8 BOM, and
-# .gitattributes checks text out as LF, so git would warn about this file after every commit
+# WriteAllText with LF instead of Out-File, which writes CRLF on Windows: .gitattributes checks text out as LF,
+# so git would warn about this file after every commit
 [IO.File]::WriteAllText("$listFolder\$listName", (($extensions -join "`n") + "`n"))

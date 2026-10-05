@@ -1,9 +1,19 @@
 # yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
-# What work machines get on top of configuration.dsc.yaml, applied after it by Scripts/Setup/Install-Packages.ps1.
-# Plain text like the base list: package names only, nothing about the work itself.
+# What work machines get on top of configuration.dsc.yaml. Plain text like the base list: package names only,
+# nothing about the work itself.
 properties:
   configurationVersion: 0.2.0
   resources:
+    # Install-Packages.ps1 installs the latest Node.js LTS through it on every machine whose list has it
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: nvm
+      directives:
+        description: Install nvm-windows
+      settings:
+        id: CoreyButler.NVMforWindows
+        source: winget
+
+
     # Visual Studio, then its workloads and components from the .vsconfig. To change them: modify the installation
     # in the Visual Studio Installer, then More > Export configuration over Config/VisualStudio/work.vsconfig.
     - resource: Microsoft.WinGet.DSC/WinGetPackage

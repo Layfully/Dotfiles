@@ -1,10 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
-# The base: packages and Windows settings every machine gets, applied through `winget configure` by
-# Scripts/Setup/Install-Packages.ps1 (chezmoi runs it when this file changes). Work machines also apply
-# configuration.work.dsc.yaml next to it, if it exists. Each entry only makes sure something is installed or
-# set, so a second run changes nothing; updates come from UniGetUI. The optional components are in chezmoi's
-# config. PowerToys' own settings are applied separately (Config/PowerToys/settings.json): the PowerToys DSC
-# module this format would use doesn't find the installation in PowerToys 0.101.
+# The packages and Windows settings every machine gets; configuration.<role>.dsc.yaml adds a role's own.
+# Each entry only makes sure something is installed or set, so a second run changes nothing. A new package also
+# needs an update source in UniGetUI (see the README's Package Updates; CI checks it).
 properties:
   configurationVersion: 0.2.0
   resources:
@@ -100,13 +97,6 @@ properties:
         description: Install delta (syntax-highlighted diffs in lazygit)
       settings:
         id: dandavison.delta
-        source: winget
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: nvm
-      directives:
-        description: Install nvm-windows
-      settings:
-        id: CoreyButler.NVMforWindows
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: zoxide

@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+# What the private machine gets on top of configuration.dsc.yaml.
+properties:
+  configurationVersion: 0.2.0
+  resources:
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: GitHubCli
+      directives:
+        description: Install the GitHub CLI
+      settings:
+        id: GitHub.cli
+        source: winget

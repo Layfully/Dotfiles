@@ -1,8 +1,8 @@
 {{ if eq .chezmoi.os "windows" -}}
-# Runs again when the module list (in the script) or -Az changes, and once a week: UniGetUI installs module
-# updates next to the old versions, and the script removes those.
+# Runs again when the module list (in the script) changes, and once a week: UniGetUI installs module updates
+# next to the old versions, and the script removes those.
 # script: {{ include (joinPath .chezmoi.workingTree "Scripts/Setup/Install-PowerShellModules.ps1") | sha256sum }}
 # week: {{ div (now).Unix 604800 }}
-try { & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-PowerShellModules.ps1" | squote }} -Az:${{ .az }} } catch { Write-Error $_; exit 1 }
+try { & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Install-PowerShellModules.ps1" | squote }} } catch { Write-Error $_; exit 1 }
 exit $LASTEXITCODE
 {{ end -}}

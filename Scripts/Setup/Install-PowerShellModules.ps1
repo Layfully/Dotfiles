@@ -4,13 +4,9 @@ Installs missing PowerShell modules and removes superseded versions. chezmoi run
 week (home/.chezmoiscripts/run_onchange_after_30-powershell-modules.ps1.tmpl).
 
 .DESCRIPTION
-PSResourceGet (built into pwsh 7.4+) rather than PowerShellGet's Install-Module: it is much faster, and
-PowerShellGet's Get-InstalledModule only sees the versions PowerShellGet installed itself. Updates come from
-UniGetUI (its PowerShell 7 source), which installs each new version next to the old one - hence the cleanup.
+Uses PSResourceGet, built into pwsh 7.4+. Updates come from UniGetUI (its PowerShell 7 source), which installs
+each new version next to the old one - hence the cleanup.
 #>
-param(
-    [switch] $Az  # Az PowerShell modules
-)
 
 $failures = 0
 
@@ -20,7 +16,6 @@ $psModules = @(
     "posh-git"            # git tab completion
     "Terminal-Icons"      # terminal icons
 )
-if ($Az) { $psModules += "Az" }
 
 #--- Missing modules ---
 $missingModules = @($psModules | Where-Object { -not (Get-InstalledPSResource -Name $_ -Scope CurrentUser -ErrorAction SilentlyContinue) })

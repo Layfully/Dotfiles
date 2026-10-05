@@ -4,8 +4,8 @@ Tries Scripts\Bootstrap.ps1 on a clean, disposable Windows in Windows Sandbox, a
 
 .DESCRIPTION
 The sandbox starts without winget, PowerShell 7 or Git, like a fresh install, so it sets those up first. Then it
-clones this repo - its last commit, so commit what you want to test - and runs the bootstrap as a private machine,
-without the optional components. The work role isn't tested: it needs the age key.
+clones this repo - its last commit, so commit what you want to test - and runs the bootstrap as a private machine
+without a Dev Drive. The work role isn't tested: it needs the age key.
 
 Output goes to a folder on this machine, shown when the script starts. With -Wait, this script waits for the
 sandbox to finish and prints the result. Closing the sandbox window throws everything in it away.
@@ -59,7 +59,7 @@ try {
     Step 'Running Scripts\Bootstrap.ps1'
     # From here on, redirected stderr of the tools is output to keep; with Stop, 5.1 would throw on the first line
     $ErrorActionPreference = 'Continue'
-    & pwsh -NoProfile -File C:\Dotfiles\Scripts\Bootstrap.ps1 -Role private -GitHubCli:$false -Node:$false -ClaudeCode:$false -Az:$false -Rider:$false -DevDrive none *>&1 |
+    & pwsh -NoProfile -File C:\Dotfiles\Scripts\Bootstrap.ps1 -Role private -DevDrive none *>&1 |
         Out-File -FilePath 'C:\Run\bootstrap.log' -Encoding utf8
     $bootstrapExit = $LASTEXITCODE
     Sync-SessionPath

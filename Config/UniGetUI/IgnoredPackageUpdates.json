@@ -2,5 +2,19 @@
   "winget\\Fortinet.FortiClientVPN": "7.0.1.0083",
   "winget\\Python.Python.3.13": "3.13.8",
   "winget\\Microsoft.VisualStudioCode": "*",
-  "winget\\3TSoftwareLabs.Robo3T": "*"
+  "winget\\3TSoftwareLabs.Robo3T": "*",
+  "winget\\Microsoft.PowerToys": "*",
+  "winget\\Devolutions.UniGetUI": "*",
+  "winget\\Microsoft.VisualStudio.Professional": "*",
+  "winget\\Docker.DockerDesktop": "*",
+  "winget\\Postman.Postman": "*",
+  "winget\\MongoDB.Compass.Full": "*",
+  "winget\\Mozilla.Firefox.DeveloperEdition": "*",
+  "winget\\WireGuard.WireGuard": "*",
+  "winget\\Microsoft.Teams": "*",
+  "winget\\Microsoft.Outlook": "*",
+  "winget\\Microsoft.OneDrive": "*",
+  "winget\\Zoom.Zoom": "*",
+  "winget\\Parsec.Parsec": "*",
+  "winget\\Spotify.Spotify": "*"
 }

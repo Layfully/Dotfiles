@@ -11,28 +11,12 @@ permissions:
 
 jobs:
   powershell:
-    # windows-latest ships Windows PowerShell 5.1 next to pwsh 7, which the first step needs
+    # Windows: winget only runs there
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      # .githooks/pre-commit runs these through powershell.exe (5.1), so parse them with 5.1 itself:
-      # PowerShell 7-only syntax such as ?., ?? or ternaries fails here instead of in the hook
-      - name: Parse hook scripts with Windows PowerShell 5.1
-        shell: powershell
-        run: |
-          $failed = $false
-          foreach ($file in Get-ChildItem Scripts/GitHooks -Filter *.ps1) {
-              $parseErrors = $null
-              [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$null, [ref]$parseErrors) | Out-Null
-              foreach ($parseError in $parseErrors) {
-                  Write-Output "::error file=Scripts/GitHooks/$($file.Name),line=$($parseError.Extent.StartLineNumber)::$($parseError.Message)"
-                  $failed = $true
-              }
-          }
-          if ($failed) { exit 1 }
 
       # Pinned, so a new release's rules can't fail a build on their own; bump by hand
       - name: Install PSScriptAnalyzer
@@ -43,14 +27,10 @@ jobs:
         shell: pwsh
         run: |
           $results = @(Invoke-ScriptAnalyzer -Path . -Recurse -Settings ./PSScriptAnalyzerSettings.psd1)
-          # 5.1 reads a BOM-less file as the system code page, so non-ASCII characters in the hook
-          # scripts turn into other characters (some of which it treats as quotes)
-          $results += @(Invoke-ScriptAnalyzer -Path Scripts/GitHooks -Settings @{ IncludeRules = @('PSUseBOMForUnicodeEncodedFile') })
-
           foreach ($result in $results) {
               $level = if ($result.Severity -eq 'Error') { 'error' } else { 'warning' }
               $file = [IO.Path]::GetRelativePath($PWD, $result.ScriptPath) -replace '\\', '/'
-              $line = if ($result.Line) { $result.Line } else { 1 }  # file-level rules (e.g. the BOM one) have no line
+              $line = if ($result.Line) { $result.Line } else { 1 }  # file-level rules have no line
               Write-Output "::$level file=$file,line=${line}::$($result.RuleName): $($result.Message)"
           }
           if ($results) { exit 1 }
@@ -76,6 +56,30 @@ jobs:
                   $jsonError = $_.Exception.InnerException  # the JsonException, which has a 0-based LineNumber
                   Write-Output "::error file=$file,line=$($jsonError.LineNumber + 1)::$($jsonError.Message)"
                   $failed = $true
+              }
+          }
+          if ($failed) { exit 1 }
+
+      # A listed package gets its updates from UniGetUI (AutoUpdatedPackages.json) or from somewhere else, such as its
+      # own updater ("*" in IgnoredPackageUpdates.json): decided when it is added, so none is quietly left behind
+      - name: Check that every listed package has an update source
+        shell: pwsh
+        run: |
+          $covered = foreach ($file in 'AutoUpdatedPackages.json', 'IgnoredPackageUpdates.json') {
+              (Get-Content "Config/UniGetUI/$file" -Raw | ConvertFrom-Json -AsHashtable).Keys -replace '^winget\\'
+          }
+          $failed = $false
+          foreach ($list in Get-ChildItem Config/WinGet -Filter *.dsc.yaml) {
+              $units = (Get-Content $list.FullName -Raw) -split '(?m)^[ \t]*- resource:[ \t]*'
+              foreach ($unit in $units | Where-Object { $_.StartsWith('Microsoft.WinGet.DSC/WinGetPackage') }) {
+                  # The package ID is the id indented under settings:, not the unit's own id above it
+                  if ($unit -notmatch '(?ms)^([ \t]+)settings:[ \t]*\r?$.*?^\1[ \t]+id:[ \t]*(\S+)') { continue }
+                  $packageId = $Matches[2]
+                  if ($packageId -notin $covered) {
+                      $line = (Select-String -LiteralPath $list.FullName -Pattern "id:\s*$([regex]::Escape($packageId))\s*$" | Select-Object -First 1).LineNumber
+                      Write-Output "::error file=Config/WinGet/$($list.Name),line=$line::$packageId has no update source: mark it for automatic updates in UniGetUI, or ignore its updates there if it updates itself"
+                      $failed = $true
+                  }
               }
           }
           if ($failed) { exit 1 }
@@ -135,18 +139,16 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH = (Join-Path $env:RUNNER_TEMP 'bin') + [IO.Path]::PathSeparator + $env:PATH
-          $allOn = 'Install the GitHub CLI=true,Install Node.js LTS through nvm=true,Install the Claude Code CLI=true,Install the Az PowerShell modules=true,Install JetBrains Rider=true'
-          # Both roles with everything on, and the other branches: every component off, no Dev Drive
+          # Both roles, one with a Dev Drive and one without
           $setups = @(
-              @{ Name = 'private'; Role = 'private'; Answers = $allOn; DevDrive = 'D:' }
-              @{ Name = 'work'; Role = 'work'; Answers = $allOn; DevDrive = 'D:' }
-              @{ Name = 'minimal'; Role = 'private'; Answers = $allOn -replace '=true', '=false'; DevDrive = 'none' }
+              @{ Role = 'private'; DevDrive = 'none' }
+              @{ Role = 'work'; DevDrive = 'D:' }
           )
           foreach ($setup in $setups) {
-              $name = $setup.Name
+              $name = $setup.Role
               $config = Join-Path $env:RUNNER_TEMP "chezmoi-$name.toml"
               $isolated = "--config=$config", "--destination=$(Join-Path $env:RUNNER_TEMP "home-$name")", "--persistent-state=$(Join-Path $env:RUNNER_TEMP "state-$name.boltdb")"
-              chezmoi init --no-tty --source $PWD @isolated --promptBool $setup.Answers --promptChoice "Machine role (work adds the encrypted work overlay)=$($setup.Role)" --promptString "Dev Drive for the package caches (a drive like D: or none)=$($setup.DevDrive)"
+              chezmoi init --no-tty --source $PWD @isolated --promptChoice "Machine role (work adds the encrypted work overlay)=$($setup.Role)" --promptString "Dev Drive for the package caches (a drive like D: or none)=$($setup.DevDrive)"
               if ($LASTEXITCODE) { Write-Output "::error::chezmoi init failed for the $name setup"; exit 1 }
               chezmoi apply --no-tty --dry-run --exclude=encrypted @isolated
               if ($LASTEXITCODE) { Write-Output "::error::chezmoi could not render the $name setup"; exit 1 }

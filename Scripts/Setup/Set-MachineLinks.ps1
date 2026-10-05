@@ -3,19 +3,15 @@
 Creates the links chezmoi can't manage itself. chezmoi runs this on every `chezmoi apply`.
 
 .DESCRIPTION
-- $PROFILE lives in Documents\PowerShell, and OneDrive moves Documents on the work machine, so the path is only
-  known at run time. It gets a stub that loads ~/.config/powershell/user_profile.ps1, which chezmoi links into
-  the repo.
-- Enables the repo's git hooks.
+Writes the $PROFILE stub (see the README's What Gets Linked) and enables the repo's git hooks.
 #>
 
 $repoRoot = Split-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -Parent  # Scripts\Setup -> repo root
 $failures = 0
 
 #--- PowerShell profile ---
-# A one-line stub that dot-sources the real profile, not a symlink: OneDrive, which holds Documents on the work
-# machine, doesn't handle symlinks. The profile finds its own folder from $PSCommandPath, which is its path
-# when dot-sourced, so it works the same either way.
+# The profile finds its own folder from $PSCommandPath, which is its path when dot-sourced, so a stub works
+# the same as a link would.
 $profileStub = "# Written by the dotfiles setup (Scripts/Setup/Set-MachineLinks.ps1). The profile itself is in the repo.`n" +
                ". `"`$HOME\.config\powershell\user_profile.ps1`"`n"
 try {

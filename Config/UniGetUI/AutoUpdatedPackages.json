@@ -13,5 +13,12 @@
   "winget\\dandavison.delta": "*",
   "winget\\Git.Git": "*",
   "winget\\Microsoft.PowerShell": "*",
-  "winget\\GitHub.cli": "*"
+  "winget\\GitHub.cli": "*",
+  "winget\\CoreyButler.NVMforWindows": "*",
+  "winget\\Microsoft.msodbcsql.17": "*",
+  "winget\\Microsoft.WebDeploy": "*",
+  "winget\\TortoiseSVN.TortoiseSVN": "*",
+  "winget\\WinMerge.WinMerge": "*",
+  "winget\\Devolutions.RemoteDesktopManager": "*",
+  "winget\\mRemoteNG.mRemoteNG": "*"
 }

@@ -3,13 +3,7 @@
 Applies Config\PowerToys\settings.json with PowerToys.DSC.exe. chezmoi runs this when that file or this script changes.
 
 .DESCRIPTION
-The file maps each PowerToys.DSC.exe module name (`PowerToys.DSC.exe modules --resource settings`) to the
-settings it should have. PowerToys merges the App (general) entry into what is there, so that one lists only
-what matters. Every other module's settings are compared and replaced as a whole: add one as the full
-"settings" object that `PowerToys.DSC.exe get --module <Name> --resource settings` prints.
-
-PowerToys' PowerShell DSC module, the one `winget configure` could use, doesn't find the installation in
-PowerToys 0.101 (it compares DisplayVersion 0.101.2362 with the registry's 0.101.2362.0), hence the exe.
+The file's format, and why this uses the exe rather than PowerToys' DSC module: the README's PowerToys Settings.
 #>
 
 $repoRoot = Split-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -Parent  # Scripts\Setup -> repo root
