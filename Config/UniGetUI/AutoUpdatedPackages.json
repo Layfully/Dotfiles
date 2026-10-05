@@ -20,5 +20,7 @@
   "winget\\TortoiseSVN.TortoiseSVN": "*",
   "winget\\WinMerge.WinMerge": "*",
   "winget\\Devolutions.RemoteDesktopManager": "*",
-  "winget\\mRemoteNG.mRemoteNG": "*"
+  "winget\\mRemoteNG.mRemoteNG": "*",
+  "winget\\Postman.Postman": "*",
+  "winget\\MongoDB.Compass.Full": "*"
 }

@@ -7,8 +7,6 @@
   "winget\\Devolutions.UniGetUI": "*",
   "winget\\Microsoft.VisualStudio.Professional": "*",
   "winget\\Docker.DockerDesktop": "*",
-  "winget\\Postman.Postman": "*",
-  "winget\\MongoDB.Compass.Full": "*",
   "winget\\Mozilla.Firefox.DeveloperEdition": "*",
   "winget\\WireGuard.WireGuard": "*",
   "winget\\Microsoft.Teams": "*",
