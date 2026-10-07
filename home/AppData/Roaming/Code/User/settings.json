@@ -52,7 +52,7 @@
   "editor.minimap.autohide": "mouseover",
   "files.autoSave": "onFocusChange",
   "files.insertFinalNewline": true,
-  "update.mode": "start",
+  "update.mode": "default",
   "git.autofetch": true,
   "git.blame.editorDecoration.enabled": true,
   "git.blame.statusBarItem.enabled": true,
