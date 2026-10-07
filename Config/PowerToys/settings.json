@@ -1,6 +1,6 @@
 {
   "App": {
-    "startup": false,
+    "startup": true,
     "show_tray_icon": true,
     "show_theme_adaptive_tray_icon": false,
     "run_elevated": false,
