@@ -11,6 +11,8 @@ Config/UniGetUI/*
 !Config/UniGetUI/DisableInstantSearch.json
 !Config/UniGetUI/DoCacheAdminRights
 !Config/UniGetUI/EnableScoopCleanup
+!Config/UniGetUI/EnableUniGetUIBeta
+!Config/UniGetUI/HideToggleFilters.json
 !Config/UniGetUI/IgnoredPackageUpdates.json
 !Config/UniGetUI/MaintenanceSchedules
 !Config/UniGetUI/PackageListViewMode.json
