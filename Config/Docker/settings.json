@@ -1,0 +1,20 @@
+{
+  "AnalyticsEnabled": false,
+  "AutoDownloadUpdates": false,
+  "AutoStart": false,
+  "ContainerTerminal": "system",
+  "DisableUpdate": true,
+  "EnableDockerAI": false,
+  "EnableDockerMCPToolkit": false,
+  "EnableIntegrationWithDefaultWslDistro": true,
+  "ExtensionsEnabled": false,
+  "MemoryMiB": 8192,
+  "SbomIndexing": false,
+  "ShowAnnouncementNotifications": false,
+  "ShowPromotionalNotifications": false,
+  "ShowSurveyNotifications": false,
+  "ThemeSource": "dark",
+  "UseContainerdSnapshotter": true,
+  "UseLibkrun": true,
+  "WslEngineEnabled": true
+}

@@ -1,0 +1,7 @@
+{{ if and (eq .chezmoi.os "windows") (eq .role "work") -}}
+# Runs again whenever the Docker Desktop settings or the script change:
+# settings: {{ include (joinPath .chezmoi.workingTree "Config/Docker/settings.json") | sha256sum }}
+# script: {{ include (joinPath .chezmoi.workingTree "Scripts/Setup/Set-DockerSettings.ps1") | sha256sum }}
+try { & {{ joinPath .chezmoi.workingTree "Scripts/Setup/Set-DockerSettings.ps1" | squote }} } catch { Write-Error $_; exit 1 }
+exit $LASTEXITCODE
+{{ end -}}

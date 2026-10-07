@@ -19,7 +19,7 @@ Windows dotfiles and machine setup for two machines, managed with [chezmoi](http
 | `home/.chezmoi.toml.tmpl` | The per-machine config: role, Dev Drive, symlink mode, age encryption, `pwsh -NoProfile` for scripts |
 | `home/.chezmoiignore` | Leaves the work overlay out unless the role is work, and gives WSL only what applies there |
 | `home/.chezmoiscripts/` | When the setup scripts run: thin triggers that pass data and hash the files that should re-run them |
-| `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, the work machine's Visual Studio workloads, PowerToys settings, the passphrase-encrypted age key, UniGetUI's configuration (a folder linked as a whole), and Claude Code's settings and user instructions |
+| `Config/` | Data rather than files chezmoi places one by one: WinGet package lists, the work machine's Visual Studio workloads and Docker Desktop settings, PowerToys settings, the passphrase-encrypted age key, UniGetUI's configuration (a folder linked as a whole), and Claude Code's settings and user instructions |
 | `Scripts/Setup/` | The setup scripts |
 | `Scripts/Bootstrap.ps1` | First-time setup of a new machine |
 | `Scripts/Test-Bootstrap.ps1` | Tries the bootstrap on a clean, throwaway Windows in Windows Sandbox |
@@ -56,6 +56,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | Add a package only one role gets | The same, in `Config/WinGet/configuration.private.dsc.yaml` or `configuration.work.dsc.yaml` |
 | Add a VS Code extension both machines get | Install it, then right-click it > Apply Extension to all Profiles (see [VS Code Extensions](#vs-code-extensions)) |
 | Add a VS Code extension only work machines get | Install it in the Work profile |
+| Keep a Docker Desktop setting on work machines | Set it in `Config/Docker/settings.json`, quit Docker Desktop, then `chezmoi apply` (see [Docker Desktop Settings](#docker-desktop-settings)) |
 | Change the work machine's Visual Studio workloads | Modify the installation in the Visual Studio Installer, then More > Export configuration over `Config/VisualStudio/work.vsconfig` |
 | Keep a package updated on every machine | Mark it for automatic updates in UniGetUI, then commit `Config/UniGetUI` (see [Package Updates](#package-updates)) |
 | Hold a package back | Ignore its updates (or one version) in UniGetUI, then commit `Config/UniGetUI` |
@@ -90,6 +91,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `Set-DevDriveCaches.ps1` | Every apply (it only changes something when the variables don't match the answer) | Points the NuGet and npm caches (`NUGET_PACKAGES`, `npm_config_cache`) at `<drive>\packages` on the Dev Drive. User environment variables, so they hold for every Node version nvm switches to. With no Dev Drive (`none`), it removes them again |
 | `Install-PowerShellModules.ps1` | When it changes, and once a week | Installs missing modules (PSFzf, CompletionPredictor, posh-git, Terminal-Icons) through PSResourceGet, and removes the older versions UniGetUI's updates leave behind |
 | `Set-PowerToysSettings.ps1` | When it or `Config/PowerToys/settings.json` changes | See [PowerToys Settings](#powertoys-settings) |
+| `Set-DockerSettings.ps1` | On work machines, when it or `Config/Docker/settings.json` changes | See [Docker Desktop Settings](#docker-desktop-settings) |
 | `install-wsl-packages.sh` | In WSL, when it changes | See [WSL Setup](#wsl-setup) |
 
 A script that fails makes `chezmoi apply` report it, and it runs again on the next apply.
@@ -101,7 +103,7 @@ The WinGet lists only say which packages a machine has. Each machine's UniGetUI 
 - `AutomaticallyUpdatePackages` turns automatic updates on, and `MaintenanceSchedules` says when they are installed. Set to `MarkedPackagesOnly`, they cover only the packages listed in `AutoUpdatedPackages.json` (marked per package in UniGetUI).
 - `IgnoredPackageUpdates.json` holds the packages kept back: `*` ignores every update, a version number skips that one.
 
-Every package in a WinGet list needs one of the two, decided when it is added: marked for automatic updates, or, for an app that updates itself (VS Code, PowerToys, Teams, ...), its updates ignored with `*`, so the two updaters don't fight. CI fails on a listed package that is in neither file.
+Every package in a WinGet list needs one of the two, decided when it is added: marked for automatic updates, or, for an app that updates itself (VS Code, Spotify, Teams, ...), its updates ignored with `*`, so the two updaters don't fight. CI fails on a listed package that is in neither file.
 
 No version is copied from one machine to the other: each machine installs the same updates on its own schedule. A package that has to stay at one exact version gets a `version` setting on its WinGet list entry, and a matching hold in UniGetUI so the two don't fight.
 
@@ -114,6 +116,7 @@ No version is copied from one machine to the other: each machine installs the sa
 | `home/dot_claude/encrypted_CLAUDE.work.md.age` | `~/.claude/CLAUDE.work.md` | The work part of Claude Code's user instructions. After changing it: `chezmoi add --encrypt ~/.claude/CLAUDE.work.md` |
 | `Config/WinGet/configuration.work.dsc.yaml` | — | Packages only work machines get (plain text) |
 | `Config/VisualStudio/work.vsconfig` | — | The Visual Studio workloads and components the work list installs (plain text) |
+| `Config/Docker/settings.json` | — | The Docker Desktop settings work machines get (plain text, see [Docker Desktop Settings](#docker-desktop-settings)) |
 
 The age key is at `~/.config/chezmoi/key.txt`. The repo holds it encrypted with a passphrase, kept in Bitwarden, as `Config/age/key.txt.age`; the bootstrap decrypts it on a work machine. The private machine applies nothing encrypted, so it only needs the key to edit the overlay. After changing `~/work.code-workspace`, save it back with `chezmoi add --encrypt ~/work.code-workspace`.
 
@@ -150,6 +153,14 @@ Diffs go through [delta](https://github.com/dandavison/delta), with syntax highl
 - Any other module is compared and replaced as a whole, so add it as the complete `settings` object printed by `PowerToys.DSC.exe get --module <Name> --resource settings`.
 
 `PowerToys.DSC.exe` sits in the PowerToys install folder (`%LOCALAPPDATA%\PowerToys` for a per-user install). PowerToys' PowerShell DSC module, the one `winget configure` could use, fails to find the installation in PowerToys 0.101 (it compares the DisplayVersion `0.101.2362` with the registry's `0.101.2362.0`), which is why these settings aren't in the WinGet package list.
+
+## Docker Desktop Settings
+
+`Config/Docker/settings.json` holds the Docker Desktop settings chosen on purpose (updates off for UniGetUI, the Docker VMM engine and its memory, notifications, beta features). `Set-DockerSettings.ps1` sets each of them in Docker's `%APPDATA%\Docker\settings-store.json` and leaves the rest of that file alone: Docker's own bookkeeping, and the license and welcome screens a new install should still show.
+
+The file isn't linked: Docker saves by replacing it, which would turn a link back into a plain file. So a setting changed in Docker's settings window stays on the machine until it is copied into `Config/Docker/settings.json`.
+
+Docker writes its settings back when it quits, so the script changes nothing while Docker Desktop is running, and nothing before Docker has started once and created the file. Either way it fails, and the next `chezmoi apply` tries again: quit Docker Desktop first.
 
 ## VS Code Extensions
 
