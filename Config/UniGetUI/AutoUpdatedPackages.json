@@ -23,5 +23,7 @@
   "winget\\mRemoteNG.mRemoteNG": "*",
   "winget\\Postman.Postman": "*",
   "winget\\MongoDB.Compass.Full": "*",
-  "winget\\Docker.DockerDesktop": "*"
+  "winget\\Docker.DockerDesktop": "*",
+  "winget\\Microsoft.PowerToys": "*",
+  "winget\\Zoom.Zoom": "*"
 }

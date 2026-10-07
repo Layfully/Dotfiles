@@ -52,8 +52,8 @@
       "PowerDisplay": false,
       "GrabAndMove": false
     },
-    "show_new_updates_toast_notification": true,
-    "download_updates_automatically": true,
+    "show_new_updates_toast_notification": false,
+    "download_updates_automatically": false,
     "include_prerelease_updates": false,
     "show_whats_new_after_updates": false,
     "enable_experimentation": true
