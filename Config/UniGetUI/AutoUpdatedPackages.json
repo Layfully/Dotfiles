@@ -22,5 +22,6 @@
   "winget\\Devolutions.RemoteDesktopManager": "*",
   "winget\\mRemoteNG.mRemoteNG": "*",
   "winget\\Postman.Postman": "*",
-  "winget\\MongoDB.Compass.Full": "*"
+  "winget\\MongoDB.Compass.Full": "*",
+  "winget\\Docker.DockerDesktop": "*"
 }
