@@ -156,7 +156,8 @@ Diffs go through [delta](https://github.com/dandavison/delta), with syntax highl
 The extensions aren't in the repo: VS Code's Settings Sync carries them (**Settings Sync: Configure…**: everything but **Settings**, which is the repo's `settings.json`). It installs and removes them on both machines, and a new machine gets them after signing in to Sync.
 
 - The **Default** profile is the private machine's.
-- The **Work** profile is the work machine's (**Use for New Windows** there). It was created copying the Default profile with only **Extensions** in its contents, so its settings, keyboard shortcuts, snippets and tasks come from the Default profile, and only its extensions differ: the work-only ones are installed in it.
+- The **Work** profile is the work machine's. It is a duplicate of the Default profile with **Use Default profile** set for everything but **Extensions**, so its settings, keyboard shortcuts, snippets and tasks come from the Default profile, and only its extensions differ: the work-only ones are installed in it.
+- Each work folder is switched to the Work profile once (**Profiles: Switch Profile**); VS Code remembers it per folder. Not **Use for New Windows**: that writes `window.newWindowProfile` into the shared `settings.json`, and Sync gives the private machine the Work profile too.
 - An extension both machines should get is marked **Apply Extension to all Profiles** (Extensions view, one at a time); one installed without that lands only in the profile that is open.
 
 ## Git Hooks

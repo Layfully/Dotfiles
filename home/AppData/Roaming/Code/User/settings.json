@@ -89,9 +89,6 @@
   "terminal.integrated.smoothScrolling": true,
   "editor.multiCursorModifier": "ctrlCmd",
   "application.shellEnvironmentResolutionTimeout": 60,
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
   "security.workspace.trust.enabled": true,
   "security.allowedUNCHosts": [
     "wsl.localhost"
