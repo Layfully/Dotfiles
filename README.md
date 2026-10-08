@@ -120,6 +120,8 @@ No version is copied from one machine to the other: each machine installs the sa
 
 The age key is at `~/.config/chezmoi/key.txt`. The repo holds it encrypted with a passphrase, kept in Bitwarden, as `Config/age/key.txt.age`; the bootstrap decrypts it on a work machine. The private machine applies nothing encrypted, so it only needs the key to edit the overlay. After changing `~/work.code-workspace`, save it back with `chezmoi add --encrypt ~/work.code-workspace`.
 
+FortiClient VPN (7.4.3.4726) is installed by hand: winget no longer has it, and Chocolatey stops at 7.0. A particular version comes from the Fortinet support portal.
+
 ## Git Config
 
 Git reads `~/.config/git/config`. Settings for one context live in their own file, included by a condition:
