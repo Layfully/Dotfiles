@@ -26,5 +26,6 @@
   "winget\\Docker.DockerDesktop": "*",
   "winget\\Microsoft.PowerToys": "*",
   "winget\\Zoom.Zoom": "*",
-  "winget\\Microsoft.WSL": "*"
+  "winget\\Microsoft.WSL": "*",
+  "winget\\15722UsefulApp.WorkspaceLauncherForVSCode": "*"
 }

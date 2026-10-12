@@ -76,6 +76,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_...\LocalState\settings.json` | `home/AppData/Local/Packages/.../settings.json` |
 | `%LOCALAPPDATA%\lazygit\config.yml` | `home/AppData/Local/lazygit/config.yml` |
 | `%LOCALAPPDATA%\Microsoft\PowerToys\FancyZones\custom-layouts.json` | `home/AppData/Local/Microsoft/PowerToys/FancyZones/custom-layouts.json`: the FancyZones layouts (the other PowerToys settings are applied, see [PowerToys Settings](#powertoys-settings)) |
+| `%LOCALAPPDATA%\Packages\Microsoft.CommandPalette_...\LocalState\settings.json` | `home/AppData/Local/Packages/Microsoft.CommandPalette_.../LocalState/settings.json`: Command Palette's settings (its hotkey, aliases and which providers search) |
 | `~/.claude/settings.json` | `Config/Claude/settings.json`, through a symlink entry (`home/dot_claude/symlink_settings.json.tmpl`), so it stays a link in WSL too |
 | `~/.claude/CLAUDE.md` | `Config/Claude/CLAUDE.md`: what Claude Code should know about me and these machines in every project, linked the same way. On a work machine it imports `~/.claude/CLAUDE.work.md` from the work overlay |
 | `%LOCALAPPDATA%\UniGetUI\Configuration` | `Config/UniGetUI/`: the whole folder, because UniGetUI turns some settings off by deleting a file. `.gitignore` lists the settings that are shared; the runtime state UniGetUI keeps there stays on each machine |

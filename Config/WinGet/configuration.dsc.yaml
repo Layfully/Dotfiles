@@ -22,6 +22,13 @@ properties:
         id: Microsoft.PowerToys
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: CmdPalVSCode
+      directives:
+        description: Install the Visual Studio / Code extension for Command Palette
+      settings:
+        id: 15722UsefulApp.WorkspaceLauncherForVSCode
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: fzf
       directives:
         description: Install fzf
