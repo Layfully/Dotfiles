@@ -22,7 +22,14 @@
     "file://${userHome}/.config/vscode/custom.css",
     "file://${userHome}/.config/vscode/custom.js"
   ],
-  "workbench.colorCustomizations": {},
+  "workbench.colorCustomizations": {
+    "[SynthWave '84]": {
+      "tab.activeBorder": "#0000",
+      "extensionButton.prominentBackground": "#614d85",
+      "extensionButton.prominentHoverBackground": "#7a62a3",
+      "editorBracketMatch.border": "#ffffff40"
+    }
+  },
   "workbench.settings.applyToAllProfiles": [],
   "window.titleBarStyle": "custom",
   "vscode_vibrancy.opacity": 0.5,
@@ -49,6 +56,7 @@
   "debug.autoExpandLazyVariables": "on",
   "debug.showVariableTypes": true,
   "telemetry.telemetryLevel": "off",
+  "workbench.colorTheme": "SynthWave '84",
   "editor.minimap.autohide": "mouseover",
   "files.autoSave": "onFocusChange",
   "files.insertFinalNewline": true,
@@ -300,6 +308,5 @@
   "dotnet.enablePublishIssuesToProblems": false,
   "projects.defaultProjectSaveLocation": "D:\\Source",
   "vscode_vibrancy.preferredDarkTheme": "Custom theme (use imports)",
-  "window.controlsStyle": "custom",
-  "synthwave84.brightness": 0.25
+  "window.controlsStyle": "custom"
 }
