@@ -25,5 +25,6 @@
   "winget\\MongoDB.Compass.Full": "*",
   "winget\\Docker.DockerDesktop": "*",
   "winget\\Microsoft.PowerToys": "*",
-  "winget\\Zoom.Zoom": "*"
+  "winget\\Zoom.Zoom": "*",
+  "winget\\Microsoft.WSL": "*"
 }

@@ -140,3 +140,10 @@ properties:
       settings:
         id: twpayne.chezmoi
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: WSL
+      directives:
+        description: Install the Windows Subsystem for Linux
+      settings:
+        id: Microsoft.WSL
+        source: winget

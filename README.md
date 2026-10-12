@@ -179,7 +179,7 @@ The pre-commit hook refuses a commit whose staged VS Code settings contain work 
 
 ## WSL Setup
 
-After running `wsl --install` and launching Ubuntu:
+WSL itself comes from the base package list. `wsl --install` then adds Ubuntu (and turns on the Virtual Machine Platform if it is off, which needs a restart). After launching Ubuntu:
 
 ```bash
 # The Windows clone is under /mnt/c; adjust the path if you cloned elsewhere
