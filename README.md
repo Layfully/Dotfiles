@@ -121,7 +121,12 @@ No version is copied from one machine to the other: each machine installs the sa
 
 The age key is at `~/.config/chezmoi/key.txt`. The repo holds it encrypted with a passphrase, kept in Bitwarden, as `Config/age/key.txt.age`; the bootstrap decrypts it on a work machine. The private machine applies nothing encrypted, so it only needs the key to edit the overlay. After changing `~/work.code-workspace`, save it back with `chezmoi add --encrypt ~/work.code-workspace`.
 
-FortiClient VPN (7.4.3.4726) is installed by hand: winget no longer has it, and Chocolatey stops at 7.0. A particular version comes from the Fortinet support portal.
+Set up by hand on a new work machine, as too little to track:
+
+- FortiClient VPN (7.4.3.4726) is installed by hand: winget no longer has it, and Chocolatey stops at 7.0. A particular version comes from the Fortinet support portal.
+- XML Explorer (4.0.5) is installed by hand: winget doesn't have it.
+- WinMerge: dark mode that follows Windows, with dark menus and dialogs (Options > Colors). Everything else is at its defaults.
+- TortoiseSVN compares and merges with WinMerge. WinMerge's installer sets that up only when its TortoiseSVN option is ticked, which winget's silent install may not do: otherwise, set WinMerge in TortoiseSVN's Settings > Diff Viewer and Merge Tool.
 
 ## Git Config
 
