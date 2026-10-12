@@ -1,0 +1,42 @@
+/* Loaded into VS Code by the Custom CSS and JS Loader extension (vscode_custom_css.imports in settings.json),
+   with custom.js, which marks each cursor move with its direction (data-motion) and leaves afterimages.
+   VS Code's smooth caret animation is a fixed 80ms linear glide; this one springs past the target and back. */
+.monaco-editor .cursors-layer.cursor-smooth-caret-animation > .cursor {
+  transition: top 260ms cubic-bezier(.34, 1.56, .64, 1), left 260ms cubic-bezier(.34, 1.56, .64, 1),
+              transform 200ms ease-out, box-shadow 200ms ease-out !important;
+}
+
+/* While moving, the cursor squashes and stretches: sideways it leans and smears wider behind its leading edge,
+   up or down it grows taller and thinner. A glow trails behind it. */
+.monaco-editor .cursors-layer > .cursor[data-motion="right"] {
+  transform: skewX(-30deg) scaleX(2.5) scaleY(.9);
+  transform-origin: right;
+  box-shadow: -4px 0 8px var(--vscode-editorCursor-foreground);
+}
+.monaco-editor .cursors-layer > .cursor[data-motion="left"] {
+  transform: skewX(30deg) scaleX(2.5) scaleY(.9);
+  transform-origin: left;
+  box-shadow: 4px 0 8px var(--vscode-editorCursor-foreground);
+}
+.monaco-editor .cursors-layer > .cursor[data-motion="down"] {
+  transform: scaleX(.6) scaleY(1.4);
+  transform-origin: bottom;
+  box-shadow: 0 -4px 8px var(--vscode-editorCursor-foreground);
+}
+.monaco-editor .cursors-layer > .cursor[data-motion="up"] {
+  transform: scaleX(.6) scaleY(1.4);
+  transform-origin: top;
+  box-shadow: 0 4px 8px var(--vscode-editorCursor-foreground);
+}
+
+/* The afterimages custom.js leaves where the cursor was: they fade and shrink away */
+.monaco-editor .cursors-layer > .cursor-afterimage {
+  position: absolute;
+  pointer-events: none;
+  background-color: var(--vscode-editorCursor-foreground);
+  animation: cursor-afterimage 440ms ease-out forwards;
+}
+@keyframes cursor-afterimage {
+  from { opacity: .5; transform: skewX(var(--skew)) scaleY(1); }
+  to { opacity: 0; transform: skewX(var(--skew)) scaleY(.3); }
+}

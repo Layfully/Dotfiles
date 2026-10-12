@@ -14,4 +14,5 @@ work.code-workspace
 {{ else -}}
 AppData
 .config/powershell
+.config/vscode
 {{ end -}}

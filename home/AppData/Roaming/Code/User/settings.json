@@ -19,6 +19,10 @@
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "modificationsIfAvailable",
   "editor.cursorSmoothCaretAnimation": "on",
+  "vscode_custom_css.imports": [
+    "file://${userHome}/.config/vscode/custom.css",
+    "file://${userHome}/.config/vscode/custom.js"
+  ],
   "workbench.colorCustomizations": {
     "terminal.background": "#00000000",
   },
@@ -120,7 +124,8 @@
   "chat.disableAIFeatures": true,
   "claudeCode.hideOnboarding": true,
   "editor.cursorBlinking": "phase",
-  "editor.cursorStyle": "block",
+  "editor.cursorStyle": "line",
+  "editor.cursorWidth": 3,
   "editor.formatOnPaste": true,
   "diffEditor.hideUnchangedRegions.enabled": true,
   "diffEditor.hideUnchangedRegions.minimumLineCount": 5,

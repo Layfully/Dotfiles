@@ -73,6 +73,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `~/.config/git/config`, `work` (`os` is a per-OS copy) | `home/dot_config/git/` (see [Git Config](#git-config)) |
 | `~/.config/oh-my-posh/cloud-context.omp.json` | `home/dot_config/oh-my-posh/`: the prompt theme, used by pwsh and by bash in WSL |
 | `%APPDATA%\Code\User\settings.json` | `home/AppData/Roaming/Code/User/settings.json` |
+| `~/.config/vscode/custom.css`, `custom.js` | `home/dot_config/vscode/`: CSS and JavaScript patched into VS Code (see [VS Code Custom CSS](#vs-code-custom-css)) |
 | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_...\LocalState\settings.json` | `home/AppData/Local/Packages/.../settings.json` |
 | `%LOCALAPPDATA%\lazygit\config.yml` | `home/AppData/Local/lazygit/config.yml` |
 | `%LOCALAPPDATA%\Microsoft\PowerToys\FancyZones\custom-layouts.json` | `home/AppData/Local/Microsoft/PowerToys/FancyZones/custom-layouts.json`: the FancyZones layouts (the other PowerToys settings are applied, see [PowerToys Settings](#powertoys-settings)) |
@@ -178,6 +179,12 @@ The extensions aren't in the repo: VS Code's Settings Sync carries them (**Setti
 - The **Work** profile is the work machine's. It is a duplicate of the Default profile with **Use Default profile** set for everything but **Extensions**, so its settings, keyboard shortcuts, snippets and tasks come from the Default profile, and only its extensions differ: the work-only ones are installed in it.
 - Each work folder is switched to the Work profile once (**Profiles: Switch Profile**); VS Code remembers it per folder. Not **Use for New Windows**: that writes `window.newWindowProfile` into the shared `settings.json`, and Sync gives the private machine the Work profile too.
 - An extension both machines should get is marked **Apply Extension to all Profiles** (Extensions view, one at a time); one installed without that lands only in the profile that is open.
+
+## VS Code Custom CSS
+
+`home/dot_config/vscode/` holds what VS Code's settings can't change: anime-style cursor motion in place of VS Code's fixed 80 ms glide. The cursor springs into place, leans and stretches into each move with a glow behind it, and leaves fading afterimages; `custom.js` marks each move and its direction, `custom.css` draws it. The Custom CSS and JS Loader extension (`be5invis.vscode-custom-css`) patches both into VS Code's own files, from `vscode_custom_css.imports` in `settings.json` (`${userHome}` makes the one path fit both machines). VS Code then reports its installation as corrupt; that warning can be dismissed for good.
+
+A VS Code update replaces the patched files, and a change to either file isn't read until the next patch: run **Enable Custom CSS and JS** (or **Reload Custom CSS and JS**), then reload the window.
 
 ## Git Hooks
 
