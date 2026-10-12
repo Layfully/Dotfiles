@@ -2,7 +2,9 @@
   "editor.unicodeHighlight.nonBasicASCII": false,
   "editor.tabSize": 2,
   "workbench.iconTheme": "material-icon-theme",
-  "material-icon-theme.activeIconPacks": ["angular"],
+  "material-icon-theme.activeIconPacks": [
+    "angular"
+  ],
   "editor.fontFamily": "JetBrainsMono Nerd Font, Consolas, 'Courier New', monospace",
   "files.watcherExclude": {
     "**/.angular/**": true,
@@ -14,24 +16,16 @@
     "**/obj/**": true,
     "**/out-tsc/**": true
   },
-  "typescript.suggest.paths": false,
-  "javascript.suggest.paths": false,
-  "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "modificationsIfAvailable",
   "editor.cursorSmoothCaretAnimation": "on",
   "vscode_custom_css.imports": [
     "file://${userHome}/.config/vscode/custom.css",
     "file://${userHome}/.config/vscode/custom.js"
   ],
-  "workbench.colorCustomizations": {
-    "terminal.background": "#00000000",
-  },
-  "workbench.settings.applyToAllProfiles": [
-    "workbench.colorCustomizations"
-  ],
+  "workbench.colorCustomizations": {},
+  "workbench.settings.applyToAllProfiles": [],
   "window.titleBarStyle": "custom",
   "vscode_vibrancy.opacity": 0.5,
-  "synthwave84.brightness": 0.15,
   "editor.accessibilitySupport": "off",
   "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
   "editor.foldingImportsByDefault": true,
@@ -55,7 +49,6 @@
   "debug.autoExpandLazyVariables": "on",
   "debug.showVariableTypes": true,
   "telemetry.telemetryLevel": "off",
-  "workbench.colorTheme": "SynthWave '84",
   "editor.minimap.autohide": "mouseover",
   "files.autoSave": "onFocusChange",
   "files.insertFinalNewline": true,
@@ -304,5 +297,9 @@
   "dotnet.copilot.enableDotnetSkills": false,
   "dotnet.projectsystem.useNewMemoryOptimization": true,
   "dotnet.testWindow.discoverTestsFromSource": true,
-  "dotnet.enablePublishIssuesToProblems": false
+  "dotnet.enablePublishIssuesToProblems": false,
+  "projects.defaultProjectSaveLocation": "D:\\Source",
+  "vscode_vibrancy.preferredDarkTheme": "Custom theme (use imports)",
+  "window.controlsStyle": "custom",
+  "synthwave84.brightness": 0.25
 }
