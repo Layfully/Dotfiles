@@ -128,6 +128,7 @@ Set up by hand on a new work machine, as too little to track:
 - XML Explorer (4.0.5) is installed by hand: winget doesn't have it.
 - WinMerge: dark mode that follows Windows, with dark menus and dialogs (Options > Colors). Everything else is at its defaults.
 - TortoiseSVN compares and merges with WinMerge. WinMerge's installer sets that up only when its TortoiseSVN option is ticked, which winget's silent install may not do: otherwise, set WinMerge in TortoiseSVN's Settings > Diff Viewer and Merge Tool.
+- Teams: in Settings, tick start automatically and open in the background, choose compact notifications and the desktop app for Office files, and in Devices pick the headset, the laptop speakers as secondary ringer and voice isolation, and turn on the video effects.
 
 ## Git Config
 
