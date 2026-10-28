@@ -3,7 +3,7 @@
     "startup": true,
     "show_tray_icon": true,
     "show_theme_adaptive_tray_icon": false,
-    "run_elevated": false,
+    "run_elevated": true,
     "enable_warnings_elevated_apps": true,
     "enable_quick_access": true,
     "quick_access_shortcut": {
@@ -17,10 +17,10 @@
     "theme": "system",
     "enabled": {
       "FancyZones": true,
-      "Image Resizer": true,
+      "Image Resizer": false,
       "File Explorer Preview": true,
-      "Shortcut Guide": false,
-      "PowerRename": true,
+      "Shortcut Guide": true,
+      "PowerRename": false,
       "Keyboard Manager": false,
       "PowerToys Run": false,
       "ColorPicker": true,
@@ -28,29 +28,31 @@
       "Awake": true,
       "MouseWithoutBorders": false,
       "FindMyMouse": true,
-      "AltWindowCycle": false,
+      "AltWindowCycle": true,
       "MouseHighlighter": true,
       "MouseJump": false,
-      "AlwaysOnTop": true,
+      "AlwaysOnTop": false,
       "MousePointerCrosshairs": false,
       "QuickAccent": false,
       "TextExtractor": false,
       "AdvancedPaste": false,
-      "Measure Tool": true,
-      "Hosts": false,
+      "Measure Tool": false,
+      "Hosts": true,
       "File Locksmith": true,
       "Peek": true,
       "RegistryPreview": false,
-      "CmdNotFound": true,
+      "CmdNotFound": false,
       "EnvironmentVariables": false,
       "NewPlus": false,
       "Workspaces": false,
       "CmdPal": true,
-      "ZoomIt": false,
+      "ZoomIt": true,
       "CursorWrap": false,
       "LightSwitch": false,
       "PowerDisplay": false,
-      "GrabAndMove": false
+      "GrabAndMove": false,
+      "AutoHideCursor": false,
+      "MouseButtonLock": false
     },
     "show_new_updates_toast_notification": false,
     "download_updates_automatically": false,
@@ -67,6 +69,9 @@
         "value": true
       },
       "fancyzones_mouseMiddleClickSpanningMultipleZones": {
+        "value": false
+      },
+      "fancyzones_mouseWheelLayoutSwitch": {
         "value": false
       },
       "fancyzones_overrideSnapHotkeys": {
@@ -128,6 +133,27 @@
       },
       "fancyzones_highlight_opacity": {
         "value": 20
+      },
+      "fancyzones_layoutNameLabelEnabled": {
+        "value": true
+      },
+      "fancyzones_layoutNameLabelPlacement": {
+        "value": 1
+      },
+      "fancyzones_layoutNameLabelTextColor": {
+        "value": "#FFFFFF"
+      },
+      "fancyzones_layoutNameLabelBackgroundColor": {
+        "value": "#262626"
+      },
+      "fancyzones_layoutNameLabelFontSize": {
+        "value": 36
+      },
+      "fancyzones_layoutNameLabelPadding": {
+        "value": 12
+      },
+      "fancyzones_layoutNameLabelDuration": {
+        "value": 1500
       },
       "fancyzones_editor_hotkey": {
         "value": {
@@ -195,6 +221,308 @@
       }
     },
     "name": "FancyZones",
+    "version": "1.0"
+  },
+  "ZoomIt": {
+    "properties": {
+      "ToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": true,
+          "alt": true,
+          "shift": false,
+          "code": 49,
+          "key": "1"
+        }
+      },
+      "LiveZoomToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": true,
+          "alt": true,
+          "shift": false,
+          "code": 52,
+          "key": "4"
+        }
+      },
+      "DrawToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": true,
+          "alt": true,
+          "shift": false,
+          "code": 50,
+          "key": "2"
+        }
+      },
+      "RecordToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": true,
+          "alt": true,
+          "shift": false,
+          "code": 53,
+          "key": "5"
+        }
+      },
+      "SnipToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": false,
+          "alt": false,
+          "shift": false,
+          "code": 0,
+          "key": "(Key 0)"
+        }
+      },
+      "SnipSaveToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": false,
+          "alt": false,
+          "shift": false,
+          "code": 0,
+          "key": "(Key 0)"
+        }
+      },
+      "SnipOcrToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": false,
+          "alt": false,
+          "shift": false,
+          "code": 0,
+          "key": "(Key 0)"
+        }
+      },
+      "SnipDictateToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": false,
+          "alt": false,
+          "shift": false,
+          "code": 0,
+          "key": "(Key 0)"
+        }
+      },
+      "SnipPanoramaToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": false,
+          "alt": false,
+          "shift": false,
+          "code": 0,
+          "key": "(Key 0)"
+        }
+      },
+      "SnipPanoramaSaveToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": false,
+          "alt": false,
+          "shift": false,
+          "code": 0,
+          "key": "(Key 0)"
+        }
+      },
+      "BreakTimerKey": {
+        "value": {
+          "win": false,
+          "ctrl": true,
+          "alt": true,
+          "shift": false,
+          "code": 51,
+          "key": "3"
+        }
+      },
+      "Font": {
+        "value": "5f///wAAAAAAAAAAAAAAAFgCAAAAAADuAwIBIlMAZQBnAG8AZQAgAFUASQAgAFMAZQBtAGkAYgBvAGwAZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      },
+      "DemoTypeToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": true,
+          "alt": true,
+          "shift": false,
+          "code": 55,
+          "key": "7"
+        }
+      },
+      "DemoTypeFile": {
+        "value": ""
+      },
+      "DemoTypeSpeedSlider": {
+        "value": 55
+      },
+      "DemoTypeUserDrivenMode": {
+        "value": false
+      },
+      "BreakTimeout": {
+        "value": 10
+      },
+      "BreakOpacity": {
+        "value": 100
+      },
+      "BreakPlaySoundFile": {
+        "value": false
+      },
+      "BreakSoundFile": {
+        "value": ""
+      },
+      "BreakShowBackgroundFile": {
+        "value": false
+      },
+      "BreakBackgroundStretch": {
+        "value": false
+      },
+      "BreakBackgroundFile": {
+        "value": ""
+      },
+      "BreakTimerPosition": {
+        "value": 4
+      },
+      "BreakShowDesktop": {
+        "value": true
+      },
+      "ShowExpiredTime": {
+        "value": true
+      },
+      "ShowTrayIcon": {
+        "value": true
+      },
+      "AnimnateZoom": {
+        "value": true
+      },
+      "SmoothImage": {
+        "value": true
+      },
+      "SnipCopyToClipboard": {
+        "value": false
+      },
+      "ZoominSliderLevel": {
+        "value": 3
+      },
+      "RecordScaling": {
+        "value": 100
+      },
+      "RecordFormat": {
+        "value": "MP4"
+      },
+      "CaptureSystemAudio": {
+        "value": true
+      },
+      "CaptureAudio": {
+        "value": true
+      },
+      "NoiseCancellation": {
+        "value": true
+      },
+      "MicMonoMix": {
+        "value": false
+      },
+      "MicrophoneDeviceId": {
+        "value": ""
+      },
+      "SnipDictateEnabled": {
+        "value": false
+      },
+      "SnipDictateOnSnip": {
+        "value": false
+      },
+      "SnipDictateGrace": {
+        "value": 800
+      },
+      "SnipDictatePrefix": {
+        "value": ""
+      },
+      "WebcamOverlay": {
+        "value": false
+      },
+      "WebcamDeviceSymLink": {
+        "value": ""
+      },
+      "WebcamPosition": {
+        "value": 3
+      },
+      "WebcamSize": {
+        "value": 1
+      },
+      "WebcamShape": {
+        "value": 0
+      },
+      "WebcamBackgroundMode": {
+        "value": 0
+      },
+      "WebcamBackgroundImage": {
+        "value": ""
+      },
+      "WebcamBrightness": {
+        "value": 50
+      },
+      "RecordAspectRatio": {
+        "value": false
+      },
+      "BreakLockWorkstation": {
+        "value": false
+      },
+      "MirrorToggleKey": {
+        "value": {
+          "win": false,
+          "ctrl": false,
+          "alt": false,
+          "shift": false,
+          "code": 0,
+          "key": "(Key 0)"
+        }
+      },
+      "MirrorTrackWindow": {
+        "value": true
+      }
+    },
+    "name": "ZoomIt",
+    "version": "1.0"
+  },
+  "Peek": {
+    "properties": {
+      "DefaultActivationShortcut": {
+        "win": false,
+        "ctrl": true,
+        "alt": false,
+        "shift": false,
+        "code": 32,
+        "key": ""
+      },
+      "ActivationShortcut": {
+        "win": false,
+        "ctrl": true,
+        "alt": false,
+        "shift": false,
+        "code": 32,
+        "key": ""
+      },
+      "AlwaysRunNotElevated": {
+        "value": true
+      },
+      "AlwaysOnTop": {
+        "value": false
+      },
+      "ShowTaskbarIcon": {
+        "value": true
+      },
+      "CloseAfterLosingFocus": {
+        "value": true
+      },
+      "ConfirmFileDelete": {
+        "value": true
+      },
+      "EnableSpaceToActivate": {
+        "value": true
+      },
+      "ShowFilePreviewTooltip": {
+        "value": true
+      }
+    },
+    "name": "Peek",
     "version": "1.0"
   }
 }

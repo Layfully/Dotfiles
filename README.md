@@ -77,6 +77,7 @@ To try the bootstrap without a spare machine, `pwsh -NoProfile -File Scripts/Tes
 | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_...\LocalState\settings.json` | `home/AppData/Local/Packages/.../settings.json` |
 | `%LOCALAPPDATA%\lazygit\config.yml` | `home/AppData/Local/lazygit/config.yml` |
 | `%LOCALAPPDATA%\Microsoft\PowerToys\FancyZones\custom-layouts.json` | `home/AppData/Local/Microsoft/PowerToys/FancyZones/custom-layouts.json`: the FancyZones layouts (the other PowerToys settings are applied, see [PowerToys Settings](#powertoys-settings)) |
+| `%LOCALAPPDATA%\Microsoft\PowerToys\Peek\preview-settings.json` | `home/AppData/Local/Microsoft/PowerToys/Peek/preview-settings.json`: how Peek previews code (wrapping, JSON and XML formatting), which `PowerToys.DSC.exe` doesn't cover |
 | `%LOCALAPPDATA%\Packages\Microsoft.CommandPalette_...\LocalState\settings.json` | `home/AppData/Local/Packages/Microsoft.CommandPalette_.../LocalState/settings.json`: Command Palette's settings (its hotkey, aliases and which providers search) |
 | `~/.claude/settings.json` | `Config/Claude/settings.json`, through a symlink entry (`home/dot_claude/symlink_settings.json.tmpl`), so it stays a link in WSL too |
 | `~/.claude/CLAUDE.md` | `Config/Claude/CLAUDE.md`: what Claude Code should know about me and these machines in every project, linked the same way. On a work machine it imports `~/.claude/CLAUDE.work.md` from the work overlay |
@@ -163,6 +164,10 @@ Diffs go through [delta](https://github.com/dandavison/delta), with syntax highl
 - Any other module is compared and replaced as a whole, so add it as the complete `settings` object printed by `PowerToys.DSC.exe get --module <Name> --resource settings`.
 
 `PowerToys.DSC.exe` sits in the PowerToys install folder (`%LOCALAPPDATA%\PowerToys` for a per-user install). PowerToys' PowerShell DSC module, the one `winget configure` could use, fails to find the installation in PowerToys 0.101 (it compares the DisplayVersion `0.101.2362` with the registry's `0.101.2362.0`), which is why these settings aren't in the WinGet package list.
+
+`PowerToys.DSC.exe` has no module for the File Explorer add-ons, and switching a previewer also registers or removes it in Windows, so those are set by hand on each machine (PowerToys > File Explorer add-ons): turn off the G-code, binary G-code, QOI and STL previewers and thumbnails, and turn on local images for Markdown. Keep the PDF previewer off, as it clashes with Outlook's attachment preview.
+
+Workspaces aren't in the repo either: each machine keeps its own (`%LOCALAPPDATA%\Microsoft\PowerToys\Workspaces\workspaces.json`, with this machine's window positions), and its shortcuts point to a workspace's ID. Create them in the Workspaces editor with a desktop shortcut (Command Palette and the Dock find them through it), then pin each shortcut at the far left of the taskbar, so `Win+1`, `Win+2`, … open them.
 
 ## Docker Desktop Settings
 
